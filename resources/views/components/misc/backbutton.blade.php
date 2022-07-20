@@ -1,0 +1,1 @@
+<a href="{{ $url }}" data-toggle="tooltip" title="Volver" class="btn btn-primary"><i class="bi bi-arrow-return-left"></i></a>
