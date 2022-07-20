@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Ronda\Ronda;
 use App\Models\Usuario\TipoUsuario;
 use App\Models\Usuario\UsuarioTipoUsuario;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -54,5 +55,9 @@ class User extends Authenticatable
 
     public function tipos_usuario(){
         return $this->belongsToMany(TipoUsuario::class, 'usuario_tipo_usuario', 'usuario_id', 'tipo_usuario_id')->withPivot('id');
+    }
+
+    public function rondas(){
+        return $this->hasMany(Ronda::class);
     }
 }
