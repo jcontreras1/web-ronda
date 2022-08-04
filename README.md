@@ -32,6 +32,20 @@ Web-Ronda es un sistema de gestion de rondas de control. Programado enteramente 
 - MySQL
 - Composer
 
+### Extensiones de PHP:
+
+- BCMath PHP Extension
+- Ctype PHP Extension
+- Fileinfo PHP extension
+- JSON PHP Extension
+- Mbstring PHP Extension
+- OpenSSL PHP Extension
+- PDO PHP Extension
+- Tokenizer PHP Extension
+- XML PHP Extension
+- MySQLI PHP Extension
+- PDO_MYSQL PHP Extension
+
 _Para entornos de desarrollo:_
 ```sh
 git clone https://github.com/jcontreras1/web-ronda
