@@ -12,7 +12,19 @@
 	</h3>
 	<hr>
 
-	<button type="button" onclick="getLocation()">Obtener ubicación</button>
+	<div class="row">
+		<div class="col-12 col-md-4 d-grid">
+			<button type="button" class="btn btn-lg btn-primary btn-block" onclick="getLocation()">Obtener ubicación <i class="bi bi-geo-alt"></i></button>
+		</div>
+		<div class="col-12 col-md-4">
+			
+			<input type="text" readonly id="latitud" class="form-control form-control-lg" >
+		</div>
+		<div class="col-12 col-md-4">
+			<input type="text" readonly id="longitud" class="form-control form-control-lg" >
+			
+		</div>
+	</div>
 	<p id="geo"></p>
 	<div id="myMap" style="height: 500px;"></div>
 	<hr>
@@ -77,7 +89,9 @@ crossorigin=""></script>
 		}).addTo(myMap);
 
 		function showPosition(position) {  
-			console.log(position.coords.latitude);
+			console.log(position.coords.latitude + ', ' + position.coords.longitude);
+			document.getElementById('latitud').value = position.coords.latitude;
+			document.getElementById('longitud').value = position.coords.longitude;
 			let marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(myMap);
 		}
 
