@@ -6,7 +6,6 @@
 	<h3>
 		<i class="fas fa-users"></i> Ronda <strong>#{{$ronda->id}}</strong>
 		<span class="float-end">
-			<a href="#" data-bs-toggle="modal" data-bs-target="#get_location" class="btn btn-success"><i class="bi bi-plus"></i></a>
 			@include('components.misc.backbutton', ['url' => url('home')])
 		</span>
 	</h3>
