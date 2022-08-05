@@ -30,7 +30,8 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::resource('ronda', RondaController::class)->only(['index', 'show', 'store', 'destroy']);
-    Route::resource('checkpoint', CheckpointController::class)->only(['create', 'update', 'destroy']);
+    Route::patch('ronda/{ronda}/cerrar', [RondaController::class, 'cerrar'])->name('ronda.cerrar');
+    Route::resource('/{ronda}/checkpoint', CheckpointController::class)->only(['store', 'update', 'destroy']);
 
 
 });

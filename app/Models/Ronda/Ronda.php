@@ -17,6 +17,6 @@ class Ronda extends Model
     ];
 
     public function checkpoints(){
-        return $this->hasMany(Checkpoint::class, 'id', 'ronda_id');
+        return $this->hasMany(Checkpoint::class);
     }
 }

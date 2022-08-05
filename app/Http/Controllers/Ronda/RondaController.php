@@ -29,4 +29,22 @@ class RondaController extends Controller
         toast('Ronda creada', 'success')->autoClose(1500);
         return back();
     }
+
+    public function destroy(Ronda $ronda){
+        $checkpoints = $ronda->checkpoints;
+        foreach($checkpoints as $checkpoint){
+            $checkpoint->delete();
+        }
+        $ronda->delete();
+        toast('Ronda eliminada', 'success')->autoClose('1500');
+        return back();
+    }
+
+    public function cerrar(Ronda $ronda){
+        $ronda->update([
+            'abierta' => false
+        ]);
+        toast('Ronda cerrada', 'success')->autoClose('1500');
+        return back();
+    }
 }

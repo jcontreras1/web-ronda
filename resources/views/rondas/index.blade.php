@@ -20,8 +20,8 @@
     <div class="card card-primary">
       <div class="card-header">
         <span class="float-end">
-          <a href="#" data-toggle="tooltip" title="Cerrar ronda" class="btn btn-warning"><i class="bi bi-check2"></i></a>
-          <a href="#" data-toggle="tooltip" title="Eliminar ronda" class="btn btn-danger"><i class="bi bi-trash"></i></a>
+          <button data-toggle="tooltip" title="Cerrar ronda" class="btn btn-warning btn_cerrar_ronda" data-url="{{route('ronda.cerrar', $ronda)}}"><i class="bi bi-check2"></i></button>
+          <button data-toggle="tooltip" title="Eliminar ronda" class="btn btn-danger btn_delete_ronda" data-url="{{route('ronda.destroy', $ronda)}}"><i class="bi bi-trash"></i></button>
         </span>
       </div>
       <div class="card-body">
@@ -32,6 +32,7 @@
           @if(count($ronda->checkpoints) == 0)
           <small><em>Sin datos</em></small>
           @else
+          {{count($ronda->checkpoints)}} puntos de control
           @endif
         </div>
         </a>
@@ -43,11 +44,10 @@
     </div>
     @endforeach
   </div>
-
-
 </div>  
 {{-- @can('administrar_sistema') --}}
-<form id="form_delete_user" method="POST"> @csrf @method('DELETE') </form>
+<form id="form_delete_ronda" method="POST"> @csrf @method('DELETE') </form>
+<form id="form_cerrar_ronda" method="POST"> @csrf @method('PATCH') </form>
 {{-- @endcan --}}
 @endsection
 
@@ -59,20 +59,33 @@
       url : '{{asset('assets/dt.spanish.json')}}'
     }
   });
-  $('.btn_delete_user').click(function(){
+  $('.btn_delete_ronda').click(function(){
     let url = $(this).data('url');
     Swal.fire({
       icon: 'question',
-      title: 'Eliminar Usuario',
+      title: '¿Eliminar Ronda?',
       showCancelButton: true,
       confirmButtonText: 'Si',
-      cancelButtonText: 'No',
+      cancelButtonText: 'Cancelar',
     }).then((result) => {
-      /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-        console.log(url);
-        $('#form_delete_user').attr('action', url);
-        $('#form_delete_user').submit();
+        $('#form_delete_ronda').attr('action', url);
+        $('#form_delete_ronda').submit();
+      }
+    })
+  });
+  $('.btn_cerrar_ronda').click(function(){
+    let url = $(this).data('url');
+    Swal.fire({
+      icon: 'question',
+      title: '¿Cerrar Ronda?',
+      showCancelButton: true,
+      confirmButtonText: 'Si',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $('#form_cerrar_ronda').attr('action', url);
+        $('#form_cerrar_ronda').submit();
       }
     })
   });

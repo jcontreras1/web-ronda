@@ -12,51 +12,63 @@
 	</h3>
 	<hr>
 
-	<div class="row">
-		<div class="col-12 col-md-4 d-grid">
-			<button type="button" class="btn btn-lg btn-primary btn-block" onclick="getLocation()">Obtener ubicación <i class="bi bi-geo-alt"></i></button>
-		</div>
-		<div class="col-12 col-md-4">
-			
-			<input type="text" readonly id="latitud" class="form-control form-control-lg" >
-		</div>
-		<div class="col-12 col-md-4">
-			<input type="text" readonly id="longitud" class="form-control form-control-lg" >
-			
-		</div>
-	</div>
-	<p id="geo"></p>
-	<div id="myMap" style="height: 500px;"></div>
-	<hr>
+	<form method="post" action="{{route('checkpoint.store', $ronda)}}">
+		<div class="row">
+			<div class="col-12 col-md-4 d-grid">
+				<button type="button" class="btn btn-lg btn-primary btn-block" onclick="getLocation()">Obtener ubicación <i class="bi bi-geo-alt"></i></button>
+			</div>
+			<div class="col-12 col-md-4">			
+				<input type="text" readonly id="latitud" name="latitud" class="form-control form-control-lg" >
+			</div>
+			<div class="col-12 col-md-4">
+				<input type="text" readonly id="longitud" name="longitud" class="form-control form-control-lg" >
 
+			</div>
+		</div>
+		<p id="geo"></p>
+		<div class="row">
+			<div class="col-12 col-md-8">
 
-	<div class="row">
-		@foreach($ronda->checkpoints as $checkpoint)
-		<div class="col-12 col-md-4">
-			<div class="card card-primary">
-				<div class="card-header">
-					<span class="float-end">
-						<a href="#" data-toggle="tooltip" title="Cerrar ronda" class="btn btn-warning"><i class="bi bi-check2"></i></a>
-						<a href="#" data-toggle="tooltip" title="Eliminar ronda" class="btn btn-danger"><i class="bi bi-trash"></i></a>
-					</span>
-				</div>
-				<div class="card-body">
-					<a class="text-dark" href="{{route('ronda.show', $ronda)}}" style="text-decoration: none;">
-						<div class="card-title">
-							<h5>Ronda #{{$ronda->id}}</h5>
-							<hr>
-							@if(count($ronda->checkpoints) == 0)
-							<small><em>Sin datos</em></small>
-							@else
-							@endif
-						</div>
-					</a>
-				</div>
-				<div class="card-footer">
-					Ronda creada {{$ronda->created_at->diffForHumans()}}
+				<div id="myMap" style="height: 450px;"></div>
+			</div>
+			<div class="col-12 col-md-4" id="s_novedad">
+				@csrf 
+				<label>Agregar descripción</label>
+				<textarea class="form-control" id="novedad" name="novedad" rows="8"></textarea>
+				<div class="py-1"></div>
+				<div class="d-grid gap-2">
+					<button class="btn btn-lg btn-success">Aceptar</button>
+					<button type="button" class="btn btn-lg btn-warning" onClick="vaciar_novedad()">Borrar Campo</button>
 				</div>
 			</div>
 		</div>
+	</form>
+	<hr>
+
+	<div class="row">
+		@foreach($ronda->checkpoints as $checkpoint)
+		<div class="col-12">
+			<div class="card card-primary">
+				<div class="card-header">
+					<strong>#{{$checkpoint->id}}</strong> - <em>{{$checkpoint->user->nombre}} {{$checkpoint->user->apellido}} ({{$ronda->created_at->diffForHumans()}})</em>
+					<span class="float-end">
+						<form method="POST" action="{{route('checkpoint.destroy', ['ronda' => $ronda, 'checkpoint' => $checkpoint])}}">
+							@method('DELETE') @csrf
+							<button data-toggle="tooltip" title="Eliminar ronda" class="btn btn-danger"><i class="bi bi-trash"></i></button>
+						</form>
+					</span>
+				</div>
+				<div class="card-body">
+					Latitud: <code>{{$checkpoint->latitud}}</code>
+					Longitud: <code>{{$checkpoint->longitud}}</code>
+					<div>
+						
+						Novedad: <strong>{{$checkpoint->novedad}}</strong>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="py-1"></div>
 		@endforeach
 	</div>
 </div>  
@@ -82,17 +94,43 @@ crossorigin=""></script>
 				x.innerHTML = "no es compatible tu navegador";
 			}
 		}
-		let myMap = L.map('myMap').setView([-42.7425792, -65.0477568],13);
+		let myMap = L.map('myMap').setView([-42.7372, -65.03948],15);
+
 		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 			maxZoom: 19,
+			dragging: false,
 			attribution: '© OpenStreetMap'
 		}).addTo(myMap);
 
+		var circle = L.circle([-42.73115, -65.04082], {
+			color: 'red',
+			fillColor: '#f03',
+			fillOpacity: 0.3,
+			radius: 30
+		}).addTo(myMap).bindPopup('Plazoleta Norte');		
+
+		var medio_ambiente = L.circle([-42.73820, -65.03763], {
+			color: 'green',
+			fillColor: '#2cfc03',
+			fillOpacity: 0.3,
+			radius: 15
+		}).addTo(myMap).bindPopup('Medio Ambiente');
+
 		function showPosition(position) {  
 			console.log(position.coords.latitude + ', ' + position.coords.longitude);
+			myMap.panTo(new L.LatLng(position.coords.latitude, position.coords.longitude));
 			document.getElementById('latitud').value = position.coords.latitude;
 			document.getElementById('longitud').value = position.coords.longitude;
 			let marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(myMap);
+			document.getElementById('novedad').focus();
+			document.getElementById("novedad").scrollIntoView();
+
+		}
+
+		function vaciar_novedad(){
+			document.getElementById('novedad').value = "";
+			document.getElementById('novedad').focus();
+			document.getElementById("novedad").scrollIntoView();
 		}
 
 	</script>
