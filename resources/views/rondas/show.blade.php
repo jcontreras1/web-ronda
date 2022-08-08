@@ -10,8 +10,8 @@
 		</span>
 	</h3>
 	<hr>
-
 	<form method="post" action="{{route('checkpoint.store', $ronda)}}">
+	@if($ronda->abierta)
 		<div class="row">
 			<div class="col-12 col-md-4 d-grid">
 				<button type="button" class="btn btn-lg btn-primary btn-block" onclick="getLocation()">Obtener ubicación <i class="bi bi-geo-alt"></i></button>
@@ -24,12 +24,14 @@
 
 			</div>
 		</div>
+		@endif
 		<p id="geo"></p>
 		<div class="row">
-			<div class="col-12 col-md-8">
+			<div class="col-12 @if($ronda->abierta) col-md-8 @endif">
 
 				<div id="myMap" style="height: 450px;"></div>
 			</div>
+			@if($ronda->abierta)
 			<div class="col-12 col-md-4" id="s_novedad">
 				@csrf 
 				<label>Agregar descripción</label>
@@ -40,6 +42,7 @@
 					<button type="button" class="btn btn-lg btn-warning" onClick="vaciar_novedad()">Borrar Campo</button>
 				</div>
 			</div>
+			@endif
 		</div>
 	</form>
 	<hr>
@@ -100,20 +103,24 @@ crossorigin=""></script>
 			dragging: false,
 			attribution: '© OpenStreetMap'
 		}).addTo(myMap);
+		@if(!$ronda->abierta)
+		@foreach($ronda->checkpoints as $point)
+		marker = L.marker([{{$point->latitud}}, {{$point->longitud}}]).addTo(myMap);
+		@endforeach
+		@endif
+		// var circle = L.circle([-42.73115, -65.04082], {
+		// 	color: 'red',
+		// 	fillColor: '#f03',
+		// 	fillOpacity: 0.3,
+		// 	radius: 30
+		// }).addTo(myMap).bindPopup('Plazoleta Norte');		
 
-		var circle = L.circle([-42.73115, -65.04082], {
-			color: 'red',
-			fillColor: '#f03',
-			fillOpacity: 0.3,
-			radius: 30
-		}).addTo(myMap).bindPopup('Plazoleta Norte');		
-
-		var medio_ambiente = L.circle([-42.73820, -65.03763], {
-			color: 'green',
-			fillColor: '#2cfc03',
-			fillOpacity: 0.3,
-			radius: 15
-		}).addTo(myMap).bindPopup('Medio Ambiente');
+		// var medio_ambiente = L.circle([-42.73820, -65.03763], {
+		// 	color: 'green',
+		// 	fillColor: '#2cfc03',
+		// 	fillOpacity: 0.3,
+		// 	radius: 15
+		// }).addTo(myMap).bindPopup('Medio Ambiente');
 
 		function showPosition(position) {  
 			console.log(position.coords.latitude + ', ' + position.coords.longitude);

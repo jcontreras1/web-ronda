@@ -15,34 +15,63 @@
   <hr>
 
   <div class="row">
-    @foreach($rondas as $ronda)
+    @foreach($abiertas as $ronda)
+    @if($ronda->abierta)
     <div class="col-12 col-md-4">
-    <div class="card card-primary">
-      <div class="card-header">
-        <span class="float-end">
-          <button data-toggle="tooltip" title="Cerrar ronda" class="btn btn-warning btn_cerrar_ronda" data-url="{{route('ronda.cerrar', $ronda)}}"><i class="bi bi-check2"></i></button>
-          <button data-toggle="tooltip" title="Eliminar ronda" class="btn btn-danger btn_delete_ronda" data-url="{{route('ronda.destroy', $ronda)}}"><i class="bi bi-trash"></i></button>
-        </span>
-      </div>
-      <div class="card-body">
-        <a class="text-dark" href="{{route('ronda.show', $ronda)}}" style="text-decoration: none;">
-        <div class="card-title">
-          <h5>Ronda #{{$ronda->id}}</h5>
-          <hr>
-          @if(count($ronda->checkpoints) == 0)
-          <small><em>Sin datos</em></small>
-          @else
-          {{count($ronda->checkpoints)}} puntos de control
-          @endif
+      <div class="card card-primary">
+        <div class="card-header">
+          <span class="float-end">
+            <button data-toggle="tooltip" title="Cerrar ronda" class="btn btn-warning btn_cerrar_ronda" data-url="{{route('ronda.cerrar', $ronda)}}"><i class="bi bi-check2"></i></button>
+            <button data-toggle="tooltip" title="Eliminar ronda" class="btn btn-danger btn_delete_ronda" data-url="{{route('ronda.destroy', $ronda)}}"><i class="bi bi-trash"></i></button>
+          </span>
         </div>
-        </a>
+        <div class="card-body">
+          <a class="text-dark" href="{{route('ronda.show', $ronda)}}" style="text-decoration: none;">
+            <div class="card-title">
+              <h5>Ronda #{{$ronda->id}}</h5>
+              <hr>
+              @if(count($ronda->checkpoints) == 0)
+              <small><em>Sin datos</em></small>
+              @else
+              {{count($ronda->checkpoints)}} puntos de control
+              @endif
+            </div>
+          </a>
+        </div>
+        <div class="card-footer">
+          Ronda creada {{$ronda->created_at->diffForHumans()}}
+        </div>
       </div>
-          <div class="card-footer">
-            Ronda creada {{$ronda->created_at->diffForHumans()}}
-          </div>
     </div>
-    </div>
+    @endif
     @endforeach
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-12">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>id</th>
+            <th>Puntos</th>
+            <th>Fecha</th>
+            <th>Opciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach($cerradas as $ronda)
+          <tr>
+            <td>{{$ronda->id}}</td>
+            <td>{{count($ronda->checkpoints)}}</td>
+            <td>{{date('d/m/Y', strtotime($ronda->created_at))}}</td>
+            <td>
+              <a href="{{route('ronda.show', $ronda)}}" class="btn btn-primary btn-sm"><i class="bi bi-list-task"></i></a>
+            </td>
+          </tr>
+          @endforeach
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>  
 {{-- @can('administrar_sistema') --}}
