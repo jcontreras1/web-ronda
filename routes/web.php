@@ -2,6 +2,8 @@
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Empresa\ConfigController;
 use App\Http\Controllers\Ronda\CheckpointController;
+use App\Http\Controllers\Ronda\CircuitoController;
+use App\Http\Controllers\Ronda\GeofenceController;
 use App\Http\Controllers\Ronda\RondaController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Usuario\TipoUsuarioController;
@@ -30,8 +32,11 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::resource('ronda', RondaController::class)->only(['index', 'show', 'store', 'destroy']);
+    Route::resource('circuito', CircuitoController::class)->only(['index', 'show', 'store', 'destroy']);
+    Route::resource('ronda/{ronda}/checkpoint', CheckpointController::class)->only(['store', 'update', 'destroy']);
+    Route::resource('circuito/{circuito}/geofence', GeofenceController::class)->only(['create', 'store', 'update', 'destroy']);
+    // Route::get('/circuito/', [RondaController::class, 'definir'])->name('ronda.define');
+    
     Route::patch('ronda/{ronda}/cerrar', [RondaController::class, 'cerrar'])->name('ronda.cerrar');
-    Route::resource('/{ronda}/checkpoint', CheckpointController::class)->only(['store', 'update', 'destroy']);
-
-
-});
+    Route::get('ronda/{ronda}/comparar/{circuito}', [RondaController::class, 'comparar'])->name('ronda.comparar')
+;});

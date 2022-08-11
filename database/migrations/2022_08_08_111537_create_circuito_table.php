@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTipoUsuarioTable extends Migration
+class CreateCircuitoTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,14 @@ class CreateTipoUsuarioTable extends Migration
      */
     public function up()
     {
-        Schema::create('tipo_usuario', function (Blueprint $table) {
+        Schema::create('circuito', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre');
-            $table->string('descripcion');
+            $table->string('titulo');
+            $table->text('descripcion')->nullable();
+            $table->unsignedBigInteger('created_by');
             $table->timestamps();
+
+            $table->foreign('created_by')->references('id')->on('users');
         });
     }
 
@@ -28,6 +31,6 @@ class CreateTipoUsuarioTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tipo_usuario');
+       Schema::dropIfExists('circuito');
     }
 }

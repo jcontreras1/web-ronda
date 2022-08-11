@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @section('content')
+@include('rondas.modals.comparar')
 @section('titulo', 'Rondas - ')
 <div class="container">
   <h3>
@@ -49,7 +50,7 @@
   <hr>
   <div class="row">
     <div class="col-12">
-      <table class="table table-striped">
+      <table class="table table-striped" id="tabla">
         <thead>
           <tr>
             <th>id</th>
@@ -65,7 +66,10 @@
             <td>{{count($ronda->checkpoints)}}</td>
             <td>{{date('d/m/Y', strtotime($ronda->created_at))}}</td>
             <td>
-              <a href="{{route('ronda.show', $ronda)}}" class="btn btn-primary btn-sm"><i class="bi bi-list-task"></i></a>
+              <a href="{{route('ronda.show', $ronda)}}" data-toggle="tooltip" title="Ver" class="btn btn-primary"><i class="bi bi-list-task"></i></a>
+              @can('administrar')
+              <button data-toggle="tooltip" title="Comparar" class="btn btn-primary" onclick="comparar({{$ronda->id}})"><i class="bi bi-map"></i></button>
+              @endcan
             </td>
           </tr>
           @endforeach
@@ -82,45 +86,69 @@
 
 @section('scripts')
 <script type="text/javascript">
- $(document).ready(function(){
-  $('#tabla').DataTable({
-    language : {
-      url : '{{asset('assets/dt.spanish.json')}}'
+  var url_base = "{{route('ronda.comparar', ['ronda' => '__ronda', 'circuito' => '__circuito'])}}";
+  $(document).ready(function(){
+    $('#tabla').DataTable({
+      language : {
+        url : '{{asset('assets/dt.spanish.json')}}'
+      }
+    });
+    $('.btn_delete_ronda').click(function(){
+      let url = $(this).data('url');
+      Swal.fire({
+        icon: 'question',
+        title: '¿Eliminar Ronda?',
+        showCancelButton: true,
+        confirmButtonText: 'Si',
+        cancelButtonText: 'Cancelar',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $('#form_delete_ronda').attr('action', url);
+          $('#form_delete_ronda').submit();
+        }
+      })
+    });
+    $('.btn_cerrar_ronda').click(function(){
+      let url = $(this).data('url');
+      Swal.fire({
+        icon: 'question',
+        title: '¿Cerrar Ronda?',
+        showCancelButton: true,
+        confirmButtonText: 'Si',
+        cancelButtonText: 'Cancelar',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $('#form_cerrar_ronda').attr('action', url);
+          $('#form_cerrar_ronda').submit();
+        }
+      })
+    });
+  });
+
+  function comparar(ronda){
+    document.getElementById('ronda_id').value = ronda;
+    let url = url_base.replace('__ronda', ronda);
+    let circ = $('#select_circuito').val();
+    if(!circ){
+      Swal.fire({
+        icon: 'error',
+        title: 'No hay circuitos definidos',
+      });
+      return;
+    }else{
+      $('#mdl_ronda_comparar').modal('show');
+      url = url.replace('__circuito', circ);
+      document.getElementById('btn_url_comparar').setAttribute('href', url);
     }
-  });
-  $('.btn_delete_ronda').click(function(){
-    let url = $(this).data('url');
-    Swal.fire({
-      icon: 'question',
-      title: '¿Eliminar Ronda?',
-      showCancelButton: true,
-      confirmButtonText: 'Si',
-      cancelButtonText: 'Cancelar',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        $('#form_delete_ronda').attr('action', url);
-        $('#form_delete_ronda').submit();
-      }
-    })
-  });
-  $('.btn_cerrar_ronda').click(function(){
-    let url = $(this).data('url');
-    Swal.fire({
-      icon: 'question',
-      title: '¿Cerrar Ronda?',
-      showCancelButton: true,
-      confirmButtonText: 'Si',
-      cancelButtonText: 'Cancelar',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        $('#form_cerrar_ronda').attr('action', url);
-        $('#form_cerrar_ronda').submit();
-      }
-    })
-  });
-});
+  }
 
-
+  function build_url(circuito){
+    ronda = document.getElementById('ronda_id').value;
+    let url = url_base.replace('__ronda', ronda);
+    url = url.replace('__circuito', circuito);
+    document.getElementById('btn_url_comparar').setAttribute('href', url);
+    
+  }
 
 </script>
 @endsection

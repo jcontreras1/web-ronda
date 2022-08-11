@@ -34,8 +34,6 @@ class CreateCheckpointTable extends Migration
      */
     public function down()
     {
-        $table->dropForeign(['ronda_id']);
-        $table->dropForeign(['user_id']);
-        Schema::dropIfExists('checkpoint');
+       Schema::dropIfExists('checkpoint');
     }
 }
