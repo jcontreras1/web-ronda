@@ -1,12 +1,11 @@
 @extends('layouts.app')
 @section('content')
-@include('rondas.modals.new_checkpoint')
 @section('titulo', "Ronda #$ronda->id - ")
 <div class="container">
 	<h3>
 		<i class="fas fa-users"></i> Ronda <strong>#{{$ronda->id}}</strong>
 		<span class="float-end">
-			@include('components.misc.backbutton', ['url' => url('home')])
+			@include('components.misc.backbutton', ['url' => route('ronda.index')])
 		</span>
 	</h3>
 	<hr>
