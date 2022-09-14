@@ -86,48 +86,52 @@ integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf
 crossorigin=""></script>
 <script type="text/javascript">
 	var x = document.getElementById("geo");
+	var marker = null;
+	let myMap = L.map('myMap').setView([-42.7372, -65.03948],15);
+
+	L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		maxZoom: 19,
+		dragging: false,
+		attribution: '© OpenStreetMap'
+	}).addTo(myMap);
+
+	function showError(error) {
+		console.log(error);
+	}
+
 	function getLocation() {
+		console.log(marker);
+		/*Si el marker ya estaba definido, me muevo hasta el marker*/
+		if(marker){
+			myMap.removeLayer(marker);
+		}
 		document.getElementById('btn_obtener_ubicacion').innerHTML = `
 		<div class="spinner-border" role="status">
 		<span class="visually-hidden">Loading...</span>
 		</div>`;
 		if("navigator.geoLocation"){
-				// getCurrentPosition() se utiliza para devolver la posición del usuario.
-				navigator.geolocation.getCurrentPosition(showPosition);
-			}
-			else{
-				x.innerHTML = "no es compatible tu navegador";
-			}
+			navigator.geolocation.getCurrentPosition(showPosition, showError, {enableHighAccuracy: true});
+		}else{
+			x.innerHTML = "no es compatible tu navegador";
 		}
-		let myMap = L.map('myMap').setView([-42.7372, -65.03948],15);
+	}
+	
+	function showPosition(position) {  
+		document.getElementById('btn_obtener_ubicacion').innerHTML = `Obtener ubicación <i class="bi bi-geo-alt"></i>`;
+		myMap.panTo(new L.LatLng(position.coords.latitude, position.coords.longitude));
+		document.getElementById('latitud').value = position.coords.latitude;
+		document.getElementById('longitud').value = position.coords.longitude;
+		marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(myMap);
+		document.getElementById('novedad').focus();
+		document.getElementById("novedad").scrollIntoView();
 
-		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-			maxZoom: 19,
-			dragging: false,
-			attribution: '© OpenStreetMap'
-		}).addTo(myMap);
-		@if(!$ronda->abierta)
-		@foreach($ronda->checkpoints as $point)
-		marker = L.marker([{{$point->latitud}}, {{$point->longitud}}]).addTo(myMap);
-		@endforeach
-		@endif
+	}
 
-		function showPosition(position) {  
-			document.getElementById('btn_obtener_ubicacion').innerHTML = `Obtener ubicación <i class="bi bi-geo-alt"></i>`;
-			myMap.panTo(new L.LatLng(position.coords.latitude, position.coords.longitude));
-			document.getElementById('latitud').value = position.coords.latitude;
-			document.getElementById('longitud').value = position.coords.longitude;
-			let marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(myMap);
-			document.getElementById('novedad').focus();
-			document.getElementById("novedad").scrollIntoView();
+	function vaciar_novedad(){
+		document.getElementById('novedad').value = "";
+		document.getElementById('novedad').focus();
+		document.getElementById("novedad").scrollIntoView();
+	}
 
-		}
-
-		function vaciar_novedad(){
-			document.getElementById('novedad').value = "";
-			document.getElementById('novedad').focus();
-			document.getElementById("novedad").scrollIntoView();
-		}
-
-	</script>
-	@endsection
+</script>
+@endsection

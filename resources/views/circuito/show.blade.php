@@ -89,6 +89,7 @@ crossorigin=""></script>
 <script type="text/javascript">
 
 	var marker = null;
+	var x = document.getElementById("geo");
 
 	function agregar_marcador(){
 		navigator.geolocation.getCurrentPosition(showPosition, showError, {enableHighAccuracy: true});
@@ -136,8 +137,7 @@ crossorigin=""></script>
 		})
 	}
 
-	var x = document.getElementById("geo");
-	var marker = null;
+	
 
 	function showError(error){
 		console.log(error);
