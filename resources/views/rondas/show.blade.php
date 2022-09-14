@@ -122,16 +122,16 @@ crossorigin=""></script>
 		document.getElementById('latitud').value = position.coords.latitude;
 		document.getElementById('longitud').value = position.coords.longitude;
 		marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(myMap);
-		document.getElementById('novedad').focus();
-		document.getElementById("novedad").scrollIntoView();
+		//document.getElementById('novedad').focus();
+		//document.getElementById("novedad").scrollIntoView();
 
 	}
 
-	// function vaciar_novedad(){
-	// 	document.getElementById('novedad').value = "";
-	// 	document.getElementById('novedad').focus();
-	// 	document.getElementById("novedad").scrollIntoView();
-	// }
+	function vaciar_novedad(){
+		document.getElementById('novedad').value = "";
+		document.getElementById('novedad').focus();
+		document.getElementById("novedad").scrollIntoView();
+	}
 
 </script>
 @endsection
