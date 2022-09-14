@@ -3,28 +3,48 @@
 
 @section('titulo', "Circuitos")
 <div class="container">
-	<h3>
+	<h3 class="mb-3">
 		{{$circuito->titulo}}
 		<span class="float-end">
-			<a href="{{route('geofence.create', ['circuito' => $circuito])}}" data-toggle="tooltip" title="Agregar punto" class="btn btn-success"><i class="bi bi-plus"></i></a>
+			{{-- <a href="{{route('geofence.create', ['circuito' => $circuito])}}" data-toggle="tooltip" title="Agregar punto" class="btn btn-success"><i class="bi bi-plus"></i></a> --}}
 			@include('components.misc.backbutton', ['url' => route('circuito.index')])
 		</span>
 	</h3>
-	<div class="py-1"></div>
-	<p>
-		<small class="text-muted">Circuito creado por {{ucfirst($circuito->creador->nombre)}} {{ucfirst($circuito->creador->apellido)}} - {{$circuito->created_at->diffForHumans()}}</small>
-	</p>
-	<p>
-		Puntos definidos: <strong>{{count($circuito->geofences)}}</strong>
-	</p>
-	<hr>
 
+	<p>
+		<small class="text-muted mb-3">
+			Circuito creado por {{ucfirst($circuito->creador->nombre)}} {{ucfirst($circuito->creador->apellido)}} - 
+			{{$circuito->created_at->diffForHumans()}} @if(count($circuito->geofences)) - Con {{ count($circuito->geofences) }} puntos @endif
+		</small>
+	</p>
 	<div class="row">
-		<div class="col-12">
+		<div class="col-12 col-md-3">
+				<form method="POST" action="{{route('geofence.store', ['circuito' => $circuito])}}">
+		@csrf
+		<div class="row mb-3">
+			<div class="col-12 d-grid">
+				<button class="btn btn-primary btn-lg mb-1" type="button" onclick="agregar_marcador();">Agregar marcador </button>
+				<button class="btn btn-success btn-lg mb-1" type="submit" id="btn-save" disabled>Guardar</button>
+			</div>
+			
+			<div class="col-12">
+				<div class="input-group">
+					<span class="input-group-text">Radio (Mts.)</span>
+					<input type="number" name="radio" id="radio" value="25" class="form-control form-control-lg">
+				</div>
+
+			</div>
+			<input type="hidden" id="latitud" name="latitud" class="form-control" >
+			<input type="hidden" id="longitud" name="longitud" class="form-control" >
+		</div>
+	</form>
+		</div>
+		<div class="col-12 col-md-9">
 			<div id="myMap" style="height: 450px;"></div>
 		</div>
 	</div>
 	<hr>
+	@if(count($circuito->geofences))
 	<table class="table table-striped">
 		<thead>
 			<tr>
@@ -44,20 +64,16 @@
 				<td>{{$geofence->radio}}mts.</td>
 				<td>
 					@if($geofence->created_by == Auth::user()->id)
-					<button 
-					class="btn btn-danger" 
-					data-toggle="tooltip" 
-					title="Eliminar Punto" 
-					onclick="delete_geofence('{{route('geofence.destroy', ['circuito' => $circuito, 'geofence' => $geofence])}}')">
-					<i class="bi bi-trash"></i>
-				</button>
-				@endif
-			</td>
-
-		</tr>
-		@endforeach
-	</tbody>
-</table>
+					<button class="btn btn-danger" data-toggle="tooltip" title="Eliminar Punto" onclick="delete_geofence('{{route('geofence.destroy', ['circuito' => $circuito, 'geofence' => $geofence])}}')">
+						<i class="bi bi-trash"></i>
+					</button>
+					@endif
+				</td>
+			</tr>
+			@endforeach
+		</tbody>
+	</table>
+	@endif
 </div>
 <form id="form_delete_geofence" method="POST">@csrf @method('DELETE')</form>
 @endsection
@@ -71,6 +87,39 @@ crossorigin=""/>
 integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
 crossorigin=""></script>
 <script type="text/javascript">
+
+	var marker = null;
+
+	function agregar_marcador(){
+		navigator.geolocation.getCurrentPosition(showPosition, showError, {enableHighAccuracy: true});
+		document.getElementById('btn-save').disabled = false;
+	}
+	
+	function showPosition(position) {
+
+		/*Si el marker ya estaba definido, me muevo hasta el marker*/
+		if(marker){
+			let coords = marker.getLatLng();
+			myMap.panTo(new L.LatLng(coords.lat, coords.lng));
+			return;
+		}
+		myMap.panTo(new L.LatLng(position.coords.latitude, position.coords.longitude));
+		document.getElementById('latitud').value = position.coords.latitude;
+		document.getElementById('longitud').value = position.coords.longitude;
+		marker = L.marker(
+			[position.coords.latitude, position.coords.longitude],
+			{
+				draggable : true
+			}
+			).addTo(myMap);
+
+		marker.on('dragend', function(e){
+			let newPos = e.target.getLatLng();
+			document.getElementById('latitud').value = newPos.lat;
+			document.getElementById('longitud').value = newPos.lng;
+			console.log(e.target.getLatLng());
+		});
+	}
 
 	function delete_geofence(url){
 		Swal.fire({
@@ -90,35 +139,38 @@ crossorigin=""></script>
 	var x = document.getElementById("geo");
 	var marker = null;
 
+	function showError(error){
+		console.log(error);
+	}
+
 
 	function getLocation() {
 		if("navigator.geoLocation"){
-				// getCurrentPosition() se utiliza para devolver la posición del usuario.
-				navigator.geolocation.getCurrentPosition(showPosition);
-			}
-			else{
-				x.innerHTML = "no es compatible tu navegador";
-			}
+			navigator.geolocation.getCurrentPosition(showPosition, showError, {enableHighAccuracy: true});
 		}
+		else{
+			x.innerHTML = "no es compatible tu navegador";
+		}
+	}
 
-		let myMap = L.map('myMap').setView([-42.7372, -65.03948],15);
+	let myMap = L.map('myMap').setView([-42.7372, -65.03948],15);
 
-		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-			maxZoom: 19,
-			dragging: false,
-			attribution: '© OpenStreetMap'
-		}).addTo(myMap);
+	L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		maxZoom: 19,
+		dragging: false,
+		attribution: '© OpenStreetMap'
+	}).addTo(myMap);
 
-		@foreach($circuito->geofences as $geo)
-		var circle = L.circle([{{$geo->latitud}}, {{$geo->longitud}}], {
-			color: 'red',
-			fillColor: '#f03',
-			fillOpacity: 0.5,
-			radius: {{$geo->radio}}
-		}).addTo(myMap);
-		circle.bindPopup('Punto #{{$geo->id}}');
-		@endforeach
+	@foreach($circuito->geofences as $geo)
+	var circle = L.circle([{{$geo->latitud}}, {{$geo->longitud}}], {
+		color: 'red',
+		fillColor: '#f03',
+		fillOpacity: 0.5,
+		radius: {{$geo->radio}}
+	}).addTo(myMap);
+	circle.bindPopup('Punto #{{$geo->id}}');
+	@endforeach
 
 
-	</script>
-	@endsection
+</script>
+@endsection

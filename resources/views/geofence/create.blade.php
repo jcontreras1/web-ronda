@@ -72,7 +72,7 @@ crossorigin=""></script>
 	function getLocation() {
 		if("navigator.geoLocation"){
 				// getCurrentPosition() se utiliza para devolver la posición del usuario.
-				navigator.geolocation.getCurrentPosition(showPosition);
+				navigator.geolocation.getCurrentPosition(showPosition, null, {enableHighAccuracy: true});
 			}
 			else{
 				x.innerHTML = "no es compatible tu navegador";
