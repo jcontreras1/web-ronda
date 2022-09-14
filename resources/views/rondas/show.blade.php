@@ -10,15 +10,15 @@
 	</h3>
 	<hr>
 	<form method="post" action="{{route('checkpoint.store', $ronda)}}">
-	@if($ronda->abierta)
+		@if($ronda->abierta)
 		<div class="row">
-			<div class="col-12 col-md-4 d-grid">
-				<button type="button" class="btn btn-lg btn-primary btn-block" onclick="getLocation()">Obtener ubicación <i class="bi bi-geo-alt"></i></button>
+			<div class="col-12 col-md-4 d-grid mb-1">
+				<button type="button" class="btn btn-lg btn-primary btn-block" id="btn_obtener_ubicacion" onclick="getLocation()">Obtener ubicación <i class="bi bi-geo-alt"></i></button>
 			</div>
-			<div class="col-12 col-md-4">			
+			<div class="col-12 col-md-4 d-none d-md-block mb-1">			
 				<input type="text" readonly id="latitud" name="latitud" class="form-control form-control-lg" >
 			</div>
-			<div class="col-12 col-md-4">
+			<div class="col-12 col-md-4 d-none d-md-block mb-1">
 				<input type="text" readonly id="longitud" name="longitud" class="form-control form-control-lg" >
 
 			</div>
@@ -34,7 +34,7 @@
 			<div class="col-12 col-md-4" id="s_novedad">
 				@csrf 
 				<label>Agregar descripción</label>
-				<textarea class="form-control" id="novedad" name="novedad" rows="8"></textarea>
+				<textarea class="form-control" id="novedad" name="novedad" rows="6"></textarea>
 				<div class="py-1"></div>
 				<div class="d-grid gap-2">
 					<button class="btn btn-lg btn-success">Aceptar</button>
@@ -87,6 +87,10 @@ crossorigin=""></script>
 <script type="text/javascript">
 	var x = document.getElementById("geo");
 	function getLocation() {
+		document.getElementById('btn_obtener_ubicacion').innerHTML = `
+		<div class="spinner-border" role="status">
+		<span class="visually-hidden">Loading...</span>
+		</div>`;
 		if("navigator.geoLocation"){
 				// getCurrentPosition() se utiliza para devolver la posición del usuario.
 				navigator.geolocation.getCurrentPosition(showPosition);
@@ -107,22 +111,9 @@ crossorigin=""></script>
 		marker = L.marker([{{$point->latitud}}, {{$point->longitud}}]).addTo(myMap);
 		@endforeach
 		@endif
-		// var circle = L.circle([-42.73115, -65.04082], {
-		// 	color: 'red',
-		// 	fillColor: '#f03',
-		// 	fillOpacity: 0.3,
-		// 	radius: 30
-		// }).addTo(myMap).bindPopup('Plazoleta Norte');		
-
-		// var medio_ambiente = L.circle([-42.73820, -65.03763], {
-		// 	color: 'green',
-		// 	fillColor: '#2cfc03',
-		// 	fillOpacity: 0.3,
-		// 	radius: 15
-		// }).addTo(myMap).bindPopup('Medio Ambiente');
 
 		function showPosition(position) {  
-			console.log(position.coords.latitude + ', ' + position.coords.longitude);
+			document.getElementById('btn_obtener_ubicacion').innerHTML = `Obtener ubicación <i class="bi bi-geo-alt"></i>`;
 			myMap.panTo(new L.LatLng(position.coords.latitude, position.coords.longitude));
 			document.getElementById('latitud').value = position.coords.latitude;
 			document.getElementById('longitud').value = position.coords.longitude;

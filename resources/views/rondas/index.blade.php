@@ -3,8 +3,7 @@
 @include('rondas.modals.comparar')
 @section('titulo', 'Rondas - ')
 <div class="container">
-  <h3>
-    <i class="fas fa-users"></i> Rondas abiertas
+  <h3>Rondas abiertas
     <span class="float-end">
       <form method="post" action="{{route('ronda.store')}}">
         @csrf
@@ -13,47 +12,26 @@
       </form>
     </span>
   </h3>
-  <hr>
 
+  {{-- Rondas abiertas --}}
   <div class="row">
     @foreach($abiertas as $ronda)
     @if($ronda->abierta)
-    <div class="col-12 col-md-4">
-      <div class="card card-primary">
-        <div class="card-header">
-          <span class="float-end">
-            <button data-toggle="tooltip" title="Cerrar ronda" class="btn btn-warning btn_cerrar_ronda" data-url="{{route('ronda.cerrar', $ronda)}}"><i class="bi bi-check2"></i></button>
-            <button data-toggle="tooltip" title="Eliminar ronda" class="btn btn-danger btn_delete_ronda" data-url="{{route('ronda.destroy', $ronda)}}"><i class="bi bi-trash"></i></button>
-          </span>
-        </div>
-        <div class="card-body">
-          <a class="text-dark" href="{{route('ronda.show', $ronda)}}" style="text-decoration: none;">
-            <div class="card-title">
-              <h5>Ronda #{{$ronda->id}}</h5>
-              <hr>
-              @if(count($ronda->checkpoints) == 0)
-              <small><em>Sin datos</em></small>
-              @else
-              {{count($ronda->checkpoints)}} puntos de control
-              @endif
-            </div>
-          </a>
-        </div>
-        <div class="card-footer">
-          Ronda creada {{$ronda->created_at->diffForHumans()}}
-        </div>
-      </div>
-    </div>
+    @include('components.ronda.card-ronda-abierta', ['ronda' => $ronda])
     @endif
     @endforeach
   </div>
+
+
   <hr>
+
+  <h4>Histórico</h4>
   <div class="row">
     <div class="col-12">
       <table class="table table-striped" id="tabla">
         <thead>
           <tr>
-            <th>id</th>
+            <th>Creada por</th>
             <th>Puntos</th>
             <th>Fecha</th>
             <th>Opciones</th>
@@ -62,9 +40,9 @@
         <tbody>
           @foreach($cerradas as $ronda)
           <tr>
-            <td>{{$ronda->id}}</td>
+            <td data-order="{{ $ronda->id }}">{{ucwords($ronda->creador->nombre . ' ' . $ronda->creador->apellido)}}</td>
             <td>{{count($ronda->checkpoints)}}</td>
-            <td>{{date('d/m/Y', strtotime($ronda->created_at))}}</td>
+            <td data-order="{{ $ronda->id }}">{{date('d/m/Y H:i', strtotime($ronda->created_at))}}</td>
             <td>
               <a href="{{route('ronda.show', $ronda)}}" data-toggle="tooltip" title="Ver" class="btn btn-primary"><i class="bi bi-list-task"></i></a>
               @can('administrar')
@@ -91,7 +69,8 @@
     $('#tabla').DataTable({
       language : {
         url : '{{asset('assets/dt.spanish.json')}}'
-      }
+      },
+      order: [[2, 'desc']],
     });
     $('.btn_delete_ronda').click(function(){
       let url = $(this).data('url');
