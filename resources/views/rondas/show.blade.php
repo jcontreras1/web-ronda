@@ -127,11 +127,11 @@ crossorigin=""></script>
 
 	}
 
-	function vaciar_novedad(){
-		document.getElementById('novedad').value = "";
-		document.getElementById('novedad').focus();
-		document.getElementById("novedad").scrollIntoView();
-	}
+	// function vaciar_novedad(){
+	// 	document.getElementById('novedad').value = "";
+	// 	document.getElementById('novedad').focus();
+	// 	document.getElementById("novedad").scrollIntoView();
+	// }
 
 </script>
 @endsection
