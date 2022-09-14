@@ -17,7 +17,19 @@ class CircuitoController extends Controller
     public function show(Circuito $circuito){
         return view('circuito.show')->with(compact([
             'circuito'
-            ]));
+        ]));
+
+    }
+    public function update(Circuito $circuito, Request $request){
+        $request->validate([
+            'titulo' => 'required'
+        ]);
+
+        $circuito->update([
+            'titulo' => $request->titulo,
+        ]);
+        toast('Circuito modificado', 'success')->autoClose(1500);
+        return back();
     }
 
     public function store(Request $request){

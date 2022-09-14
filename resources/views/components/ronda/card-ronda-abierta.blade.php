@@ -5,16 +5,22 @@
 				<div class="card-title">
 					<h5>Ronda #{{$ronda->id}}</h5>
 					<hr>
+					<div>
+						
+					Fecha: <strong>{{ date('d/m/Y', strtotime($ronda->created_at)) }} </strong> a las <strong>{{ date('H:i', strtotime($ronda->created_at)) }}</strong>
+					</div>
+					<div>
+					Por: <strong>{{ ucwords($ronda->creador->nombre . ' ' . $ronda->creador->apellido) }}</strong>
+					</div>
 					@if(count($ronda->checkpoints) == 0)
 					<small><em>Sin datos</em></small>
 					@else
-					{{count($ronda->checkpoints)}} puntos de control
+					<em>{{count($ronda->checkpoints)}} puntos de control</em>
 					@endif
 				</div>
 			</a>
 		</div>
 		<div class="card-footer">
-			<small><em><strong>{{$ronda->created_at->diffForHumans()}}</strong> por <strong>{{ ucwords($ronda->creador->nombre . ' ' . $ronda->creador->apellido) }}</strong> </em></small>
 			<span class="float-end">
 				@if(Auth::user()->id == $ronda->creador->id)
 				<button data-toggle="tooltip" title="Cerrar ronda" class="btn btn-warning btn_cerrar_ronda" data-url="{{route('ronda.cerrar', $ronda)}}"><i class="bi bi-check2"></i></button>

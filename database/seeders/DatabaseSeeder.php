@@ -74,6 +74,13 @@ class DatabaseSeeder extends Seeder
             'descripcion' => 'Nombre del archivo para la imagen de los membretes',
         ]);
 
+        VariableGlobal::updateOrCreate([
+            'clave' => 'API_TOKEN_MAPS',
+        ],[
+            'valor' => 'pk.eyJ1Ijoic2lzdGVtYXNhcHBtIiwiYSI6ImNsODFzd29qbDBqYWwzdHBhOXY2NDJpYWcifQ.Ox0jk94skjm7oPWxkVeVug',
+            'descripcion' => 'Url donde buscar las tejas',
+        ]);
+
     
 
     }

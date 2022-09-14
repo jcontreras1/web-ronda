@@ -14,31 +14,33 @@
 		</span>
 	</h3>
 	<hr>
-	<table class="table table-striped" id="tabla">
-		<thead>
-			<tr>
-				<th>Nombre</th>
-				<th>Descripción</th>
-				<th>Creado Por</th>
-				<th>Opciones</th>
-			</tr>
-		</thead>
-		<tbody>
-			@foreach($circuitos as $circuito)
-			<tr>
-				<td>{{$circuito->titulo}}</td>
-				<td>{{$circuito->descripcion}}</td>
-				<td>{{$circuito->creador->nombre}} - {{$circuito->created_at->diffForHumans()}}</td>
-				<td>
-					<a href="{{route('circuito.show', $circuito)}}" class="btn btn-primary"><i class="bi bi-list-task"></i></a>
-					@if($circuito->creador->id == Auth::user()->id)
-					<button class="btn btn-danger" onclick="delete_circuito('{{route('circuito.destroy', $circuito)}}');"><i class="bi bi-trash"></i></button>
-					@endif
-				</td>
-			</tr>
-			@endforeach
-		</tbody>
-	</table>
+	<div class="table-responsive">		
+		<table class="table table-striped" id="tabla">
+			<thead>
+				<tr>
+					<th>Nombre</th>
+					{{-- <th>Descripción</th> --}}
+					<th>Creado Por</th>
+					<th>Opciones</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach($circuitos as $circuito)
+				<tr>
+					<td>{{$circuito->titulo}}</td>
+					{{-- <td>{{$circuito->descripcion}}</td> --}}
+					<td>{{$circuito->creador->nombre}} - {{$circuito->created_at->diffForHumans()}}</td>
+					<td>
+						<a href="{{route('circuito.show', $circuito)}}" class="btn btn-primary"><i class="bi bi-list-task"></i></a>
+						@if($circuito->creador->id == Auth::user()->id)
+						<button class="btn btn-danger" onclick="delete_circuito('{{route('circuito.destroy', $circuito)}}');"><i class="bi bi-trash"></i></button>
+						@endif
+					</td>
+				</tr>
+				@endforeach
+			</tbody>
+		</table>
+	</div>
 </div>
 <form id="form_delete_circuito" method="POST">
 	@csrf @method('DELETE')

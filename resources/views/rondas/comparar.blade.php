@@ -12,7 +12,7 @@
 	<div class="py-1"></div>
 	<p>
 		<small class="text-muted">
-			Rondin realizado por {{ucfirst($ronda->creador->nombre)}} {{ucfirst($ronda->creador->apellido)}} {{$ronda->created_at->diffForHumans()}}. Puntos definidos <strong>{{count($circuito->geofences)}}</strong> - Puntos visitados: <strong>{{count($ronda->checkpoints)}}</strong>
+			Rondin realizado por {{ucfirst($ronda->creador->nombre)}} {{ucfirst($ronda->creador->apellido)}} el {{date('d/m/Y', strtotime($ronda->created_at)) }} a las {{date('H:i', strtotime($ronda->created_at)) }}. Puntos definidos <strong>{{count($circuito->geofences)}}</strong> - Puntos visitados: <strong>{{count($ronda->checkpoints)}}</strong>
 		</small>
 	</p>
 
@@ -53,20 +53,17 @@ crossorigin=""></script>
 	var x = document.getElementById("geo");
 	var marker = null;
 
-
 	function getLocation() {
 		if("navigator.geoLocation"){
-				// getCurrentPosition() se utiliza para devolver la posición del usuario.
 				navigator.geolocation.getCurrentPosition(showPosition);
-			}
-			else{
+			}else{
 				x.innerHTML = "no es compatible tu navegador";
 			}
 		}
 
 		let myMap = L.map('myMap').setView([-42.7372, -65.03948],15);
 
-		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		L.tileLayer('https://{s}.tiles.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.jpg?access_token={{ variable_global("API_TOKEN_MAPS") }}', {
 			maxZoom: 19,
 			dragging: false,
 			attribution: '© OpenStreetMap'
@@ -86,7 +83,6 @@ crossorigin=""></script>
 		marker = L.marker([{{$point->latitud}}, {{$point->longitud}}]).addTo(myMap);
 		marker.bindPopup('Hora {{$point->created_at->format('d/m/Y H:i:s')}}');
 		@endforeach
-
 
 	</script>
 	@endsection

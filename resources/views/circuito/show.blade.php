@@ -1,15 +1,16 @@
 @extends('layouts.app')
 @section('content')
-
 @section('titulo', "Circuitos")
+@include('circuito.modals.mdl_titulo')
 <div class="container">
-	<h3 class="mb-3">
-		{{$circuito->titulo}}
+	<h3>
+		{{$circuito->titulo}} | <small><a href="#" data-bs-toggle="modal" data-bs-target="#mdl_titulo" class="text-info"><i class="bi bi-pencil-fill"></i></a></small>
 		<span class="float-end">
 			{{-- <a href="{{route('geofence.create', ['circuito' => $circuito])}}" data-toggle="tooltip" title="Agregar punto" class="btn btn-success"><i class="bi bi-plus"></i></a> --}}
 			@include('components.misc.backbutton', ['url' => route('circuito.index')])
 		</span>
 	</h3>
+	<hr>
 
 	<p>
 		<small class="text-muted mb-3">
@@ -19,25 +20,25 @@
 	</p>
 	<div class="row">
 		<div class="col-12 col-md-3">
-				<form method="POST" action="{{route('geofence.store', ['circuito' => $circuito])}}">
-		@csrf
-		<div class="row mb-3">
-			<div class="col-12 d-grid">
-				<button class="btn btn-primary btn-lg mb-1" type="button" onclick="agregar_marcador();">Agregar marcador </button>
-				<button class="btn btn-success btn-lg mb-1" type="submit" id="btn-save" disabled>Guardar</button>
-			</div>
-			
-			<div class="col-12">
-				<div class="input-group">
-					<span class="input-group-text">Radio (Mts.)</span>
-					<input type="number" name="radio" id="radio" value="25" class="form-control form-control-lg">
-				</div>
+			<form method="POST" action="{{route('geofence.store', ['circuito' => $circuito])}}">
+				@csrf
+				<div class="row mb-3">
+					<div class="col-12 d-grid">
+						<button class="btn btn-primary btn-lg mb-1" type="button" onclick="agregar_marcador();">Agregar marcador </button>
+						<button class="btn btn-success btn-lg mb-1" type="submit" id="btn-save" disabled>Guardar</button>
+					</div>
 
-			</div>
-			<input type="hidden" id="latitud" name="latitud" class="form-control" >
-			<input type="hidden" id="longitud" name="longitud" class="form-control" >
-		</div>
-	</form>
+					<div class="col-12">
+						<div class="input-group">
+							<span class="input-group-text">Radio (Mts.)</span>
+							<input type="number" name="radio" id="radio" value="25" class="form-control form-control-lg">
+						</div>
+
+					</div>
+					<input type="hidden" id="latitud" name="latitud" class="form-control" >
+					<input type="hidden" id="longitud" name="longitud" class="form-control" >
+				</div>
+			</form>
 		</div>
 		<div class="col-12 col-md-9">
 			<div id="myMap" style="height: 450px;"></div>
@@ -45,34 +46,32 @@
 	</div>
 	<hr>
 	@if(count($circuito->geofences))
-	<table class="table table-striped">
-		<thead>
-			<tr>
-				<th>#Punto</th>
-				<th>Lat</th>
-				<th>Lon</th>
-				<th>Radio</th>
-				<th>Opciones</th>
-			</tr>
-		</thead>
-		<tbody>
-			@foreach($circuito->geofences as $geofence)
-			<tr>
-				<td>#{{$geofence->id}}</td>
-				<td><code>{{$geofence->latitud}}</code></td>
-				<td><code>{{$geofence->longitud}}</code></td>
-				<td>{{$geofence->radio}}mts.</td>
-				<td>
-					@if($geofence->created_by == Auth::user()->id)
-					<button class="btn btn-danger" data-toggle="tooltip" title="Eliminar Punto" onclick="delete_geofence('{{route('geofence.destroy', ['circuito' => $circuito, 'geofence' => $geofence])}}')">
-						<i class="bi bi-trash"></i>
-					</button>
-					@endif
-				</td>
-			</tr>
-			@endforeach
-		</tbody>
-	</table>
+	<div class="table-responsive">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>#Punto</th>
+					<th>Radio</th>
+					<th>Opciones</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach($circuito->geofences as $geofence)
+				<tr>
+					<td>#{{$geofence->id}}</td>
+					<td>{{$geofence->radio}}mts.</td>
+					<td>
+						@if($geofence->created_by == Auth::user()->id)
+						<button class="btn btn-danger" data-toggle="tooltip" title="Eliminar Punto" onclick="delete_geofence('{{route('geofence.destroy', ['circuito' => $circuito, 'geofence' => $geofence])}}')">
+							<i class="bi bi-trash"></i>
+						</button>
+						@endif
+					</td>
+				</tr>
+				@endforeach
+			</tbody>
+		</table>
+	</div>
 	@endif
 </div>
 <form id="form_delete_geofence" method="POST">@csrf @method('DELETE')</form>
@@ -155,22 +154,22 @@ crossorigin=""></script>
 
 	let myMap = L.map('myMap').setView([-42.7372, -65.03948],15);
 
-	L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-		maxZoom: 19,
-		dragging: false,
-		attribution: '© OpenStreetMap'
-	}).addTo(myMap);
+	// L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		L.tileLayer('https://{s}.tiles.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.jpg?access_token={{ variable_global("API_TOKEN_MAPS") }}', {
+			maxZoom: 19,
+			dragging: false,
+			attribution: '© OpenStreetMap'
+		}).addTo(myMap);
 
-	@foreach($circuito->geofences as $geo)
-	var circle = L.circle([{{$geo->latitud}}, {{$geo->longitud}}], {
-		color: 'red',
-		fillColor: '#f03',
-		fillOpacity: 0.5,
-		radius: {{$geo->radio}}
-	}).addTo(myMap);
-	circle.bindPopup('Punto #{{$geo->id}}');
-	@endforeach
+		@foreach($circuito->geofences as $geo)
+		var circle = L.circle([{{$geo->latitud}}, {{$geo->longitud}}], {
+			color: 'red',
+			fillColor: '#f03',
+			fillOpacity: 0.5,
+			radius: {{$geo->radio}}
+		}).addTo(myMap);
+		circle.bindPopup('Punto #{{$geo->id}}');
+		@endforeach
 
-
-</script>
-@endsection
+	</script>
+	@endsection

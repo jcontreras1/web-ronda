@@ -48,27 +48,7 @@
 
 	<div class="row">
 		@foreach($ronda->checkpoints as $checkpoint)
-		<div class="col-12">
-			<div class="card card-primary">
-				<div class="card-header">
-					<strong>#{{$checkpoint->id}}</strong> - <em>{{$checkpoint->user->nombre}} {{$checkpoint->user->apellido}} ({{$ronda->created_at->diffForHumans()}})</em>
-					<span class="float-end">
-						<form method="POST" action="{{route('checkpoint.destroy', ['ronda' => $ronda, 'checkpoint' => $checkpoint])}}">
-							@method('DELETE') @csrf
-							<button data-toggle="tooltip" title="Eliminar ronda" class="btn btn-danger"><i class="bi bi-trash"></i></button>
-						</form>
-					</span>
-				</div>
-				<div class="card-body">
-					Latitud: <code>{{$checkpoint->latitud}}</code>
-					Longitud: <code>{{$checkpoint->longitud}}</code>
-					<div>
-						
-						Novedad: <strong>{{$checkpoint->novedad}}</strong>
-					</div>
-				</div>
-			</div>
-		</div>
+		@include('components.ronda.card-checkpoint', ['checkpoint' => $checkpoint])
 		<div class="py-1"></div>
 		@endforeach
 	</div>
@@ -89,11 +69,17 @@ crossorigin=""></script>
 	var marker = null;
 	let myMap = L.map('myMap').setView([-42.7372, -65.03948],15);
 
-	L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+	L.tileLayer('https://{s}.tiles.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.jpg?access_token={{ variable_global("API_TOKEN_MAPS") }}', {
 		maxZoom: 19,
 		dragging: false,
 		attribution: '© OpenStreetMap'
 	}).addTo(myMap);
+
+	let punto_visitado = null;
+	@foreach($ronda->checkpoints as $geo)
+	punto_visitado = L.marker([{{$geo->latitud}}, {{$geo->longitud}}]).addTo(myMap);
+	punto_visitado.bindPopup('Visitado a las {{ date('d/m/Y H:i', strtotime($geo->created_at)) }}');
+	@endforeach
 
 	function showError(error) {
 		console.log(error);

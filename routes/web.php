@@ -32,7 +32,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::resource('ronda', RondaController::class)->only(['index', 'show', 'store', 'destroy']);
-    Route::resource('circuito', CircuitoController::class)->only(['index', 'show', 'store', 'destroy']);
+    Route::resource('circuito', CircuitoController::class)->only(['index', 'show', 'update', 'store', 'destroy']);
     Route::resource('ronda/{ronda}/checkpoint', CheckpointController::class)->only(['store', 'update', 'destroy']);
     Route::resource('circuito/{circuito}/geofence', GeofenceController::class)->only(['create', 'store', 'update', 'destroy']);
     // Route::get('/circuito/', [RondaController::class, 'definir'])->name('ronda.define');
