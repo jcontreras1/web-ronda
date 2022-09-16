@@ -38,5 +38,8 @@ Route::middleware(['auth'])->group(function () {
     // Route::get('/circuito/', [RondaController::class, 'definir'])->name('ronda.define');
     
     Route::patch('ronda/{ronda}/cerrar', [RondaController::class, 'cerrar'])->name('ronda.cerrar');
-    Route::get('ronda/{ronda}/comparar/{circuito}', [RondaController::class, 'comparar'])->name('ronda.comparar')
-;});
+    Route::get('ronda/{ronda}/comparar/{circuito}', [RondaController::class, 'comparar'])->name('ronda.comparar');
+
+    Route::view('/test', 'test.test');
+    Route::post('/etc/img', [RondaController::class, 'img'])->name('img.upload');
+});

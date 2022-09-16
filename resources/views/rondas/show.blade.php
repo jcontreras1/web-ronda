@@ -1,6 +1,15 @@
 @extends('layouts.app')
 @section('content')
 @section('titulo', "Ronda #$ronda->id - ")
+
+<div class="modal fade " id="lightbox">
+	<div class="modal-dialog" id="dialog">
+		<div class="modal-content">
+			<img id="img_modal" class="img-fluid">
+		</div>
+	</div>
+</div>
+
 <div class="container">
 	<h3>
 		<i class="fas fa-users"></i> Ronda <strong>#{{$ronda->id}}</strong>
@@ -9,7 +18,7 @@
 		</span>
 	</h3>
 	<hr>
-	<form method="post" action="{{route('checkpoint.store', $ronda)}}">
+	<form method="post" action="{{route('checkpoint.store', $ronda)}}" enctype="multipart/form-data">
 		@if($ronda->abierta)
 		<div class="row">
 			<div class="col-12 col-md-4 d-grid mb-1">
@@ -34,8 +43,8 @@
 			<div class="col-12 col-md-4" id="s_novedad">
 				@csrf 
 				<label>Agregar descripción</label>
-				<textarea class="form-control" id="novedad" name="novedad" rows="6"></textarea>
-				<div class="py-1"></div>
+				<textarea class="form-control mb-2" id="novedad" name="novedad" rows="6"></textarea>				
+				<input type="file" accept="image/png, image/gif, image/jpeg" class="form-control mb-2" name="imagen[]" multiple >
 				<div class="d-grid gap-2">
 					<button class="btn btn-lg btn-success">Aceptar</button>
 					<button type="button" class="btn btn-lg btn-warning" onClick="vaciar_novedad()">Borrar Campo</button>
@@ -54,6 +63,7 @@
 	</div>
 </div>  
 
+
 @endsection
 @section('head')
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
@@ -69,6 +79,23 @@ crossorigin=""></script>
 	var marker = null;
 	let myMap = L.map('myMap').setView([-42.7372, -65.03948],15);
 
+	var myModal = new bootstrap.Modal(document.getElementById('lightbox'));
+	var dialog = document.getElementById('dialog');
+	function launch_modal(img){
+		const oimg = new Image();
+		oimg.src = img;
+		if(oimg.height > oimg.width){
+			dialog.classList.remove('modal-xl');
+		}else{
+			dialog.classList.add('modal-xl');
+
+		}
+		
+		document.getElementById('img_modal').src = img;
+		myModal.show();
+	}
+
+
 	L.tileLayer('https://{s}.tiles.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.jpg?access_token={{ variable_global("API_TOKEN_MAPS") }}', {
 		maxZoom: 19,
 		dragging: false,
@@ -78,7 +105,7 @@ crossorigin=""></script>
 	let punto_visitado = null;
 	@foreach($ronda->checkpoints as $geo)
 	punto_visitado = L.marker([{{$geo->latitud}}, {{$geo->longitud}}]).addTo(myMap);
-	punto_visitado.bindPopup('Visitado a las {{ date('d/m/Y H:i', strtotime($geo->created_at)) }}');
+	punto_visitado.bindPopup('<strong>{{ $geo->novedad }}</strong><br>Visitado a las {{ date('d/m/Y H:i', strtotime($geo->created_at)) }}');
 	@endforeach
 
 	function showError(error) {

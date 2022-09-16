@@ -7,6 +7,9 @@ use App\Models\Ronda\Circuito;
 use App\Models\Ronda\Ronda;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+
+
 
 class RondaController extends Controller
 {
@@ -38,6 +41,12 @@ class RondaController extends Controller
     public function destroy(Ronda $ronda){
         $checkpoints = $ronda->checkpoints;
         foreach($checkpoints as $checkpoint){
+            foreach($checkpoint->images as $img){
+                if(Storage::disk('public')->delete('ronda/' . $img->filename)) {
+                    Storage::disk('public')->delete('ronda/' . $img->filename);
+                }
+                $img->delete();
+            }
             $checkpoint->delete();
         }
         $ronda->delete();

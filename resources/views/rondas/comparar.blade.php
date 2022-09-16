@@ -81,7 +81,7 @@ crossorigin=""></script>
 
 		@foreach($ronda->checkpoints as $point)
 		marker = L.marker([{{$point->latitud}}, {{$point->longitud}}]).addTo(myMap);
-		marker.bindPopup('Hora {{$point->created_at->format('d/m/Y H:i:s')}}');
+		marker.bindPopup('<strong>{{ $point->novedad }}</strong><br>Visitado a las {{ date('d/m/Y H:i', strtotime($geo->created_at)) }}');
 		@endforeach
 
 	</script>

@@ -2,6 +2,7 @@
 
 namespace App\Models\Ronda;
 
+use App\Models\Ronda\ImageCheckpoint;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -21,5 +22,10 @@ class Checkpoint extends Model
 
     public function user(){
         return $this->belongsTo(User::class);
+    }
+
+
+    public function images(){
+        return $this->hasMany(ImageCheckpoint::class);
     }
 }
