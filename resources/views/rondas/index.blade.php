@@ -63,7 +63,7 @@
         language : {
           url : '{{asset('assets/dt.spanish.json')}}'
         },
-        order: [[2, 'desc']],
+        order: [[1, 'desc']],
       });
       $('.btn_delete_ronda').click(function(){
         let url = $(this).data('url');
