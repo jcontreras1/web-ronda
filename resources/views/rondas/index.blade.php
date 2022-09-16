@@ -29,8 +29,7 @@
     <table class="table table-striped" id="tabla">
       <thead>
         <tr>
-          <th>Creada por</th>
-          <th>Puntos</th>
+          <th>Recorre</th>
           <th>Fecha</th>
           <th>Opciones</th>
         </tr>
@@ -39,13 +38,11 @@
         @foreach($cerradas as $ronda)
         <tr>
           <td data-order="{{ $ronda->id }}">{{ucwords($ronda->creador->nombre . ' ' . $ronda->creador->apellido)}}</td>
-          <td >{{count($ronda->checkpoints)}}</td>
+          {{-- <td >{{count($ronda->checkpoints)}}</td> --}}
           <td data-order="{{ $ronda->id }}">{{date('d/m/Y H:i', strtotime($ronda->created_at))}}</td>
           <td>
-            <a href="{{route('ronda.show', $ronda)}}" data-toggle="tooltip" title="Ver" class="btn btn-primary"><i class="bi bi-list-task"></i></a>
-            @can('administrar')
-            <button data-toggle="tooltip" title="Comparar" class="btn btn-primary" onclick="comparar({{$ronda->id}})"><i class="bi bi-map"></i></button>
-            @endcan
+            <a href="{{route('ronda.show', $ronda)}}" data-toggle="tooltip" title="Ver" class="btn btn-primary mb-1"><i class="bi bi-list-task"></i></a>
+            <button data-toggle="tooltip" title="Comparar" class="btn btn-primary mb-1" onclick="comparar({{$ronda->id}})"><i class="bi bi-map"></i></button>
           </td>
         </tr>
         @endforeach

@@ -18,7 +18,7 @@
 		</span>
 	</h3>
 	<hr>
-	<form method="post" action="{{route('checkpoint.store', $ronda)}}" enctype="multipart/form-data">
+	<form method="post" action="{{route('checkpoint.store', $ronda)}}" enctype="multipart/form-data" id="formulario">
 		@if($ronda->abierta)
 		<div class="row">
 			<div class="col-12 col-md-4 d-grid mb-1">
@@ -29,14 +29,12 @@
 			</div>
 			<div class="col-12 col-md-4 d-none d-md-block mb-1">
 				<input type="text" readonly id="longitud" name="longitud" class="form-control form-control-lg" >
-
 			</div>
 		</div>
 		@endif
 		<p id="geo"></p>
 		<div class="row">
 			<div class="col-12 @if($ronda->abierta) col-md-8 @endif">
-
 				<div id="myMap" style="height: 450px;"></div>
 			</div>
 			@if($ronda->abierta)
@@ -46,8 +44,8 @@
 				<textarea class="form-control mb-2" id="novedad" name="novedad" rows="6"></textarea>				
 				<input type="file" accept="image/png, image/gif, image/jpeg" class="form-control mb-2" name="imagen[]" multiple >
 				<div class="d-grid gap-2">
-					<button class="btn btn-lg btn-success">Aceptar</button>
-					<button type="button" class="btn btn-lg btn-warning" onClick="vaciar_novedad()">Borrar Campo</button>
+					<button type="button" class="btn btn-lg btn-success" onClick="aceptar_formulario()" id="btn-aceptar">Aceptar</button>
+					<button type="button" class="btn btn-lg btn-warning" onClick="vaciar_novedad()" id="btn-vaciar">Borrar Campo</button>
 				</div>
 			</div>
 			@endif
@@ -76,6 +74,7 @@ integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf
 crossorigin=""></script>
 <script type="text/javascript">
 	var x = document.getElementById("geo");
+	var formulario = document.getElementById("formulario");
 	var marker = null;
 	let myMap = L.map('myMap').setView([-42.7372, -65.03948],15);
 
@@ -110,6 +109,15 @@ crossorigin=""></script>
 
 	function showError(error) {
 		console.log(error);
+	}
+
+	function aceptar_formulario(){
+		let btn_aceptar = document.getElementById('btn-aceptar');
+		let btn_vaciar = document.getElementById('btn-vaciar');
+		btn_aceptar.disabled = true;
+		btn_vaciar.disabled = true;
+		btn_aceptar.innerHTML = '<div class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden"></span></div> Subiendo...';
+		formulario.submit();
 	}
 
 	function getLocation() {
