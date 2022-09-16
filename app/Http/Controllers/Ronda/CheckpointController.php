@@ -38,6 +38,7 @@ class CheckpointController extends Controller
 				$ext = $file->getClientOriginalExtension();
 				$filename = Str::uuid() . '.'. $ext;
 				$resizedImage = Image::make($file);
+				$resizedImage->orientate();
 				if($resizedImage->height() >= $resizedImage->width()){
 					/*Es mas alta que ancha, redimensiono par que sea de 720 de altura*/
 					$resizedImage->heighten(720)->encode('jpg', 75);
