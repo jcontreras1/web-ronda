@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Ronda\Ronda;
 use App\Models\Usuario\TipoUsuario;
 use App\Models\Usuario\UsuarioTipoUsuario;
+use App\Models\Varios\Area;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -59,5 +60,9 @@ class User extends Authenticatable
 
     public function rondas(){
         return $this->hasMany(Ronda::class);
+    }
+
+    public function areas(){
+        return $this->belongsToMany(Area::class, 'area_usuario', 'user_id', 'area_id')->withPivot('id');
     }
 }

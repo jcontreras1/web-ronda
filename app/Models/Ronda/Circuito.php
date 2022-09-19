@@ -4,6 +4,7 @@ namespace App\Models\Ronda;
 
 use App\Models\Ronda\Geofence;
 use App\Models\User;
+use App\Models\Varios\Area;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -17,6 +18,7 @@ class Circuito extends Model
         'titulo',
         'descripcion',
         'created_by',
+        'area_id',
     ];
 
     public function geofences(){
@@ -25,5 +27,9 @@ class Circuito extends Model
 
     public function creador(){
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function area(){
+        return $this->belongsTo(Area::class);
     }
 }

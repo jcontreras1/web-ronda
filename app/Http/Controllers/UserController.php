@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Usuario\TipoUsuario;
 use App\Models\Usuario\UsuarioTipoUsuario;
+use App\Models\Varios\Area;
 use App\Notifications\BienvenidoUsuarioNuevo;
 use Carbon\Carbon;
 use DB;
@@ -97,7 +98,11 @@ class UserController extends Controller
     {
         $this->authorize('update', $user);
         $tipos_usuario = TipoUsuario::all();
-        return view('user.edit',compact('user'), compact('tipos_usuario'));
+        $areas = Area::all();
+        return view('user.edit',compact('user'), compact([
+            'tipos_usuario',
+            'areas',
+        ]));
     }
 
     public function update(Request $request, User $user)

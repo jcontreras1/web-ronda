@@ -4,6 +4,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use App\Models\Usuario\TipoUsuario;
 use App\Models\Usuario\UsuarioTipoUsuario;
+use App\Models\Varios\Area;
 use App\Models\Varios\VariableGlobal;
 use Hash;
 use Illuminate\Database\Seeder;
@@ -77,11 +78,21 @@ class DatabaseSeeder extends Seeder
         VariableGlobal::updateOrCreate([
             'clave' => 'API_TOKEN_MAPS',
         ],[
-            'valor' => 'pk.eyJ1Ijoic2lzdGVtYXNhcHBtIiwiYSI6ImNsODFzd29qbDBqYWwzdHBhOXY2NDJpYWcifQ.Ox0jk94skjm7oPWxkVeVug',
+            'valor' => '',
+            'descripcion' => 'Api key donde buscar las tejas',
+        ]); 
+        VariableGlobal::updateOrCreate([
+            'clave' => 'URL_TILES',
+        ],[
+            'valor' => 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
             'descripcion' => 'Url donde buscar las tejas',
         ]);
 
-    
-
+        Area::create(['nombre' => 'CTAC MAS']);
+        Area::create(['nombre' => 'CTAC MLPB']);
+        Area::create(['nombre' => 'Auxiliares MLPB']);
+        Area::create(['nombre' => 'Auxiliares MAS']);
+        Area::create(['nombre' => 'Plazoleta Fiscal']);
+   
     }
 }

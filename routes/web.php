@@ -6,6 +6,8 @@ use App\Http\Controllers\Ronda\CircuitoController;
 use App\Http\Controllers\Ronda\GeofenceController;
 use App\Http\Controllers\Ronda\RondaController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\Usuario\AreaController;
+use App\Http\Controllers\Usuario\AreaUsuarioController;
 use App\Http\Controllers\Usuario\TipoUsuarioController;
 use App\Http\Controllers\Varios\ColorController;
 use Illuminate\Support\Facades\Route;
@@ -31,6 +33,8 @@ Route::middleware(['auth'])->group(function () {
         Route::patch('/profile/password/', [UserController::class, 'password_update'])->name('profile.password.update');
     });
 
+    Route::resource('area', AreaController::class);
+    Route::resource('/user/{user}/area_usuario', AreaUsuarioController::class);
     Route::resource('ronda', RondaController::class)->only(['index', 'show', 'store', 'destroy']);
     Route::resource('circuito', CircuitoController::class)->only(['index', 'show', 'update', 'store', 'destroy']);
     Route::resource('ronda/{ronda}/checkpoint', CheckpointController::class)->only(['store', 'update', 'destroy']);

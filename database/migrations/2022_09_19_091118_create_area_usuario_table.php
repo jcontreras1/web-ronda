@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRondaTable extends Migration
+class CreateAreaUsuarioTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class CreateRondaTable extends Migration
      */
     public function up()
     {
-        Schema::create('ronda', function (Blueprint $table) {
+        Schema::create('area_usuario', function (Blueprint $table) {
             $table->id();
-            $table->boolean('abierta')->default(true);
+            $table->unsignedBigInteger('area_id');
             $table->unsignedBigInteger('user_id');
-            $table->timestamps();
-
+            $table->foreign('area_id')->references('id')->on('area');
             $table->foreign('user_id')->references('id')->on('users');
+            $table->timestamps();
         });
     }
 
@@ -30,9 +30,6 @@ class CreateRondaTable extends Migration
      */
     public function down()
     {
-        Schema::table('circuito', function (Blueprint $table) {
-            $table->dropForeign(['user_id']);
-            Schema::dropIfExists('ronda');
-        });
+        Schema::dropIfExists('area_usuario');
     }
 }

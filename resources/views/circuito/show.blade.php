@@ -153,23 +153,21 @@ crossorigin=""></script>
 	}
 
 	let myMap = L.map('myMap').setView([-42.7372, -65.03948],15);
+	L.tileLayer('{{ variable_global("URL_TILES") }}?access_token={{ variable_global("API_TOKEN_MAPS") }}', {
+		maxZoom: 19,
+		dragging: false,
+		attribution: '© OpenStreetMap'
+	}).addTo(myMap);
 
-	// L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-		L.tileLayer('https://{s}.tiles.mapbox.com/v4/mapbox.satellite/{z}/{x}/{y}.jpg?access_token={{ variable_global("API_TOKEN_MAPS") }}', {
-			maxZoom: 19,
-			dragging: false,
-			attribution: '© OpenStreetMap'
-		}).addTo(myMap);
+	@foreach($circuito->geofences as $geo)
+	var circle = L.circle([{{$geo->latitud}}, {{$geo->longitud}}], {
+		color: 'red',
+		fillColor: '#f03',
+		fillOpacity: 0.5,
+		radius: {{$geo->radio}}
+	}).addTo(myMap);
+	circle.bindPopup('Punto #{{$geo->id}}');
+	@endforeach
 
-		@foreach($circuito->geofences as $geo)
-		var circle = L.circle([{{$geo->latitud}}, {{$geo->longitud}}], {
-			color: 'red',
-			fillColor: '#f03',
-			fillOpacity: 0.5,
-			radius: {{$geo->radio}}
-		}).addTo(myMap);
-		circle.bindPopup('Punto #{{$geo->id}}');
-		@endforeach
-
-	</script>
-	@endsection
+</script>
+@endsection

@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('content')
 @include('user.modals.user_cargo_create')
+@include('user.modals.user_area_create')
 @section('titulo', 'Editar Usuario - ')
 <div class="container">
     <h3>
@@ -70,40 +71,68 @@
                     <tr>
                         <td>{{$tipo_usuario->nombre}}</td>
                         @can('administrar')
-                        <td class=""><button type="button" data-toggle="tooltip" title="Eliminar cargo" data-url="{{route('cargo.destroy', ['user' => $user, 'cargo' => $tipo_usuario->pivot->id])}}" class="btn btn-danger btn-sm btn_delete_cargo" ><i class="bi bi-trash"></i></button></td>
+                        <td>
+                            <form method="POST" action="{{route('cargo.destroy', ['user' => $user, 'cargo' => $tipo_usuario->pivot->id])}}">
+                                @csrf
+                                @method('DELETE')
+                                <button data-toggle="tooltip" title="Eliminar cargo" class="btn btn-danger btn-sm" ><i class="bi bi-trash"></i></button>
+                            </form>
+                        </td>
                         @endcan
                     </tr>
                     @endforeach
                 </tbody>
             </table>
             @endif
+            <div class="py-2"></div>
+            <h5>Áreas 
+                @can('administrar')
+                | 
+                <button type="button" class="btn btn-success btn-sm" id="agregar_area" data-toggle="tooltip" title="Agregar/Cambiar area"><i class="bi bi-plus"></i></button>
+                @endcan
+            </h5>
+            <hr>
+            @if(count($user->areas) == 0)
+            <small>Sin Áreas</small>
+            @else
+            <table class="table table-striped table-sm">
+                <tbody>
+                    @foreach($user->areas as $area)
+                    <tr>
+                        <td>{{$area->nombre}}</td>
+                        @can('administrar')
+                        <td>
+                            <form method="POST" action="{{route('area_usuario.destroy', ['user' => $user, 'area_usuario' => $area->pivot->id])}}">
+                                @csrf @method('DELETE')
+                                <button data-toggle="tooltip" title="Eliminar cargo" class="btn btn-danger btn-sm btn_delete_area" ><i class="bi bi-trash"></i></button>
+                            </form>
+                        </td>
+                        @endcan
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            @endif
+
         </div> 
     </div>
 </div>
-<form id="form_delete_cargo" method="POST">@csrf @method('DELETE') </form>
 @endsection
 @section('scripts')
 <script type="text/javascript">
+
+    var btn_agregar_area = document.getElementById('agregar_area');
+    btn_agregar_area.addEventListener('click', agregar_area);
+
+    function agregar_area(){
+        var modal = new bootstrap.Modal(document.getElementById('mdl_area_add'));
+        modal.show();
+    }
+
     $(document).ready(function(){       
         $('#agregar_cargo').click(function(){
             $('#mdl_cargo_add').modal('show');
         });
-        $('.btn_delete_cargo').click(function(){
-            let url = $(this).data('url');
-            $(this).blur();
-            Swal.fire({
-              title: '¿Eliminar el cargo del usuario?',
-              icon: 'question',
-              showCancelButton: true,
-              confirmButtonText: 'Si',
-              cancelButtonText: 'No'
-          }).then((result) => {
-              if (result.isConfirmed) {
-                $('#form_delete_cargo').attr('action', url);
-                $('#form_delete_cargo').submit();
-            }
-        });
-      });
     });
 </script>
 @endsection
