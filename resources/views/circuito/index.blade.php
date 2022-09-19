@@ -1,16 +1,17 @@
 @extends('layouts.app')
 @section('content')
-
+@include('circuito.modals.create')
 @section('titulo', "Circuitos")
 <div class="container">
 	<h3>
 		Circuitos
 		<span class="float-end">
-			<form action="{{route('circuito.store')}}" method="POST">
-				@csrf				
-				<button data-toggle="tooltip" title="Agregar Circuito" class="btn btn-success"><i class="bi bi-plus"></i></button>
-				@include('components.misc.backbutton', ['url' => url('home')])
-			</form>
+			@if(count($areas_mias) > 0)
+			
+			<button data-toggle="tooltip" id="btn_circuito_create" title="Agregar Circuito" class="btn btn-success"><i class="bi bi-plus"></i></button>
+			@include('components.misc.backbutton', ['url' => url('home')])
+
+			@endif
 		</span>
 	</h3>
 	<hr>
@@ -48,6 +49,21 @@
 @endsection
 @push('scripts')
 <script type="text/javascript">
+
+	var btn_circuito_create = document.getElementById('btn_circuito_create');
+	btn_circuito_create.addEventListener('click', crear_circuito);
+
+	function crear_circuito(){
+		let opciones = document.getElementById('select_area').length;
+		if(opciones == 1){
+			document.getElementById('form_circuito_store').submit();
+		}else{
+			mdl = new bootstrap.Modal(document.getElementById('mdl_circuito_create'));
+			mdl.show();
+		}
+	}
+
+
 	function delete_circuito(url){
 		Swal.fire({
 			icon: 'question',

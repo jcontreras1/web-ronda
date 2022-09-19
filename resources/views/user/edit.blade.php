@@ -99,7 +99,7 @@
                 <tbody>
                     @foreach($user->areas as $area)
                     <tr>
-                        <td>{{$area->nombre}}</td>
+                        <td>{{ strtoupper($area->nombre) }}</td>
                         @can('administrar')
                         <td>
                             <form method="POST" action="{{route('area_usuario.destroy', ['user' => $user, 'area_usuario' => $area->pivot->id])}}">

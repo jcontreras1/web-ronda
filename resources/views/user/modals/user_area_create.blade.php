@@ -1,5 +1,5 @@
 <div class="modal" id="mdl_area_add" tabindex="-1" role="dialog">
-	<div class="modal-dialog modal-lg" role="document">
+	<div class="modal-dialog" role="document">
 		<form method="POST" action="{{ route("area_usuario.store", ['user' => $user]) }}">
 			@csrf
 			@method('POST')

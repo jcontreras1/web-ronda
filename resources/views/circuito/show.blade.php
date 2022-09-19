@@ -12,14 +12,18 @@
 	</h3>
 	<hr>
 
-	<p>
-		<small class="text-muted mb-3">
-			Circuito creado por {{ucfirst($circuito->creador->nombre)}} {{ucfirst($circuito->creador->apellido)}} - 
-			{{$circuito->created_at->diffForHumans()}} @if(count($circuito->geofences)) - Con {{ count($circuito->geofences) }} puntos @endif
-		</small>
-	</p>
 	<div class="row">
 		<div class="col-12 col-md-3">
+			<p>
+				<small class="text-muted mb-3">
+					Creado por <strong>{{ucfirst($circuito->creador->nombre)}} {{ucfirst($circuito->creador->apellido)}}</strong> <br>
+					Área: <strong>{{ $circuito->area->nombre }}</strong> <br>
+					Fecha: <strong>{{ date('d/m/Y H:i', strtotime($circuito->created_at)) }}</strong> <br>
+					@if(count($circuito->geofences))
+					<strong>{{ count($circuito->geofences) }} </strong> punto(s)
+					@endif
+				</small>
+			</p>
 			<form method="POST" action="{{route('geofence.store', ['circuito' => $circuito])}}">
 				@csrf
 				<div class="row mb-3">
