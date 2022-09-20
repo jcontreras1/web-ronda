@@ -73,6 +73,20 @@ crossorigin=""/>
 integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
 crossorigin=""></script>
 <script type="text/javascript">
+	
+	var icono_sin_novedades = L.icon({
+		iconUrl: '{{ asset('assets/img/markers/marker-ok.png') }}',
+		iconSize:     [35, 47]
+	});	
+	var icono_novedades = L.icon({
+		iconUrl: '{{ asset('assets/img/markers/marker-warning.png') }}',
+		iconSize:     [35, 47]
+	});	
+	var icono_imagenes = L.icon({
+		iconUrl: '{{ asset('assets/img/markers/marker-photo.png') }}',
+		iconSize:     [35, 47]
+	});
+
 	var x = document.getElementById("geo");
 	var formulario = document.getElementById("formulario");
 	var marker = null;
@@ -102,7 +116,7 @@ crossorigin=""></script>
 
 	let punto_visitado = null;
 	@foreach($ronda->checkpoints as $geo)
-	punto_visitado = L.marker([{{$geo->latitud}}, {{$geo->longitud}}]).addTo(myMap);
+	punto_visitado = L.marker([{{$geo->latitud}}, {{$geo->longitud}}], {icon: @if(count($geo->images) > 0) icono_imagenes @elseif($geo->novedad !== 'Sin novedades') icono_novedades @else icono_sin_novedades @endif}).addTo(myMap);
 	punto_visitado.bindPopup('<strong>{{ $geo->novedad }}</strong><br>Visitado a las {{ date('d/m/Y H:i', strtotime($geo->created_at)) }}');
 	@endforeach
 
