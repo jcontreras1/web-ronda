@@ -12,7 +12,7 @@
 
 <div class="container">
 	<h3>
-		<i class="fas fa-users"></i> Ronda <strong>#{{$ronda->id}}</strong>
+		<i class="fas fa-users"></i> Ronda #{{$ronda->id}} @if($ronda->circuito) | <small class="text-muted">{{ $ronda->circuito->titulo }} </small> @endif
 		<span class="float-end">
 			@include('components.misc.backbutton', ['url' => route('ronda.index')])
 		</span>
@@ -105,6 +105,19 @@ crossorigin=""></script>
 	punto_visitado = L.marker([{{$geo->latitud}}, {{$geo->longitud}}]).addTo(myMap);
 	punto_visitado.bindPopup('<strong>{{ $geo->novedad }}</strong><br>Visitado a las {{ date('d/m/Y H:i', strtotime($geo->created_at)) }}');
 	@endforeach
+
+	//Si hay geofences
+	@if($ronda->circuito)
+	@foreach($ronda->circuito->geofences as $geo)
+	var circle = L.circle([{{$geo->latitud}}, {{$geo->longitud}}], {
+		color: '#eb4034',
+		fillColor: '#eb4034',
+		fillOpacity: 0.3,
+		radius: {{$geo->radio}}
+	}).addTo(myMap);
+	circle.bindPopup('Punto #{{$geo->id}}');
+	@endforeach
+	@endif
 
 	function showError(error) {
 		console.log(error);

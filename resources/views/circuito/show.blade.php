@@ -17,7 +17,7 @@
 			<p>
 				<small class="text-muted mb-3">
 					Creado por <strong>{{ucfirst($circuito->creador->nombre)}} {{ucfirst($circuito->creador->apellido)}}</strong> <br>
-					Área: <strong>{{ $circuito->area->nombre }}</strong> <br>
+					Área: <strong>{{ $circuito->area->nombre ?? 'Sin Área' }}</strong> <br>
 					Fecha: <strong>{{ date('d/m/Y H:i', strtotime($circuito->created_at)) }}</strong> <br>
 					@if(count($circuito->geofences))
 					<strong>{{ count($circuito->geofences) }} </strong> punto(s)

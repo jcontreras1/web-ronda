@@ -17,10 +17,23 @@ class RondaController extends Controller
         $circuitos = Circuito::all();
         $abiertas = Ronda::where('abierta', true)->get();
         $cerradas = Ronda::where('abierta', false)->get();
+        
+        $areas = Auth::user()->areas;
+
+        $circuitos_posibles = [];
+        foreach($areas as $area){
+            foreach($area->circuitos as $circuito){
+                if(!in_array($circuito, $circuitos_posibles)){
+                    $circuitos_posibles[] = $circuito;
+                }
+            }
+        }
         return view('rondas.index')->with(compact([
             'abiertas',
             'cerradas',
             'circuitos',
+            'circuitos_posibles',
+            'areas',
         ]));
     }
 
@@ -31,8 +44,13 @@ class RondaController extends Controller
     }
 
     public function store(Request $request){
+
+        $circuito = null;
+        if($request->has('circuito_id'))
+            $circuito = $request->circuito_id;
         Ronda::create([
             'user_id' => Auth::user()->id,
+            'circuito_id' => $circuito,
         ]);
         toast('Ronda creada', 'success')->autoClose(1500);
         return back();
