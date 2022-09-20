@@ -3,7 +3,7 @@
 		<div class="card-body">
 			<a class="text-dark" href="{{route('ronda.show', $ronda)}}" style="text-decoration: none;">
 				<div class="card-title">
-					<h5>Ronda #{{$ronda->id}} - <small class="text-muted">{{ $ronda->circuito->titulo }}</small></h5>
+					<h5>Ronda #{{$ronda->id}} @if($ronda->circuito)- <small class="text-muted"> {{ $ronda->circuito->titulo }}</small> @endif </h5>
 					<hr>
 					<div>						
 						Fecha: <strong>{{ date('d/m/Y', strtotime($ronda->created_at)) }} </strong> a las <strong>{{ date('H:i', strtotime($ronda->created_at)) }}</strong>
