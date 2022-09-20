@@ -75,6 +75,19 @@ class AuthServiceProvider extends ServiceProvider
         });        
         Gate::define('ventas', function (User $user) {
             return evaluar_permisos(['ADM_SIS', 'VENTAS'], $user->tipos_usuario);
+        });        
+        Gate::define('supervisar', function (User $user) {
+            if(evaluar_permisos(['ADM_SIS'], $user->tipos_usuario)){
+                return true;
+            }else{
+                foreach($user->areas as $area){
+                    if($area->pivot->es_jefe){
+                        /*Es jefe de algún área*/
+                        return true;
+                    }
+                }
+                return false;
+            }
         });
     }
 }

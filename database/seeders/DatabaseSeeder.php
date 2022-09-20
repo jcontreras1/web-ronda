@@ -46,7 +46,7 @@ class DatabaseSeeder extends Seeder
             'nombre' => 'CON_SIS',
         ],[
             'descripcion' => 'Solo consultas',
-        ]);        
+        ]);
         
         $clave = Hash::make('jonathan');
         User::firstOrCreate(

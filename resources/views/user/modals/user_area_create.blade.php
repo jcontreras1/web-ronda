@@ -11,14 +11,20 @@
 				<div class="modal-body">
 					<div class="row">
 						<div class="col-12">
-							 <label>Area</label>
-							 <div class="py-1"></div>
-							<select name="area_id" class="form-select primerCampo">
+							<label>Area</label>
+							<select name="area_id" class="form-select primerCampo mb-2">
 								@foreach($areas as $area)
-									<option value="{{$area->id}}"> {{ strtoupper($area->nombre) }} </option>
+								<option value="{{$area->id}}"> {{ strtoupper($area->nombre) }} </option>
 								@endforeach
 							</select>
-							<br/>
+							@can('administrar')
+							<label>Es jefe</label>
+							<h3>
+								<div class="form-check form-switch">
+									<input class="form-check-input" type="checkbox" role="switch" name="es_jefe">
+								</div>
+							</h3>
+							@endcan
 						</div>
 					</div>
 				</div>

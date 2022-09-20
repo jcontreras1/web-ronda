@@ -99,7 +99,7 @@
                 <tbody>
                     @foreach($user->areas as $area)
                     <tr>
-                        <td>{{ strtoupper($area->nombre) }}</td>
+                        <td>{{ strtoupper($area->nombre) }} @if($area->pivot->es_jefe) <i data-toggle="tooltip" title="Es jefe área" class="bi bi-star-fill text-warning"></i> @endif</td>
                         @can('administrar')
                         <td>
                             <form method="POST" action="{{route('area_usuario.destroy', ['user' => $user, 'area_usuario' => $area->pivot->id])}}">

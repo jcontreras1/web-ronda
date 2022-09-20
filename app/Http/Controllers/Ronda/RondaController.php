@@ -14,12 +14,11 @@ use Illuminate\Support\Facades\Storage;
 class RondaController extends Controller
 {
     public function index(){
-        $circuitos = Circuito::all();
-        $abiertas = Ronda::where('abierta', true)->get();
-        $cerradas = Ronda::where('abierta', false)->get();
-        
+
+        /*Áreas a las que pertenezco*/
         $areas = Auth::user()->areas;
 
+        /*Circuitos de las áreas a las que pertenezco*/
         $circuitos_posibles = [];
         foreach($areas as $area){
             foreach($area->circuitos as $circuito){
@@ -28,10 +27,22 @@ class RondaController extends Controller
                 }
             }
         }
+
+        /*Si puede administrar el sistema, verá esto. Caso contrario, se ve solo lo del área*/
+        $abiertas = Ronda::where('abierta', true)->get();
+        $cerradas = Ronda::where('abierta', false)->get();
+
+        if(!evaluar_permisos(['ADM_SIS'], Auth::user()->tipos_usuario)){
+            /*Rondas cerradas cuyo circuito, pertenece a algún área a la que pertenezco*/
+            $cerradas = Ronda::where('abierta', false)->whereIn('circuito_id', array_map(function($elem){return $elem['id'];}, $circuitos_posibles))->get();
+            /*Rondas abiertas cuyo circuito, pertenece a algín área a la que pertenezco*/
+            $abiertas = Ronda::where('abierta', true)->whereIn('circuito_id', array_map(function($elem){return $elem['id'];}, $circuitos_posibles))->get();
+        }
+
         return view('rondas.index')->with(compact([
             'abiertas',
             'cerradas',
-            'circuitos',
+            // 'circuitos',
             'circuitos_posibles',
             'areas',
         ]));
