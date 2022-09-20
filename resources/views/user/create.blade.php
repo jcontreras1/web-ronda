@@ -46,13 +46,19 @@
                 <div class="row">
                     <div class="col-12">
                         <strong>Rol</strong>
-                        <br>
-                        <select name="rol" class="form-control" required>
+                        <select name="rol" class="form-select" required>
                             @foreach($tipos_usuario as $rol)
                             <option value="{{$rol->id}}">{{ $rol->nombre }} - {{$rol->descripcion}}</option>
                             @endforeach
                         </select>
-                        <br/>
+                    </div>
+                    <div class="col-12">
+                        <strong>Áreas</strong>
+                        <select name="area[]" class="form-select" required multiple>
+                            @foreach($areas as $area)
+                            <option value="{{$area->id}}">{{ strtoupper($area->nombre) }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
                 <hr>

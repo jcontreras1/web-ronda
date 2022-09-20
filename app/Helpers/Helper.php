@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Varios\AreaUsuario;
 use App\Models\Varios\VariableGlobal;
 
 function variable_global($clave){
@@ -15,6 +16,14 @@ function obj_variable_global($clave){
 		return VariableGlobal::where('clave', $clave)->first();
 	}
 	return false;
+}
+
+function soy_jefe($area, $user){
+	if(evaluar_permisos(['ADM_SIS'], $user->tipos_usuario)){
+		return true;
+	}
+	$ausu = AreaUsuario::where('area_id', $area->id)->where('user_id', $user->id)->where('es_jefe', true)->count();
+	return boolval($ausu);
 }
 
 function evaluar_permisos($roles_necesarios, $roles_del_usuario){

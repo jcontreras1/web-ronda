@@ -86,7 +86,7 @@
             @endif
             <div class="py-2"></div>
             <h5>Áreas 
-                @can('administrar')
+                @can('supervisar')
                 | 
                 <button type="button" class="btn btn-success btn-sm" id="agregar_area" data-toggle="tooltip" title="Agregar/Cambiar area"><i class="bi bi-plus"></i></button>
                 @endcan
@@ -99,15 +99,16 @@
                 <tbody>
                     @foreach($user->areas as $area)
                     <tr>
-                        <td>{{ strtoupper($area->nombre) }} @if($area->pivot->es_jefe) <i data-toggle="tooltip" title="Es jefe área" class="bi bi-star-fill text-warning"></i> @endif</td>
-                        @can('administrar')
-                        <td>
+                        <td>{{ strtoupper($area->nombre) }} @if($area->pivot->es_jefe) <i data-toggle="tooltip" title="Es jefe área" class="bi bi-star-fill text-warning"></i> @endif
+                        @if(soy_jefe($area, Auth::user()))
+                        <span class="float-end">
                             <form method="POST" action="{{route('area_usuario.destroy', ['user' => $user, 'area_usuario' => $area->pivot->id])}}">
                                 @csrf @method('DELETE')
                                 <button data-toggle="tooltip" title="Eliminar cargo" class="btn btn-danger btn-sm btn_delete_area" ><i class="bi bi-trash"></i></button>
                             </form>
+                        </span>
                         </td>
-                        @endcan
+                        @endif
                     </tr>
                     @endforeach
                 </tbody>

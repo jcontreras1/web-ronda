@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Usuario\TipoUsuario;
 use App\Models\Usuario\UsuarioTipoUsuario;
 use App\Models\Varios\Area;
+use App\Models\Varios\AreaUsuario;
 use App\Notifications\BienvenidoUsuarioNuevo;
 use Carbon\Carbon;
 use DB;
@@ -20,15 +21,37 @@ class UserController extends Controller
 {
     public function index(){
         $this->authorize('viewAny', User::class);
-        $users = User::where('id', '<>', 1)->get();
+        
+        $areas = Auth::user()->areas()->wherePivot('es_jefe', true)->get();
+        $ids_usuario = [];
+        foreach($areas as $area){
+            foreach($area->usuarios as $usr){
+                if(!in_array($usr->id, $ids_usuario) && $usr->id !== 1 && $usr->id !== Auth::user()->id){
+                    $ids_usuario[] = $usr->id;
+                }
+            }
+        } 
+
+        $users = User::whereIn('id', $ids_usuario)->get();
+        if(evaluar_permisos(['ADM_SIS'], Auth::user()->tipos_usuario)){
+            $users = User::where('id', '<>', 1)->get();
+        }
         return view('user.index', compact('users'));
     }
 
     public function create()
     {
         $this->authorize('create', User::class);
-        $tipos_usuario = TipoUsuario::all();
-        return view('user.create',compact('tipos_usuario'));
+        $tipos_usuario = TipoUsuario::whereNotIn('nombre', ['ADM_SIS', 'CON_SIS'])->get();
+        $areas = Auth::user()->areas()->wherePivot('es_jefe', true)->get();
+        if(evaluar_permisos(['ADM_SIS'], Auth::user()->tipos_usuario)){
+            $tipos_usuario = TipoUsuario::all();
+            $areas = Area::all();
+        }
+        return view('user.create',compact([
+            'tipos_usuario',
+            'areas',
+        ]));
     }
     /**
      * Store a newly created resource in storage.
@@ -43,6 +66,7 @@ class UserController extends Controller
             'nombre' => 'required',
             'email' => 'required|email',
             'rol' => 'required',
+            'area' => 'required',
         ]);
         
         // $clave = Hash::make(Str::random(15));
@@ -69,6 +93,13 @@ class UserController extends Controller
                 'usuario_id' => $user->id,
                 'tipo_usuario_id' => $request->rol
             ]);
+
+            foreach($request->area as $area){
+                AreaUsuario::create([
+                    'area_id' => $area,
+                    'user_id' => $user->id
+                ]);
+            }
 
             $user->notify(new BienvenidoUsuarioNuevo($token));
             DB::commit();
@@ -98,7 +129,10 @@ class UserController extends Controller
     {
         $this->authorize('update', $user);
         $tipos_usuario = TipoUsuario::all();
-        $areas = Area::all();
+        $areas = Auth::user()->areas()->wherePivot('es_jefe', true)->get();
+        if(evaluar_permisos(['ADM_SIS'], Auth::user()->tipos_usuario)){
+            $areas = Area::all();
+        }
         return view('user.edit',compact('user'), compact([
             'tipos_usuario',
             'areas',

@@ -15,7 +15,7 @@
 					</select>
 				</div>
 				<div class="modal-footer">
-					<a class="btn btn-success" id="btn_url_comparar">Aceptar</a>
+					<button class="btn btn-success">Aceptar</button>
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
 				</div>
 			</form>

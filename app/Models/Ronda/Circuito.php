@@ -26,7 +26,7 @@ class Circuito extends Model
     }
 
     public function creador(){
-        return $this->belongsTo(User::class, 'created_by');
+        return $this->belongsTo(User::class, 'created_by')->withTrashed();
     }
 
     public function area(){

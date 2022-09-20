@@ -13,6 +13,13 @@ class CircuitoController extends Controller
     public function index(){
         $circuitos = Circuito::all();
         $areas_mias = Auth::user()->areas;
+        
+        if(!evaluar_permisos(['ADM_SIS'], Auth::user()->tipos_usuario)){
+            /*Areas donde soy jefe*/
+            $areas_mias = Auth::user()->areas()->wherePivot('es_jefe', true)->get();
+            /*circuitos de las áreas donde soy jefe*/
+            $circuitos = Circuito::whereIn('area_id', array_map(function($elem){return $elem['id'];}, $areas_mias->toArray()))->get();
+        }
         return view('circuito.index')->with(compact(['circuitos', 'areas_mias']));
     }
 
