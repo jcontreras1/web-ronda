@@ -33,9 +33,9 @@
 					<td>{{$circuito->creador->nombre}} - {{$circuito->created_at->diffForHumans()}}</td>
 					<td>
 						<a href="{{route('circuito.show', $circuito)}}" class="btn btn-primary"><i class="bi bi-list-task"></i></a>
-						@if($circuito->creador->id == Auth::user()->id)
+						@can('administrar')
 						<button class="btn btn-danger" onclick="delete_circuito('{{route('circuito.destroy', $circuito)}}');"><i class="bi bi-trash"></i></button>
-						@endif
+						@endcan
 					</td>
 				</tr>
 				@endforeach

@@ -7,10 +7,11 @@ use App\Models\User;
 use App\Models\Varios\Area;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Circuito extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $table = 'circuito';
     protected $fillable = 
@@ -19,6 +20,7 @@ class Circuito extends Model
         'descripcion',
         'created_by',
         'area_id',
+        'deleted_at',
     ];
 
     public function geofences(){
