@@ -116,7 +116,7 @@ crossorigin=""></script>
 
 	let punto_visitado = null;
 	@foreach($ronda->checkpoints as $geo)
-	punto_visitado = L.marker([{{$geo->latitud}}, {{$geo->longitud}}], {icon: @if(count($geo->images) > 0) icono_imagenes @elseif($geo->novedad !== 'Sin novedades') icono_novedades @else icono_sin_novedades @endif}).addTo(myMap);
+	punto_visitado = L.marker([{{$geo->latitud}}, {{$geo->longitud}}], {icon: @if(count($geo->images) > 0) icono_imagenes @elseif($geo->novedad) icono_novedades @else icono_sin_novedades @endif}).addTo(myMap);
 	punto_visitado.bindPopup('<strong>{{ $geo->novedad }}</strong><br>Visitado a las {{ date('d/m/Y H:i', strtotime($geo->created_at)) }}');
 	@endforeach
 

@@ -33,7 +33,13 @@
       <tbody>
         @foreach($cerradas as $ronda)
         <tr onclick="ver_circuito('{{ route('ronda.show', $ronda) }}')" style="cursor: pointer;">
-          <td data-order="{{ $ronda->id }}">{{ucwords($ronda->creador->nombre)}}</td>
+          <td data-order="{{ $ronda->id }}">{{ucwords($ronda->creador->nombre)}} 
+              @if($ronda->checkpoints()->where('novedad', '<>', null)->count() > 0)
+            <span class="float-end badge rounded-pill bg-danger">
+              {{ count($ronda->checkpoints()->where('novedad', '<>', null)->get()) }}
+            </span>
+              @endif
+          </td>
           {{-- <td >{{count($ronda->checkpoints)}}</td> --}}
           <td data-order="{{ $ronda->id }}">{{date('d/m/Y H:i', strtotime($ronda->created_at))}}</td>
           <td>

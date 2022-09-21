@@ -19,14 +19,11 @@ class CheckpointController extends Controller
 			'latitud' => 'required',
 			'longitud' => 'required',
 		]);
-		$novedad = $request->novedad;
-		if(trim($request->novedad) == "")
-			$novedad = "Sin novedades";
 
 		$checkpoint = Checkpoint::create([
 			'latitud' => $request->latitud,
 			'longitud' => $request->longitud,
-			'novedad' => $novedad,
+			'novedad' => $request->novedad,
 			'ronda_id' => $ronda->id,
 			'user_id' => Auth::user()->id,
 		]);
