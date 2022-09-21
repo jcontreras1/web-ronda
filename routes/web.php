@@ -12,7 +12,6 @@ use App\Http\Controllers\Usuario\TipoUsuarioController;
 use App\Http\Controllers\Varios\ColorController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/pepe', function(){abort(500);});
 
 Route::get('/', function () { return view('welcome'); });
 Route::get('clave/definir/{token}', [ResetPasswordController::class, 'showDefineForm'])->name('password.define');
@@ -36,14 +35,10 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('area', AreaController::class);
     Route::resource('/user/{user}/area_usuario', AreaUsuarioController::class);
     Route::resource('ronda', RondaController::class)->only(['index', 'show', 'store', 'destroy']);
-    Route::resource('circuito', CircuitoController::class)->only(['index', 'show', 'update', 'store', 'destroy']);
-    Route::resource('ronda/{ronda}/checkpoint', CheckpointController::class)->only(['store', 'update', 'destroy']);
-    Route::resource('circuito/{circuito}/geofence', GeofenceController::class)->only(['create', 'store', 'update', 'destroy']);
-    // Route::get('/circuito/', [RondaController::class, 'definir'])->name('ronda.define');
-    
     Route::patch('ronda/{ronda}/cerrar', [RondaController::class, 'cerrar'])->name('ronda.cerrar');
-    Route::get('ronda/{ronda}/comparar/{circuito}', [RondaController::class, 'comparar'])->name('ronda.comparar');
-
-    Route::view('/test', 'test.test');
-    Route::post('/etc/img', [RondaController::class, 'img'])->name('img.upload');
+    Route::resource('ronda/{ronda}/checkpoint', CheckpointController::class)->only(['store', 'update', 'destroy']);
+    Route::resource('circuito', CircuitoController::class)->only(['index', 'show', 'update', 'store', 'destroy']);
+    Route::resource('circuito/{circuito}/geofence', GeofenceController::class)->only(['store', 'update', 'destroy']);
+    
+    // Route::get('ronda/{ronda}/comparar/{circuito}', [RondaController::class, 'comparar'])->name('ronda.comparar');
 });

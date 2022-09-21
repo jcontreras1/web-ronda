@@ -6,7 +6,6 @@
 	<h3>
 		{{$circuito->titulo}} | <small><a href="#" data-bs-toggle="modal" data-bs-target="#mdl_titulo" class="text-info"><i class="bi bi-pencil-fill"></i></a></small>
 		<span class="float-end">
-			{{-- <a href="{{route('geofence.create', ['circuito' => $circuito])}}" data-toggle="tooltip" title="Agregar punto" class="btn btn-success"><i class="bi bi-plus"></i></a> --}}
 			@include('components.misc.backbutton', ['url' => route('circuito.index')])
 		</span>
 	</h3>

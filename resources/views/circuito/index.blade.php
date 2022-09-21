@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 @include('circuito.modals.create')
-@section('titulo', "Circuitos")
+@section('titulo', "Circuitos - ")
 <div class="container">
 	<h3>
 		Circuitos

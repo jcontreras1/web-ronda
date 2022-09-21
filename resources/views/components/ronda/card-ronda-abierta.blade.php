@@ -19,7 +19,7 @@
 				</div>
 			</a>
 		</div>
-		@if(Auth::user()->id == $ronda->creador->id)
+		@if(Auth::user()->id == $ronda->creador->id || evaluar_permisos(['ADM_SIS'], Auth::user()->tipos_usuario))
 		<div class="card-footer">
 			<span class="float-end">
 				@if(count($ronda->checkpoints) > 0)

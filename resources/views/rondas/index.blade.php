@@ -35,19 +35,17 @@
 				<tr onclick="ver_circuito('{{ route('ronda.show', $ronda) }}')" style="cursor: pointer;">
 					<td data-order="{{ $ronda->id }}">{{ucwords($ronda->creador->nombre)}} 
 						<span class="lead text-primary d-block d-md-inline float-md-end ">
-						@if(count($ronda->novedades) > 0)
-						<i class="bi bi-card-text"></i>
-						@endif
-						@if(count($ronda->images) > 0)
-						<i class="bi bi-card-image"></i>
-						@endif
+							@if(count($ronda->novedades) > 0)
+							<i class="bi bi-card-text"></i>
+							@endif
+							@if(count($ronda->images) > 0)
+							<i class="bi bi-card-image"></i>
+							@endif
 						</span>
 					</td>
-					{{-- <td >{{count($ronda->checkpoints)}}</td> --}}
 					<td data-order="{{ $ronda->id }}">{{date('d/m/Y H:i', strtotime($ronda->created_at))}}</td>
 					<td>
 						<a href="{{route('ronda.show', $ronda)}}" data-toggle="tooltip" title="Ver" class="btn btn-primary mb-1"><i class="bi bi-list-task"></i></a>
-						{{-- <button data-toggle="tooltip" title="Comparar" class="btn btn-primary mb-1" onclick="comparar({{$ronda->id}})"><i class="bi bi-map"></i></button> --}}
 					</td>
 				</tr>
 				@endforeach
@@ -62,7 +60,6 @@
 
 	@section('scripts')
 	<script type="text/javascript">
-		var url_base = "{{route('ronda.comparar', ['ronda' => '__ronda', 'circuito' => '__circuito'])}}";
 		var btn_ronda_create = document.getElementById('btn_ronda_create');
 		btn_ronda_create.addEventListener('click', crear_rondin);
 
@@ -119,39 +116,5 @@
 				})
 			});
 		});
-
-		function comparar(ronda){
-			document.getElementById('ronda_id').value = ronda;
-			let url = url_base.replace('__ronda', ronda);
-			let circ = $('#select_circuito').val();
-			if(!circ){
-				Swal.fire({
-					icon: 'error',
-					title: 'No hay circuitos definidos',
-				});
-				return;
-			}else{
-				let opciones = document.getElementById("select_circuito").options.length;
-				/*Si hay una sola opcion, que sea directamente un redirect*/
-				if(opciones == 1){         
-					let url = url_base.replace('__ronda', ronda);
-					url = url.replace('__circuito', circ);
-					location.href = url;
-				}else{
-					$('#mdl_ronda_comparar').modal('show');
-					url = url.replace('__circuito', circ);
-					document.getElementById('btn_url_comparar').setAttribute('href', url);
-				}
-			}
-		}
-
-		function build_url(circuito){
-			ronda = document.getElementById('ronda_id').value;
-			let url = url_base.replace('__ronda', ronda);
-			url = url.replace('__circuito', circuito);
-			document.getElementById('btn_url_comparar').setAttribute('href', url);
-
-		}
-
 	</script>
 	@endsection

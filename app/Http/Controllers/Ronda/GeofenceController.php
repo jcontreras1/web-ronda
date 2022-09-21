@@ -10,9 +10,6 @@ use Illuminate\Support\Facades\Auth;
 
 class GeofenceController extends Controller
 {
-    public function create(Circuito $circuito){
-        return view('geofence.create')->with(compact(['circuito']));
-    }
 
     public function store(Request $request, Circuito $circuito){
         $request->validate([
