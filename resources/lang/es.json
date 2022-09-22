@@ -35,6 +35,7 @@
     "This action is unauthorized." : "Operación no permitida",
     "Go Home" : "Inicio",
     "Not Found" : "Página no encontrada",
-    "Server Error" : "Error interno"
+    "Server Error" : "Error interno",
+    "Service Unavailable" : "En mantenimiento"
 
 }
