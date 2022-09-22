@@ -17,11 +17,12 @@
         
         @include('components.menu.card_menu', ['url' => route('config.index'), 'bg_color' => '#816797', 'class_icon' => 'bi bi-gear-fill', 'title' =>'Configuraciones'])
         
-        @include('components.menu.card_menu', ['url' => '#', 'bg_color' => '#4C3A51', 'class_icon' => 'bi bi-clipboard2-data', 'title' =>'Exportable'])
         
         @endcan
         
         @endcan
+        
+        @include('components.menu.card_menu', ['url' => route('export.index'), 'bg_color' => '#4C3A51', 'class_icon' => 'bi bi-clipboard2-data', 'title' =>'Exportable'])
 
     </div>
 </div>

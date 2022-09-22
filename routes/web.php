@@ -3,6 +3,7 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Empresa\ConfigController;
 use App\Http\Controllers\Ronda\CheckpointController;
 use App\Http\Controllers\Ronda\CircuitoController;
+use App\Http\Controllers\Ronda\ExportController;
 use App\Http\Controllers\Ronda\GeofenceController;
 use App\Http\Controllers\Ronda\RondaController;
 use App\Http\Controllers\UserController;
@@ -31,7 +32,6 @@ Route::middleware(['auth'])->group(function () {
         Route::patch('/profile/update', [UserController::class, 'profile_update'])->name('profile.update');
         Route::patch('/profile/password/', [UserController::class, 'password_update'])->name('profile.password.update');
     });
-
     Route::resource('area', AreaController::class);
     Route::resource('/user/{user}/area_usuario', AreaUsuarioController::class);
     Route::resource('ronda', RondaController::class)->only(['index', 'show', 'store', 'destroy']);
@@ -39,6 +39,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('ronda/{ronda}/checkpoint', CheckpointController::class)->only(['store', 'update', 'destroy']);
     Route::resource('circuito', CircuitoController::class)->only(['index', 'show', 'update', 'store', 'destroy']);
     Route::resource('circuito/{circuito}/geofence', GeofenceController::class)->only(['store', 'update', 'destroy']);
-    
-    // Route::get('ronda/{ronda}/comparar/{circuito}', [RondaController::class, 'comparar'])->name('ronda.comparar');
+    /*Export*/
+    Route::get('/export', [ExportController::class, 'index'])->name('export.index');    
+    Route::get('/export/{ronda}', [ExportController::class, 'show'])->name('export.show');    
 });

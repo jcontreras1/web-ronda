@@ -33,13 +33,16 @@
 			<tbody>
 				@foreach($cerradas as $ronda)
 				<tr onclick="ver_circuito('{{ route('ronda.show', $ronda) }}')" style="cursor: pointer;">
-					<td data-order="{{ $ronda->id }}">{{ucwords($ronda->creador->nombre)}} 
+					<td data-order="{{ $ronda->id }}">{{ucwords($ronda->creador->nombre)}}
 						<span class="lead text-primary d-block d-md-inline float-md-end ">
 							@if(count($ronda->novedades) > 0)
-							<i class="bi bi-card-text"></i>
+							<i data-toggle="tooltip" title="Tiene novedades" class="bi bi-card-text"></i>
 							@endif
 							@if(count($ronda->images) > 0)
-							<i class="bi bi-card-image"></i>
+							<i data-toggle="tooltip" title="Hay imágenes" class="bi bi-card-image"></i>
+							@endif
+							@if(count($ronda->checkpoints) < 10 && count($ronda->checkpoints) > 0)
+							<i data-toggle="tooltip" title="Puntos visitados" class="bi bi-{{ count($ronda->checkpoints) }}-circle"></i>
 							@endif
 						</span>
 					</td>
