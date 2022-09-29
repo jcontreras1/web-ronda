@@ -2,16 +2,10 @@
 @section('content')
 @section('titulo', 'Rondas - ')
 <div class="container">
-	<h3 class="">Rondas abiertas
-		<span class="float-end">
-			<button class="btn btn-success text-white" id="btn_ronda_create" data-toggle="tooltip" title="Agregar ronda"><i class="bi bi-plus"></i></button>
-			@include('components.misc.backbutton', ['url' => url('home')])
-		</span>
-	</h3>
-	<hr>
-	
+	<x-misc-title title="Rondas cerradas">
+		<button class="btn btn-success" id="btn_ronda_create" data-toggle="tooltip" title="Agregar ronda"><i class="bi bi-plus"></i></button>
+	</x-misc-title>
 	{{-- Rondas históricas --}}
-	<h4>Histórico</h4>
 	<div class="table-responsive">
 		<table class="table table-striped" id="tabla">
 			<thead>

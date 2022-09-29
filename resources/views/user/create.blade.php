@@ -2,13 +2,7 @@
 @section('titulo', 'Crear Usuario - ')
 @section('content')
 <div class="container">
-    <h3> 
-        Crear Usuario
-        <span class="float-end">
-            @include('components.misc.backbutton', ['url' => route('user.index')])
-        </span>
-    </h3>
-    <hr> 
+    <x-misc-title title="Crear Usuario" back="{{ route('user.index') }}" />
     <div class="row justify-content-center">
         <div class="col-md-12">
             <form action="{{route('user.store')}}" method="post" id="form">

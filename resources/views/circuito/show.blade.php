@@ -2,14 +2,10 @@
 @section('content')
 @section('titulo', "Circuitos")
 @include('circuito.modals.mdl_titulo')
-<div class="container">
-	<h3>
-		{{$circuito->titulo}} | <small><a href="#" data-bs-toggle="modal" data-bs-target="#mdl_titulo" class="text-info"><i class="bi bi-pencil-fill"></i></a></small>
-		<span class="float-end">
-			@include('components.misc.backbutton', ['url' => route('circuito.index')])
-		</span>
-	</h3>
-	<hr>
+<div class="container">	
+	<x-misc-title :title="$circuito->titulo" back="{{ route('circuito.index') }}">
+		<a href="#" data-bs-toggle="modal" data-bs-target="#mdl_titulo" class="btn btn-warning"><i class="bi bi-pencil-fill"></i></a>
+	</x-misc-title>
 
 	<div class="row">
 		<div class="col-12 col-md-3">

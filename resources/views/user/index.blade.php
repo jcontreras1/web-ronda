@@ -2,15 +2,9 @@
 @section('content')
 @section('titulo', 'Usuarios - ')
 <div class="container">
-  <h3>
-    <i class="fas fa-users"></i> Usuarios
-    <span class="float-end">
-      <a href="{{route('user.create')}}" class="btn btn-success text-white" data-toggle="tooltip" title="Agregar Usuario"><i class="bi bi-person-plus-fill"></i></a>
-      @include('components.misc.backbutton', ['url' => url('home')])
-    </span>
-  </h3>
-  <div class="py-2"></div>
-  <hr>
+  <x-misc-title title="Usuarios">
+    <a href="{{route('user.create')}}" class="btn btn-success text-white" data-toggle="tooltip" title="Agregar Usuario"><i class="bi bi-person-plus-fill"></i></a>
+  </x-misc-title>
   <div class="table-responsive">
     <table class=" table table-hover table-sm" id="tabla" data-page-length='25'>
       <thead>

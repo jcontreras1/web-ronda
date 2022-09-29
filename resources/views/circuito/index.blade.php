@@ -3,18 +3,12 @@
 @include('circuito.modals.create')
 @section('titulo', "Circuitos - ")
 <div class="container">
-	<h3>
-		Circuitos
-		<span class="float-end">
-			@if(count($areas_mias) > 0)
-			
-			<button data-toggle="tooltip" id="btn_circuito_create" title="Agregar Circuito" class="btn btn-success"><i class="bi bi-plus"></i></button>
-			@include('components.misc.backbutton', ['url' => url('home')])
+	<x-misc-title title="Circuitos">
+		@if(count($areas_mias) > 0)			
+		<button data-toggle="tooltip" id="btn_circuito_create" title="Agregar Circuito" class="btn btn-success"><i class="bi bi-plus"></i></button>
+		@endif
+	</x-misc-title>
 
-			@endif
-		</span>
-	</h3>
-	<hr>
 	<div class="table-responsive">		
 		<table class="table table-striped" id="tabla">
 			<thead>

@@ -4,14 +4,9 @@
 @include('area.modals.modif')
 	@section('titulo', 'Areas - ')
 	<div class="container">
-	<h3>
-		Áreas
-		<span class="float-end">
-			<button data-toggle="model" onclick="modal_create()" class="btn btn-success"><i class="bi bi-plus"></i></button>
-			@include('components.misc.backbutton', ['url' => route('home')])
-		</span>
-	</h3>
-	<hr>
+	<x-misc-title title="Áreas">
+		<button data-toggle="model" onclick="modal_create()" class="btn btn-success"><i class="bi bi-plus"></i></button>
+	</x-misc-title>
 	<div class="table-responsive">
 		<table class="table table-striped">
 			<thead>

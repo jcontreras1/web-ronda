@@ -1,26 +1,22 @@
 @extends('layouts.app')
 @section('content')
-{{-- @include('rondas.modals.comparar') --}}
 @include('rondas.modals.create')
 @section('titulo', 'Rondas - ')
 <div class="container">
-	<h3 class="">Rondas abiertas
-		<span class="float-end">
-			<button class="btn btn-success text-white" id="btn_ronda_create" data-toggle="tooltip" title="Agregar ronda"><i class="bi bi-plus"></i></button>
-			@include('components.misc.backbutton', ['url' => url('home')])
-		</span>
-	</h3>
-	<hr>
+
+	<x-misc-title title="Rondas Abiertas">
+		<button class="btn btn-success" id="btn_ronda_create" data-toggle="tooltip" title="Agregar ronda"><i class="bi bi-plus"></i></button>
+	</x-misc-title>
+
 	{{-- Rondas abiertas --}}
 	<div class="row mb-3">
-		@foreach($abiertas as $ronda)
-		
+		@foreach($abiertas as $ronda)		
 		@include('components.ronda.card-ronda-abierta', ['ronda' => $ronda])
 		@endforeach
 	</div>
 
 	{{-- Rondas históricas --}}
-	<h4>Histórico</h4>
+	<h4 class="mb-3">Histórico</h4>
 	<div class="table-responsive">
 		<table class="table table-striped" id="tabla">
 			<thead>
@@ -55,69 +51,70 @@
 			</tbody>
 		</table>
 	</div>
-	{{-- @can('administrar_sistema') --}}
-	<form id="form_delete_ronda" method="POST"> @csrf @method('DELETE') </form>
-	<form id="form_cerrar_ronda" method="POST"> @csrf @method('PATCH') </form>
-	{{-- @endcan --}}
-	@endsection
+</div>
+{{-- @can('administrar_sistema') --}}
+<form id="form_delete_ronda" method="POST"> @csrf @method('DELETE') </form>
+<form id="form_cerrar_ronda" method="POST"> @csrf @method('PATCH') </form>
+{{-- @endcan --}}
+@endsection
 
-	@section('scripts')
-	<script type="text/javascript">
-		var btn_ronda_create = document.getElementById('btn_ronda_create');
-		btn_ronda_create.addEventListener('click', crear_rondin);
+@section('scripts')
+<script type="text/javascript">
+	var btn_ronda_create = document.getElementById('btn_ronda_create');
+	btn_ronda_create.addEventListener('click', crear_rondin);
 
-		function crear_rondin(){
-			let opciones = document.getElementById('select_circuito').length;
-			if(opciones > 1){
-				var modal = new bootstrap.Modal(document.getElementById('mdl_ronda_create'));
-				modal.show();
-			}else{
-				var form = document.getElementById('form_ronda_create');
-				form.submit();
-			}
+	function crear_rondin(){
+		let opciones = document.getElementById('select_circuito').length;
+		if(opciones > 1){
+			var modal = new bootstrap.Modal(document.getElementById('mdl_ronda_create'));
+			modal.show();
+		}else{
+			var form = document.getElementById('form_ronda_create');
+			form.submit();
 		}
+	}
 
-		function ver_circuito(url){
-			location.href = url;
-		}
+	function ver_circuito(url){
+		location.href = url;
+	}
 
-		$(document).ready(function(){
-			$('#tabla').DataTable({
-				language : {
-					url : '{{asset('assets/dt.spanish.json')}}'
-				},
-				order: [[1, 'desc']],
-			});
-			$('.btn_delete_ronda').click(function(){
-				let url = $(this).data('url');
-				Swal.fire({
-					icon: 'question',
-					title: '¿Eliminar Ronda?',
-					showCancelButton: true,
-					confirmButtonText: 'Si',
-					cancelButtonText: 'Cancelar',
-				}).then((result) => {
-					if (result.isConfirmed) {
-						$('#form_delete_ronda').attr('action', url);
-						$('#form_delete_ronda').submit();
-					}
-				})
-			});
-			$('.btn_cerrar_ronda').click(function(){
-				let url = $(this).data('url');
-				Swal.fire({
-					icon: 'question',
-					title: '¿Cerrar Ronda?',
-					showCancelButton: true,
-					confirmButtonText: 'Si',
-					cancelButtonText: 'Cancelar',
-				}).then((result) => {
-					if (result.isConfirmed) {
-						$('#form_cerrar_ronda').attr('action', url);
-						$('#form_cerrar_ronda').submit();
-					}
-				})
-			});
+	$(document).ready(function(){
+		$('#tabla').DataTable({
+			language : {
+				url : '{{asset('assets/dt.spanish.json')}}'
+			},
+			order: [[1, 'desc']],
 		});
-	</script>
-	@endsection
+		$('.btn_delete_ronda').click(function(){
+			let url = $(this).data('url');
+			Swal.fire({
+				icon: 'question',
+				title: '¿Eliminar Ronda?',
+				showCancelButton: true,
+				confirmButtonText: 'Si',
+				cancelButtonText: 'Cancelar',
+			}).then((result) => {
+				if (result.isConfirmed) {
+					$('#form_delete_ronda').attr('action', url);
+					$('#form_delete_ronda').submit();
+				}
+			})
+		});
+		$('.btn_cerrar_ronda').click(function(){
+			let url = $(this).data('url');
+			Swal.fire({
+				icon: 'question',
+				title: '¿Cerrar Ronda?',
+				showCancelButton: true,
+				confirmButtonText: 'Si',
+				cancelButtonText: 'Cancelar',
+			}).then((result) => {
+				if (result.isConfirmed) {
+					$('#form_cerrar_ronda').attr('action', url);
+					$('#form_cerrar_ronda').submit();
+				}
+			})
+		});
+	});
+</script>
+@endsection

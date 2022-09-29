@@ -4,15 +4,9 @@
 @include('user.modals.user_area_create')
 @section('titulo', 'Editar Usuario - ')
 <div class="container">
-    <h3>
-        Editar Usuario
-        <span class="float-end">
-            @include('components.misc.backbutton', ['url' => route('user.index')])
-        </span>
-    </h3>
-    <hr>
+    <x-misc-title title="Editar Usuario" back="{{ route('user.index') }}" />
     <div class="row">
-        <div class="col-xs-12 col-md-6">
+        <div class="col-xs-12 col-md-6 mb-3">
             <form method="post" action="{{route('user.update', $user->id)}}">
                 @method('PATCH')
                 @csrf
