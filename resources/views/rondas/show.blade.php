@@ -14,7 +14,7 @@
 	<x-misc-title :title="'Ronda #' . $ronda->id" back="{{ route('ronda.index') }}" />
 		@if($ronda->circuito)
 		<em class="text-muted">	
-		Circuito: <strong>{{ $ronda->circuito->titulo }}</strong>
+			Circuito: <strong>{{ $ronda->circuito->titulo }}</strong>
 		</em>
 		<div class="py-2"></div>
 		@endif
@@ -41,8 +41,9 @@
 				<div class="col-12 col-md-4" id="s_novedad">
 					@csrf 
 					<label>Agregar descripción</label>
-					<textarea class="form-control mb-2" id="novedad" name="novedad" rows="6"></textarea>				
-					<input type="file" accept="image/png, image/gif, image/jpeg" class="form-control mb-2" name="imagen[]" multiple >
+					<textarea class="form-control mb-2" id="novedad" name="novedad" rows="6"></textarea>
+					<input type="hidden" name="image64" id="image64">
+					<input type="file" id="input_image" accept="image/png, image/jpeg" class="form-control mb-2">
 					<div class="d-grid gap-2">
 						<button type="button" class="btn btn-lg btn-success" onClick="aceptar_formulario()" id="btn-aceptar">Aceptar</button>
 						<button type="button" class="btn btn-lg btn-warning" onClick="vaciar_novedad()" id="btn-vaciar">Borrar Campo</button>
@@ -52,7 +53,9 @@
 			</div>
 		</form>
 		<hr>
-
+		<div class="row">
+			<canvas id="canvas" style="display: none;"></canvas>
+		</div>
 		<div class="row">
 			@foreach($ronda->checkpoints as $checkpoint)
 			@include('components.ronda.card-checkpoint', ['checkpoint' => $checkpoint])
@@ -73,6 +76,49 @@
 	integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
 	crossorigin=""></script>
 	<script type="text/javascript">
+
+		const fileInput = document.querySelector('#input_image');
+		const canvas = document.querySelector('#canvas');
+		const canvasCtx = canvas.getContext('2d');
+		const sizeLandscape = {'width' : 1280, 'height' : 720};
+		const sizePortrait = {'width' : 720, 'height' : 1280};
+
+		let activeImage, originalWidthToHeightRatio;
+
+		fileInput.addEventListener('change', e => {
+			const reader = new FileReader();
+			reader.addEventListener('load', () => {
+				openImage(reader.result);
+			});
+			reader.readAsDataURL(e.target.files[0]);
+		});
+
+		function openImage(imageSrc){
+			activeImage = new Image();
+			activeImage.addEventListener('load', () => {
+				originalWidthToHeightRatio = activeImage.width / activeImage.height;
+				resize(activeImage.width, activeImage.height);
+			});
+			activeImage.src = imageSrc;
+		}
+
+
+		function resize(width, height){
+			let newWidth, newHeight;
+			if(width > height){
+				/*Landscape*/
+				newWidth = sizeLandscape.width;
+				newHeight = Math.floor(newWidth / originalWidthToHeightRatio);
+			}else{
+				/*Portrait*/
+				newWidth = sizePortrait.width;
+				newHeight = Math.floor(newWidth / originalWidthToHeightRatio);
+			}			
+			canvas.width = newWidth;
+			canvas.height = newHeight;
+			canvasCtx.drawImage(activeImage, 0, 0, newWidth, newHeight);
+			document.getElementById('image64').value = canvas.toDataURL("image/jpeg",0.7);
+		}
 
 		var icono_sin_novedades = L.icon({
 			iconUrl: '{{ asset('assets/img/markers/marker-ok.png') }}',
@@ -169,9 +215,8 @@
 		document.getElementById('latitud').value = position.coords.latitude;
 		document.getElementById('longitud').value = position.coords.longitude;
 		marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(myMap);
-		//document.getElementById('novedad').focus();
-		//document.getElementById("novedad").scrollIntoView();
-
+		// document.getElementById('myMap').focus();
+		document.getElementById("myMap").scrollIntoView();
 	}
 
 	function vaciar_novedad(){

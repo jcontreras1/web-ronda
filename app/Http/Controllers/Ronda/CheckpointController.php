@@ -20,6 +20,8 @@ class CheckpointController extends Controller
 			'longitud' => 'required',
 		]);
 
+		// return $request;
+
 		$checkpoint = Checkpoint::create([
 			'latitud' => $request->latitud,
 			'longitud' => $request->longitud,
@@ -28,13 +30,13 @@ class CheckpointController extends Controller
 			'user_id' => Auth::user()->id,
 		]);
 
-		if($request->hasFile('imagen')){
+		if($request->has('image64')){
 
-			$files = $request->file('imagen');
-			foreach($files as $file){
-				$ext = $file->getClientOriginalExtension();
+			//$files = $request->file('imagen');
+			//foreach($files as $file){
+				$ext = 'jpeg'; //$file->getClientOriginalExtension();
 				$filename = Str::uuid() . '.'. $ext;
-				$resizedImage = Image::make($file);
+				$resizedImage = Image::make($request->image64);
 				$resizedImage->orientate();
 				if($resizedImage->height() >= $resizedImage->width()){
 					/*Es mas alta que ancha, redimensiono par que sea de 720 de altura*/
@@ -49,7 +51,7 @@ class CheckpointController extends Controller
 					'filename' => $filename,
 					'checkpoint_id' => $checkpoint->id,
 				]);
-			}
+			//}
 		}
 		toast('Novedad agregada', 'success')->autoClose(1500);
 		return back();        
