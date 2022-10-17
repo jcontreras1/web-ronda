@@ -43,7 +43,7 @@
 					<label>Agregar descripción</label>
 					<textarea class="form-control mb-2" id="novedad" name="novedad" rows="6"></textarea>
 					<input type="hidden" name="image64" id="image64">
-					<input type="file" id="input_image" accept="image/png, image/jpeg" class="form-control mb-2">
+					<input type="file" capture="environment" id="input_image" accept="image/png, image/jpeg" class="form-control mb-2">
 					<div class="d-grid gap-2">
 						<button type="button" class="btn btn-lg btn-success" onClick="aceptar_formulario()" id="btn-aceptar">Aceptar</button>
 						<button type="button" class="btn btn-lg btn-warning" onClick="vaciar_novedad()" id="btn-vaciar">Borrar Campo</button>
@@ -82,22 +82,32 @@
 		const canvasCtx = canvas.getContext('2d');
 		const sizeLandscape = {'width' : 1280, 'height' : 720};
 		const sizePortrait = {'width' : 720, 'height' : 1280};
+		const btn_aceptar = document.getElementById('btn-aceptar');
+		const btn_vaciar = document.getElementById('btn-vaciar');
 
 		let activeImage, originalWidthToHeightRatio;
 
-		fileInput.addEventListener('change', e => {
-			const reader = new FileReader();
-			reader.addEventListener('load', () => {
-				openImage(reader.result);
+		if(fileInput){			
+			fileInput.addEventListener('change', e => {
+				btn_aceptar.disabled = true;
+				btn_vaciar.disabled = true;
+				btn_aceptar.innerHTML = '<div class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden"></span></div> Procesando...';
+				const reader = new FileReader();
+				reader.addEventListener('load', () => {
+					openImage(reader.result);
+				});
+				reader.readAsDataURL(e.target.files[0]);
 			});
-			reader.readAsDataURL(e.target.files[0]);
-		});
+		}
 
 		function openImage(imageSrc){
 			activeImage = new Image();
 			activeImage.addEventListener('load', () => {
 				originalWidthToHeightRatio = activeImage.width / activeImage.height;
 				resize(activeImage.width, activeImage.height);
+				btn_aceptar.disabled = false;
+				btn_vaciar.disabled = false;
+				btn_aceptar.innerHTML = 'Aceptar';
 			});
 			activeImage.src = imageSrc;
 		}
@@ -117,7 +127,8 @@
 			canvas.width = newWidth;
 			canvas.height = newHeight;
 			canvasCtx.drawImage(activeImage, 0, 0, newWidth, newHeight);
-			document.getElementById('image64').value = canvas.toDataURL("image/jpeg",0.7);
+			document.getElementById('image64').value = canvas.toDataURL("image/jpeg",0.6);
+			console.log(canvas.toDataURL("image/jpeg",0.6));
 		}
 
 		var icono_sin_novedades = L.icon({
@@ -184,8 +195,6 @@
 	}
 
 	function aceptar_formulario(){
-		let btn_aceptar = document.getElementById('btn-aceptar');
-		let btn_vaciar = document.getElementById('btn-vaciar');
 		btn_aceptar.disabled = true;
 		btn_vaciar.disabled = true;
 		btn_aceptar.innerHTML = '<div class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden"></span></div> Subiendo...';

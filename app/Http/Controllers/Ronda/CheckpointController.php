@@ -40,9 +40,9 @@ class CheckpointController extends Controller
 				$resizedImage->orientate();
 				if($resizedImage->height() >= $resizedImage->width()){
 					/*Es mas alta que ancha, redimensiono par que sea de 720 de altura*/
-					$resizedImage->heighten(720)->encode('jpg', 75);
+					$resizedImage->heighten(720)->encode('jpg', 85);
 				}else{
-					$resizedImage->widen(1280)->encode('jpg', 75);
+					$resizedImage->widen(1280)->encode('jpg', 85);
 				}
 
 				Storage::disk('public')->put('ronda/' . $checkpoint->id . '/' . $filename, $resizedImage->__toString(), 'public');
