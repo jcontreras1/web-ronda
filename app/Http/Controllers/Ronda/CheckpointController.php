@@ -30,8 +30,7 @@ class CheckpointController extends Controller
 			'user_id' => Auth::user()->id,
 		]);
 
-		if($request->has('image64')){
-
+		if($request->has('image64') && $request->image64){
 			//$files = $request->file('imagen');
 			//foreach($files as $file){
 				$ext = 'jpeg'; //$file->getClientOriginalExtension();
