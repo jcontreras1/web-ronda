@@ -19,7 +19,7 @@
 			</div>
 		</div>
 		<p class="form-control mb-3 py-4" id="myInput">
-			Rondín {{ $ronda->circuito->titulo }} comenzado por {{ $ronda->creador->nombre }} a las {{ date('H:i', strtotime($ronda->created_at)) }} del día {{ date('d/m/Y', strtotime($ronda->created_at)) }} <br>
+			Rondín {{ $ronda->circuito->titulo ?? '' }} comenzado por {{ $ronda->creador->nombre }} a las {{ date('H:i', strtotime($ronda->created_at)) }} del día {{ date('d/m/Y', strtotime($ronda->created_at)) }} <br>
 			@foreach($ronda->checkpoints as $checkpoint)
 			[{{ date('d/m/Y H:i', strtotime($checkpoint->created_at)) }}] [Lat: {{ substr($checkpoint->latitud, 0, 7) }}, Lng: {{ substr($checkpoint->longitud, 0, 7) }}] -
 			{{ $checkpoint->novedad ?? 'Sin novedades' }}

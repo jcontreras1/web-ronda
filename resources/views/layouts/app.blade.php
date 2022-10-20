@@ -31,11 +31,35 @@
 		@stack('head')
 		@yield('head')
 		<!-- Fonts -->
-		<link rel="dns-prefetch" href="//fonts.gstatic.com">
-		<link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+		{{-- <link rel="dns-prefetch" href="//fonts.gstatic.com"> --}}
+		{{-- <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet"> --}}
 		<!-- Styles -->
 		<link href="{{ asset('css/app.css') }}" rel="stylesheet">
-		<link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+		<style type="text/css">
+			.bg-purple{
+				background-color: #909CAE;
+			}
+			.bg-palta{
+				background-color: #8FC6B1;
+			}
+
+			.card {
+				border-radius: 2px !important;
+			}
+			.card.info{
+				border-left: 4px solid #2d89c8;
+			}
+			.card.dark{
+				border-left: 4px solid #6c757d;
+			}
+
+			.row-click{
+				cursor: pointer;
+			}
+			.card.indigo{
+				border-left: 4px solid #9561e2;
+			}
+		</style>
 	</head>
 	<body class="h-100">
 		@include('sweetalert::alert')
