@@ -63,8 +63,8 @@
 			@endforeach
 		</div>
 	</div>  
-
-
+	
+	
 	@endsection
 	@section('head')
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
@@ -76,7 +76,7 @@
 	integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
 	crossorigin=""></script>
 	<script type="text/javascript">
-
+		
 		const fileInput = document.querySelector('#input_image');
 		const canvas = document.querySelector('#canvas');
 		const canvasCtx = canvas.getContext('2d');
@@ -84,9 +84,9 @@
 		const sizePortrait = {'width' : 720, 'height' : 1280};
 		const btn_aceptar = document.getElementById('btn-aceptar');
 		const btn_vaciar = document.getElementById('btn-vaciar');
-
+		
 		let activeImage, originalWidthToHeightRatio;
-
+		
 		if(fileInput){			
 			fileInput.addEventListener('change', e => {
 				btn_aceptar.disabled = true;
@@ -99,7 +99,7 @@
 				reader.readAsDataURL(e.target.files[0]);
 			});
 		}
-
+		
 		function openImage(imageSrc){
 			activeImage = new Image();
 			activeImage.addEventListener('load', () => {
@@ -111,8 +111,8 @@
 			});
 			activeImage.src = imageSrc;
 		}
-
-
+		
+		
 		function resize(width, height){
 			let newWidth, newHeight;
 			if(width > height){
@@ -130,7 +130,7 @@
 			document.getElementById('image64').value = canvas.toDataURL("image/jpeg",0.6);
 			console.log(canvas.toDataURL("image/jpeg",0.6));
 		}
-
+		
 		var icono_sin_novedades = L.icon({
 			iconUrl: '{{ asset('assets/img/markers/marker-ok.png') }}',
 			iconSize:     [35, 47]
@@ -143,12 +143,29 @@
 			iconUrl: '{{ asset('assets/img/markers/marker-photo.png') }}',
 			iconSize:     [35, 47]
 		});
-
+		
 		var x = document.getElementById("geo");
 		var formulario = document.getElementById("formulario");
 		var marker = null;
-		let myMap = L.map('myMap').setView([-42.7372, -65.03948],15);
-
+		
+		/*Establecer centro*/
+		polygon = [];
+		@if($ronda->circuito)
+		@foreach($ronda->circuito->geofences as $geo)
+		polygon.push([{{$geo->latitud}}, {{$geo->longitud}}]);
+		@endforeach
+		@endif
+		let center = null;
+		if(polygon.length) center = L.polyline(polygon).getBounds().getCenter();
+		let mapLat = -42.7372;
+		let mapLng = -65.03948;
+		if(center){
+			mapLat = center.lat;
+			mapLng = center.lng;
+		}
+		
+		let myMap = L.map('myMap').setView([mapLat, mapLng],15);
+		
 		var myModal = new bootstrap.Modal(document.getElementById('lightbox'));
 		var dialog = document.getElementById('dialog');
 		function launch_modal(img){
@@ -158,81 +175,81 @@
 				dialog.classList.remove('modal-xl');
 			}else{
 				dialog.classList.add('modal-xl');
-
+				
 			}
-
+			
 			document.getElementById('img_modal').src = img;
 			myModal.show();
 		}
-
+		
 		L.tileLayer('{{ variable_global("URL_TILES") }}?access_token={{ variable_global("API_TOKEN_MAPS") }}', {
 			maxZoom: 19,
 			dragging: false,
 			attribution: '© OpenStreetMap'
 		}).addTo(myMap);
-
+		
 		let punto_visitado = null;
 		@foreach($ronda->checkpoints as $geo)
 		punto_visitado = L.marker([{{$geo->latitud}}, {{$geo->longitud}}], {icon: @if(count($geo->images) > 0) icono_imagenes @elseif($geo->novedad) icono_novedades @else icono_sin_novedades @endif}).addTo(myMap);
 		punto_visitado.bindPopup('<strong>{{ $geo->novedad }}</strong><br>Visitado a las {{ date('d/m/Y H:i', strtotime($geo->created_at)) }}');
 		@endforeach
-
-	//Si hay geofences
-	@if($ronda->circuito)
-	@foreach($ronda->circuito->geofences as $geo)
-	var circle = L.circle([{{$geo->latitud}}, {{$geo->longitud}}], {
-		color: '#eb4034',
-		fillColor: '#eb4034',
-		fillOpacity: 0.3,
-		radius: {{$geo->radio}}
-	}).addTo(myMap);
-	circle.bindPopup('Punto #{{$geo->id}}');
-	@endforeach
-	@endif
-
-	function showError(error) {
-		console.log(error);
-	}
-
-	function aceptar_formulario(){
-		btn_aceptar.disabled = true;
-		btn_vaciar.disabled = true;
-		btn_aceptar.innerHTML = '<div class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden"></span></div> Subiendo...';
-		formulario.submit();
-	}
-
-	function getLocation() {
-		console.log(marker);
-		/*Si el marker ya estaba definido, me muevo hasta el marker*/
-		if(marker){
-			myMap.removeLayer(marker);
+		
+		//Si hay geofences
+		@if($ronda->circuito)
+		@foreach($ronda->circuito->geofences as $geo)
+		var circle = L.circle([{{$geo->latitud}}, {{$geo->longitud}}], {
+			color: '#eb4034',
+			fillColor: '#eb4034',
+			fillOpacity: 0.3,
+			radius: {{$geo->radio}}
+		}).addTo(myMap);
+		circle.bindPopup('Punto #{{$geo->id}}');
+		@endforeach
+		@endif
+		
+		function showError(error) {
+			console.log(error);
 		}
-		document.getElementById('btn_obtener_ubicacion').innerHTML = `
-		<div class="spinner-border" role="status">
-		<span class="visually-hidden">Loading...</span>
-		</div>`;
-		if("navigator.geoLocation"){
-			navigator.geolocation.getCurrentPosition(showPosition, showError, {enableHighAccuracy: true});
-		}else{
-			x.innerHTML = "no es compatible tu navegador";
+		
+		function aceptar_formulario(){
+			btn_aceptar.disabled = true;
+			btn_vaciar.disabled = true;
+			btn_aceptar.innerHTML = '<div class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden"></span></div> Subiendo...';
+			formulario.submit();
 		}
-	}
-	
-	function showPosition(position) {  
-		document.getElementById('btn_obtener_ubicacion').innerHTML = `Obtener ubicación <i class="bi bi-geo-alt"></i>`;
-		myMap.panTo(new L.LatLng(position.coords.latitude, position.coords.longitude));
-		document.getElementById('latitud').value = position.coords.latitude;
-		document.getElementById('longitud').value = position.coords.longitude;
-		marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(myMap);
-		// document.getElementById('myMap').focus();
-		document.getElementById("myMap").scrollIntoView();
-	}
-
-	function vaciar_novedad(){
-		document.getElementById('novedad').value = "";
-		document.getElementById('novedad').focus();
-		document.getElementById("novedad").scrollIntoView();
-	}
-
-</script>
-@endsection
+		
+		function getLocation() {
+			console.log(marker);
+			/*Si el marker ya estaba definido, me muevo hasta el marker*/
+			if(marker){
+				myMap.removeLayer(marker);
+			}
+			document.getElementById('btn_obtener_ubicacion').innerHTML = `
+			<div class="spinner-border" role="status">
+				<span class="visually-hidden">Loading...</span>
+			</div>`;
+			if("navigator.geoLocation"){
+				navigator.geolocation.getCurrentPosition(showPosition, showError, {enableHighAccuracy: true});
+			}else{
+				x.innerHTML = "no es compatible tu navegador";
+			}
+		}
+		
+		function showPosition(position) {  
+			document.getElementById('btn_obtener_ubicacion').innerHTML = `Obtener ubicación <i class="bi bi-geo-alt"></i>`;
+			myMap.panTo(new L.LatLng(position.coords.latitude, position.coords.longitude));
+			document.getElementById('latitud').value = position.coords.latitude;
+			document.getElementById('longitud').value = position.coords.longitude;
+			marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(myMap);
+			// document.getElementById('myMap').focus();
+			document.getElementById("myMap").scrollIntoView();
+		}
+		
+		function vaciar_novedad(){
+			document.getElementById('novedad').value = "";
+			document.getElementById('novedad').focus();
+			document.getElementById("novedad").scrollIntoView();
+		}
+		
+	</script>
+	@endsection

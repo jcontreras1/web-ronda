@@ -6,7 +6,7 @@
 	<x-misc-title :title="$circuito->titulo" back="{{ route('circuito.index') }}">
 		<a href="#" data-bs-toggle="modal" data-bs-target="#mdl_titulo" class="btn btn-warning"><i class="bi bi-pencil-fill"></i></a>
 	</x-misc-title>
-
+	
 	<div class="row">
 		<div class="col-12 col-md-3">
 			<p>
@@ -26,13 +26,13 @@
 						<button class="btn btn-primary btn-lg mb-1" type="button" onclick="agregar_marcador();">Agregar marcador </button>
 						<button class="btn btn-success btn-lg mb-1" type="submit" id="btn-save" disabled>Guardar</button>
 					</div>
-
+					
 					<div class="col-12">
 						<div class="input-group">
 							<span class="input-group-text">Radio (Mts.)</span>
 							<input type="number" name="radio" id="radio" value="25" class="form-control form-control-lg">
 						</div>
-
+						
 					</div>
 					<input type="hidden" id="latitud" name="latitud" class="form-control" >
 					<input type="hidden" id="longitud" name="longitud" class="form-control" >
@@ -85,17 +85,17 @@ crossorigin=""/>
 integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
 crossorigin=""></script>
 <script type="text/javascript">
-
+	
 	var marker = null;
 	var x = document.getElementById("geo");
-
+	
 	function agregar_marcador(){
 		navigator.geolocation.getCurrentPosition(showPosition, showError, {enableHighAccuracy: true});
 		document.getElementById('btn-save').disabled = false;
 	}
 	
 	function showPosition(position) {
-
+		
 		/*Si el marker ya estaba definido, me muevo hasta el marker*/
 		if(marker){
 			let coords = marker.getLatLng();
@@ -106,12 +106,12 @@ crossorigin=""></script>
 		document.getElementById('latitud').value = position.coords.latitude;
 		document.getElementById('longitud').value = position.coords.longitude;
 		marker = L.marker(
-			[position.coords.latitude, position.coords.longitude],
-			{
-				draggable : true
-			}
-			).addTo(myMap);
-
+		[position.coords.latitude, position.coords.longitude],
+		{
+			draggable : true
+		}
+		).addTo(myMap);
+		
 		marker.on('dragend', function(e){
 			let newPos = e.target.getLatLng();
 			document.getElementById('latitud').value = newPos.lat;
@@ -119,7 +119,7 @@ crossorigin=""></script>
 			console.log(e.target.getLatLng());
 		});
 	}
-
+	
 	function delete_geofence(url){
 		Swal.fire({
 			icon: 'question',
@@ -134,14 +134,14 @@ crossorigin=""></script>
 			}
 		})
 	}
-
 	
-
+	
+	
 	function showError(error){
 		console.log(error);
 	}
-
-
+	
+	
 	function getLocation() {
 		if("navigator.geoLocation"){
 			navigator.geolocation.getCurrentPosition(showPosition, showError, {enableHighAccuracy: true});
@@ -150,14 +150,27 @@ crossorigin=""></script>
 			x.innerHTML = "no es compatible tu navegador";
 		}
 	}
-
-	let myMap = L.map('myMap').setView([-42.7372, -65.03948],15);
+	
+	polygon = [];
+	@foreach($circuito->geofences as $geo)
+	polygon.push([{{$geo->latitud}}, {{$geo->longitud}}]);
+	@endforeach
+	let center = null;
+	if(polygon.length) center = L.polyline(polygon).getBounds().getCenter();
+	let mapLat = -42.7372;
+	let mapLng = -65.03948;
+	if(center){
+		mapLat = center.lat;
+		mapLng = center.lng;
+	}
+	
+	let myMap = L.map('myMap').setView([mapLat, mapLng],15);
 	L.tileLayer('{{ variable_global("URL_TILES") }}?access_token={{ variable_global("API_TOKEN_MAPS") }}', {
 		maxZoom: 19,
 		dragging: false,
 		attribution: '© OpenStreetMap'
 	}).addTo(myMap);
-
+	
 	@foreach($circuito->geofences as $geo)
 	var circle = L.circle([{{$geo->latitud}}, {{$geo->longitud}}], {
 		color: 'red',
@@ -167,6 +180,14 @@ crossorigin=""></script>
 	}).addTo(myMap);
 	circle.bindPopup('Punto #{{$geo->id}}');
 	@endforeach
-
-</script>
-@endsection
+	
+	// marker = L.marker(
+	// 		[position.coords.latitude, position.coords.longitude],
+	// 		{
+		// 			draggable : true
+		// 		}
+		// 		).addTo(myMap);
+		
+		
+	</script>
+	@endsection
