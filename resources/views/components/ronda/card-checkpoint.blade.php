@@ -17,7 +17,7 @@
 			</span> --}}
 		</div>
 		<div class="card-body">									
-			<strong>{!!$checkpoint->novedad ?? '<span class="text-muted">Sin novedades</span>'!!}</strong>
+			<strong>{!!nl2br($checkpoint->novedad) ?? '<span class="text-muted">Sin novedades</span>'!!}</strong>
 			@if(count($checkpoint->images))
 			<hr>
 			<div class="row">

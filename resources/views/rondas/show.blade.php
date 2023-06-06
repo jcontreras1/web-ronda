@@ -191,7 +191,7 @@
 		let punto_visitado = null;
 		@foreach($ronda->checkpoints as $geo)
 		punto_visitado = L.marker([{{$geo->latitud}}, {{$geo->longitud}}], {icon: @if(count($geo->images) > 0) icono_imagenes @elseif($geo->novedad) icono_novedades @else icono_sin_novedades @endif}).addTo(myMap);
-		punto_visitado.bindPopup('<strong>{{ $geo->novedad }}</strong><br>Visitado a las {{ date('d/m/Y H:i', strtotime($geo->created_at)) }}');
+		punto_visitado.bindPopup(`<strong>{!!nl2br($geo->novedad)!!}</strong><br>Visitado a las {{ date('d/m/Y H:i', strtotime($geo->created_at)) }}`);
 		@endforeach
 		
 		//Si hay geofences
@@ -214,7 +214,7 @@
 		function aceptar_formulario(){
 			btn_aceptar.disabled = true;
 			btn_vaciar.disabled = true;
-			btn_aceptar.innerHTML = '<div class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden"></span></div> Subiendo...';
+			btn_aceptar.innerHTML = `<div class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden"></span></div> Subiendo...`;
 			formulario.submit();
 		}
 		

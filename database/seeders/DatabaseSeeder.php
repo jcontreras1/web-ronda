@@ -48,17 +48,15 @@ class DatabaseSeeder extends Seeder
             'descripcion' => 'Solo consultas',
         ]);
         
-        $clave = Hash::make('jonathan');
+        $clave = Hash::make('admin1234');
         User::firstOrCreate(
             [
-                'dni' => 35382669,
-                'email' => 'jonathan.contreras.991@gmail.com',
+                'dni' => 123456789,
+                'email' => 'admin@test.com',
             ],[
-                'nombre' => 'Jonathan',
-                'apellido' => 'Contreras',
+                'nombre' => 'admin',
+                'apellido' => 'admin',
                 'password' => $clave,
-                'fecha_nacimiento' => '1991-01-11',
-                'telefono' => '2804367267',
             ]);
 
         /*Me hago administrador del sistema*/
