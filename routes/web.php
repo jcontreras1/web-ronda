@@ -11,10 +11,16 @@ use App\Http\Controllers\Usuario\AreaController;
 use App\Http\Controllers\Usuario\AreaUsuarioController;
 use App\Http\Controllers\Usuario\TipoUsuarioController;
 use App\Http\Controllers\Varios\ColorController;
+use App\Http\Controllers\testcontroller;
+use App\Models\Ronda\Circuito;
 use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', function () { return view('welcome'); });
+
+
+Route::get('/tareas', [testcontroller::class, 'test']);
+
 Route::get('clave/definir/{token}', [ResetPasswordController::class, 'showDefineForm'])->name('password.define');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 // Auth::routes();
@@ -41,5 +47,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('circuito/{circuito}/geofence', GeofenceController::class)->only(['store', 'update', 'destroy']);
     /*Export*/
     Route::get('/export', [ExportController::class, 'index'])->name('export.index');    
-    Route::get('/export/{ronda}', [ExportController::class, 'show'])->name('export.show');    
+    Route::get('/export/{ronda}', [ExportController::class, 'show'])->name('export.show');
+    // Route::view('/tareas', 'tareas.index');
+  
 });

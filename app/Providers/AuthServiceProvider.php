@@ -67,6 +67,9 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
         /*POSIBLES PERMISOS: ADM_SIS, USR_SIS, TRP_SIS*/
+        Gate::define('administrar_modulo_tareas', function (User $user) {
+            return true;
+        });
         Gate::define('administrar', function (User $user) {
             return evaluar_permisos(['ADM_SIS'], $user->tipos_usuario);
         });

@@ -1,7 +1,9 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use App\Models\Varios\AreaUsuario;
 use App\Models\Varios\VariableGlobal;
+use Carbon\Carbon;
 
 function variable_global($clave){
 	if(VariableGlobal::select('valor')->where('clave', $clave)->count() > 0 ){
@@ -64,4 +66,27 @@ function medio_de_pago($medio){
 		'D' => 'TRANSFERENCIA/DEPÓSITO',
 	];
 	return $medios[$medio];
+}
+// Tareas
+function formatos_imagen(){
+	$formatos = [
+	   'gif',
+	   'png',
+	   'jpg',
+	   'jpeg',
+	   'bpm',
+	   'webp',
+	];
+	return $formatos;
+ }
+
+function tiene_modulo($modulo){
+	//NECESARIOS Y DE USUARIO
+	return true;
+	return evaluar_permisos(['tareas'], Auth::user()->tipos_usuario);
+	$modulo = 'MODULO_' . strtoupper($modulo);
+	if(variable_global($modulo) == '1' || variable_global($modulo) == 'true'){
+		return true;
+	}
+	return false;
 }

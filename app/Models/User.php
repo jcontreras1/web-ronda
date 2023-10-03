@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Ronda\Ronda;
+use App\Models\Tarea\Tarea;
 use App\Models\Usuario\TipoUsuario;
 use App\Models\Usuario\UsuarioTipoUsuario;
 use App\Models\Varios\Area;
@@ -64,5 +65,9 @@ class User extends Authenticatable
 
     public function areas(){
         return $this->belongsToMany(Area::class, 'area_usuario', 'user_id', 'area_id')->withPivot('id', 'es_jefe');
+    }
+
+    public function tareas(){
+        return $this->belongsToMany(Tarea::class, 'tarea_participante');
     }
 }
