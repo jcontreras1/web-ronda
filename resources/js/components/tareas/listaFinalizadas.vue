@@ -1,5 +1,5 @@
 <template>
-    <a class="btn btn-primary mb-2" data-toggle="collapse" href="#collapseFinalizadas" role="button" aria-expanded="false" aria-controls="collapseExample">
+    <a class="btn btn-primary mb-2" data-bs-toggle="collapse" href="#collapseFinalizadas" role="button" aria-expanded="false" aria-controls="collapseExample">
         Historial
     </a>
     <div class="collapse" id="collapseFinalizadas">

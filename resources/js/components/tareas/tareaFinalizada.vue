@@ -4,16 +4,16 @@
         <em class="text-muted" style="text-decoration: line-through;">{{ tarea.titulo}}</em>
         <span class="float-right">
             <button 
-            class="btn btn-warning btn-sm"
+            class="btn btn-warning btn-sm mx-1"
             @click="reactivarTarea()"
             >
-            <i class="fas fa-redo-alt"></i>
+            <i class="bi bi-arrow-repeat"></i>
             </button>
             <button 
-            class="btn btn-danger btn-sm"
+            class="btn btn-danger btn-sm mx-1"
             @click="eliminarTarea()"
             >
-            <i class="fas fa-trash-alt"></i>
+            <i class="bi bi-x"></i>
             </button>
         </span>
     </div>
