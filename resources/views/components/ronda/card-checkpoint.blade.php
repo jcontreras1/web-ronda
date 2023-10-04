@@ -9,6 +9,7 @@
 	<div class="card card-primary">
 		<div class="card-header @if($checkpoint->novedad || count($checkpoint->images) > 0) bg-dark @else bg-success @endif text-white">
 			{{$checkpoint->user->nombre}} {{$checkpoint->user->apellido}} [{{ date('d/m/Y H:i', strtotime($checkpoint->created_at))}}]
+			<span class="float-end">#{{$checkpoint->id}}</span>
 			{{-- <span class="float-end">
 				<form method="POST" action="{{route('checkpoint.destroy', ['ronda' => $ronda, 'checkpoint' => $checkpoint])}}">
 					@method('DELETE') @csrf
@@ -16,8 +17,14 @@
 				</form>
 			</span> --}}
 		</div>
-		<div class="card-body">									
-			<strong>{!!nl2br($checkpoint->novedad) ?? '<span class="text-muted">Sin novedades</span>'!!}</strong>
+		<div class="card-body">		
+
+			@if($checkpoint->novedad)
+				<strong>{!!nl2br($checkpoint->novedad)!!}</strong>
+			@else
+				<span class="text-muted">Sin novedades</span>
+			@endif
+
 			@if(count($checkpoint->images))
 			<hr>
 			<div class="row">

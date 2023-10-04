@@ -22,7 +22,9 @@
 			@if($ronda->abierta)
 			<div class="row">
 				<div class="col-12 col-md-4 d-grid mb-1">
-					<button type="button" class="btn btn-lg btn-primary btn-block" id="btn_obtener_ubicacion" onclick="getLocation()">Obtener ubicación <i class="bi bi-geo-alt"></i></button>
+					<button type="button" class="btn btn-lg btn-primary btn-block" id="btn_obtener_ubicacion">
+						Obtener ubicación <i class="bi bi-geo-alt"></i>
+					</button>
 				</div>
 				<div class="col-12 col-md-4 d-none d-md-block mb-1">			
 					<input type="text" readonly id="latitud" name="latitud" class="form-control form-control-lg" >
@@ -84,9 +86,27 @@
 		const sizePortrait = {'width' : 720, 'height' : 1280};
 		const btn_aceptar = document.getElementById('btn-aceptar');
 		const btn_vaciar = document.getElementById('btn-vaciar');
+		const btn_obtener_ubicacion = document.getElementById('btn_obtener_ubicacion');
+		const latitud = document.querySelector('#latitud');
+		const longitud = document.querySelector('#longitud');
 		
 		let activeImage, originalWidthToHeightRatio;
 		
+		btn_obtener_ubicacion.addEventListener('click', function(){
+			/*Si el marker ya estaba definido, lo borro y lo creo de vuelta*/
+			if(marker){
+				myMap.removeLayer(marker);
+			}
+			document.getElementById('btn_obtener_ubicacion').innerHTML = `
+			<div class="spinner-border" role="status">
+			<span class="visually-hidden">Loading...</span>
+			</div>`;
+			getLocation();
+		});
+
+
+
+
 		if(fileInput){			
 			fileInput.addEventListener('change', e => {
 				btn_aceptar.disabled = true;
@@ -128,7 +148,6 @@
 			canvas.height = newHeight;
 			canvasCtx.drawImage(activeImage, 0, 0, newWidth, newHeight);
 			document.getElementById('image64').value = canvas.toDataURL("image/jpeg",0.6);
-			console.log(canvas.toDataURL("image/jpeg",0.6));
 		}
 		
 		var icono_sin_novedades = L.icon({
@@ -215,34 +234,43 @@
 			btn_aceptar.disabled = true;
 			btn_vaciar.disabled = true;
 			btn_aceptar.innerHTML = `<div class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden"></span></div> Subiendo...`;
-			formulario.submit();
+			
+			if(!latitud.value || !longitud.value){
+				getLocation()
+				.then(function(){
+					formulario.submit();
+				})
+				.catch(function(error){
+					console.error(error);
+				});
+			}else{
+				formulario.submit();
+			}
+			
 		}
 		
 		function getLocation() {
-			console.log(marker);
-			/*Si el marker ya estaba definido, me muevo hasta el marker*/
-			if(marker){
-				myMap.removeLayer(marker);
-			}
-			document.getElementById('btn_obtener_ubicacion').innerHTML = `
-			<div class="spinner-border" role="status">
-				<span class="visually-hidden">Loading...</span>
-			</div>`;
-			if("navigator.geoLocation"){
-				navigator.geolocation.getCurrentPosition(showPosition, showError, {enableHighAccuracy: true});
-			}else{
-				x.innerHTML = "no es compatible tu navegador";
-			}
-		}
-		
-		function showPosition(position) {  
-			document.getElementById('btn_obtener_ubicacion').innerHTML = `Obtener ubicación <i class="bi bi-geo-alt"></i>`;
-			myMap.panTo(new L.LatLng(position.coords.latitude, position.coords.longitude));
-			document.getElementById('latitud').value = position.coords.latitude;
-			document.getElementById('longitud').value = position.coords.longitude;
-			marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(myMap);
-			// document.getElementById('myMap').focus();
-			document.getElementById("myMap").scrollIntoView();
+			return new Promise((resolve, reject) => {
+				if(navigator.geolocation){
+					navigator.geolocation.getCurrentPosition(function(position){
+						document.getElementById('latitud').value = position.coords.latitude;
+						document.getElementById('longitud').value = position.coords.longitude;
+						document.getElementById('btn_obtener_ubicacion').innerHTML = `Obtener ubicación <i class="bi bi-geo-alt"></i>`;
+						myMap.panTo(new L.LatLng(position.coords.latitude, position.coords.longitude));
+						marker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(myMap);
+						document.getElementById("myMap").scrollIntoView();
+						resolve(true);
+					},
+					showError,
+					{
+						enableHighAccuracy: true
+					});
+					
+				}else{
+					x.innerHTML = "no es compatible tu navegador";
+					reject('No es compatible');
+				}
+			});			
 		}
 		
 		function vaciar_novedad(){
