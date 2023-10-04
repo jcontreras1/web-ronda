@@ -1,34 +1,34 @@
 <template>
-    <div class="input-group mb-3 input-group-lg">
-        <input 
-        ref="input_tarea" 
-        v-model="tarea.titulo"
-        v-on:keyup.enter="agregarTarea"
-        @input="updateProgressBar"
-        type="text" autofocus="" class="form-control" placeholder="Descripción de la tarea"
-        />
-        <div class="input-group-append">
-            <button 
-            :disabled="tarea.titulo ? false : true" 
-            @click="agregarTarea()"
-            class="btn btn-outline-success" type="button" id="button-addon2"
-            >Agregar</button>
-        </div>
-    </div>
-    <div class="progress" style="height: 3px;">
-        <div 
-        class="progress-bar"
-        :class="{ 
-            'bg-primary': tarea.titulo.length < 125,
-            'bg-danger': tarea.titulo.length >= 125 
-        }"
-        role="progressbar" 
-        :style="{width: progress + '%'}" 
-        :aria-valuenow="progress" 
-        aria-valuemin="0" 
-        aria-valuemax="100">
 
-    </div>
+    <div class="input-group mb-3">
+      <input 
+      ref="input_tarea" 
+      v-model="tarea.titulo"
+      v-on:keyup.enter="agregarTarea"
+      @input="updateProgressBar"
+      type="text" autofocus="" class="form-control" placeholder="Descripción de la tarea"
+      />
+      <button 
+      :disabled="tarea.titulo ? false : true" 
+      @click="agregarTarea()"
+      class="btn btn-outline-success" type="button" id="button-addon2"
+      >Agregar</button>
+  </div>
+
+  <div class="progress" style="height: 3px;">
+    <div 
+    class="progress-bar"
+    :class="{ 
+        'bg-primary': tarea.titulo.length < 125,
+        'bg-danger': tarea.titulo.length >= 125 
+    }"
+    role="progressbar" 
+    :style="{width: progress + '%'}" 
+    :aria-valuenow="progress" 
+    aria-valuemin="0" 
+    aria-valuemax="100">
+
+</div>
 </div>
 <span v-if="tarea.titulo.length">
     <span v-if="tarea.titulo.length === 140 - 1">

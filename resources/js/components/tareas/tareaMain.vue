@@ -1,14 +1,14 @@
 <template>
-    <div class="container-fluid">
+    <div class="container">
         <div class="row">
-            <div class="col-12 col-md-3">
+            <!-- <div class="col-12 col-md-3">
                 <container-filtros
                     :filtros="filtros"
                     :administrar="administrar"
                     v-on:aplicarFiltros="aplicarFiltros"
                     />
-            </div>
-            <div class="col-12 col-md-8">
+            </div> -->
+            <div class="col-12">
                 <h3>Lista de tareas</h3>
                     <tarea-create
                     v-on:tareaCreada="getTareas()"

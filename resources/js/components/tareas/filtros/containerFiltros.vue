@@ -1,8 +1,9 @@
 <template>
-    <div class="jumbotron">
+    <div class="card p-3 h-100">
         <h3>Panel de Control</h3>
         <hr>
         <h5>Filtros por Responsable</h5>
+        {{filtros}}
         <div v-for="filtro in filtros" :key="filtro.id">            
             <div class="custom-control custom-switch mb-2">
                 <input 
@@ -12,13 +13,13 @@
                 :id="'customSwitch' + filtro.id"
                 @change="changeSwitch"
                 />
-                <label class="custom-control-label" :for="'customSwitch' + filtro.id">{{filtro.name}} <small class="text-muted">({{filtro.ocurrencias}})</small></label>
+                <label class="custom-control-label" :for="'customSwitch' + filtro.id">{{filtro.nombre}} <small class="text-muted">({{filtro.ocurrencias}})</small></label>
             </div>
         </div>
         <div class="py-2"></div>
         <button v-if="administrar" @click="renovar_tareas" class="btn btn-outline-primary mb-2">
             Renovar tareas periódicas
-            <i class="fas fa-sync-alt"></i>
+            <i class="bi bi-arrow-repeat"></i>
         </button>
     </div>
 </template>
@@ -47,7 +48,7 @@ export default {
             })
         },
         changeSwitch(){
-            const personasSeleccionadas = document.getElementsByClassName('filtro-persona');
+            const personasSeleccionadas = document.getElementsByClassnombre('filtro-persona');
             let personas = [];
             for(let i = 0; i < personasSeleccionadas.length; i++){
                 if(personasSeleccionadas[i].checked){

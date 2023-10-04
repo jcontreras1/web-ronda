@@ -3,35 +3,35 @@
         <a data-bs-toggle="collapse" :href="'#collapseTarea' + tarea.id" role="button" aria-expanded="false" aria-controls="collapseExample" style="text-decoration: none;" class="text-dark">
             <div class="card-body">
                 <span >{{ tarea.titulo }}</span>
-                <span class="float-right">
+                <span class="float-end">
                     <button 
                     class="btn btn-success btn-sm"
                     @click.prevent.stop="completarTarea()"
                     >
-                    <i class="fas fa-check"></i>
+                    <i class="bi bi-check"></i>
                 </button>
             </span>
             <div>
                 <!-- Responsable -->
-                <span v-if="tarea.responsable_id" class="ml-1 badge badge-success bg-secondary" data-bs-toggle="tooltip" title="Responsable">
+                <span v-if="tarea.responsable_id" class="mr-1 badge bg-primary" data-bs-toggle="tooltip" title="Responsable">
 
-                    <i class="bi bi-user"></i> {{user_selected.name}}
+                    <i class="bi bi-person"></i> {{user_selected.name}}
                 </span>
                 <!-- Subtareas - Progress -->
-                <span v-if="totales" class="ml-1 badge badge-dark" data-bs-toggle="tooltip" title="Tareas">
+                <span v-if="totales" class="mr-1 badge bg-success" data-bs-toggle="tooltip" title="Tareas">
                     Tareas {{realizadas}}/{{totales}}
                 </span>
                 <!-- Comentarios -->
-                <span v-if="comentarios.length" class="ml-1 badge badge-dark" data-bs-toggle="tooltip" title="Tiene comentarios">
-                    <i class="far fa-comment-alt mr-2"></i>{{comentarios.length}}
+                <span v-if="comentarios.length" class="mr-1 badge bg-secondary" data-bs-toggle="tooltip" title="Tiene comentarios">
+                    <i class="bi bi-chat mr-1"></i>&nbsp;{{comentarios.length}}
                 </span>
                 <!-- Renovable -->
-                <span v-if="tarea.renovable" class="ml-1 badge badge-primary" data-bs-toggle="tooltip" title="Renovable">
-                    <i class="fas fa-sync-alt"></i>
+                <span v-if="tarea.renovable" class="mr-1 badge bg-primary" data-bs-toggle="tooltip" title="Renovable">
+                    <i class="bi bi-arrow-repeat"></i>
                 </span>
                 <!-- Archivos -->
-                <span v-if="documentos.length" class="ml-1 badge badge-secondary" data-bs-toggle="tooltip" title="Documentos">
-                    {{this.documentos.length}} <i class="fas fa-file-alt"></i>
+                <span v-if="documentos.length" class="mr-1 badge bg-secondary" data-bs-toggle="tooltip" title="Documentos">
+                    {{this.documentos.length}} <i class="bi bi-file-earmark-text"></i>
                 </span>
             </div>
         </div>
@@ -43,7 +43,7 @@
                     <!-- Responsable -->
                     <div class="mb-3">
                         <label>Responsable</label>
-                        <select class="form-control form-control-sm" :disabled="!(tarea.responsable_id == user_id || administrar || (tarea.creador.id == user_id))" @change="setResponsable($event)">
+                        <select class="form-select" :disabled="!(tarea.responsable_id == user_id || administrar || (tarea.creador.id == user_id))" @change="setResponsable($event)">
                             <option value=""></option>
                             <option v-for="user in users" :key="user.id" :value="user.id" :selected="tarea.responsable.id === user.id">
                                 {{ user.name }}
@@ -234,6 +234,9 @@ export default ({
             axios.get('api/tarea/' + this.tarea.id + '/comentario')
             .then( response => {
                 if(response.status == 200){
+                    if(response.data.length){
+                        console.log(this.tarea.id + ' - ' + response.data.length);
+                    }
                     this.comentarios = response.data;
                 }
             })

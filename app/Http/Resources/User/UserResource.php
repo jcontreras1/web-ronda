@@ -16,7 +16,7 @@ class UserResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => ucfirst(strtolower($this->lastname)) . ' ' . ucfirst(strtolower($this->name)),
+            'name' => ucfirst(strtolower($this->apellido)) . ' ' . ucfirst(strtolower($this->nombre)),
         ];
     }
 }

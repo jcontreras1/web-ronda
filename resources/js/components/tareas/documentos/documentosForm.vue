@@ -1,14 +1,7 @@
 <template>
         <form @submit.prevent="upload" enctype="multipart/form-data">
-            <label for="file">Subir documentos</label>
-            <input 
-            type="file"
-            class="jumbotron bg-light mb-1"
-            style="border: 2px dashed #495057; height: 5px;"
-            id="file"
-            @change="change"
-            />
-            <i v-if="loading" class="fas fa-cog fa-spin text-primary"></i>
+                <label for="formFile">Subir documentos</label>
+                <input class="form-control bg-light mb-1" type="file" id="formFile"  style="border: 2px dashed #495057; height: 5px;" @change="change">       <i v-if="loading" class="bi bi-arrow-repeat text-primary"></i>
         </form>
 </template>
 <script>

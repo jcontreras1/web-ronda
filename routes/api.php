@@ -6,6 +6,7 @@ use App\Http\Controllers\api\Tarea\ApiTareaArchivoController;
 use App\Http\Controllers\api\Tarea\ApiTareaComentarioController;
 use App\Http\Controllers\api\Tarea\ApiTareaController;
 use App\Http\Controllers\api\Tarea\ApiTareaSubtareaController;
+use App\Http\Resources\User\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -28,7 +29,7 @@ Route::middleware('auth:sanctum')->group(function () {
 		Route::resource('tarea/{tarea}/comentario', ApiTareaComentarioController::class)->only(['index', 'store', 'update', 'destroy']);
 		Route::resource('tarea/{tarea}/documento', ApiTareaArchivoController::class)->only(['index', 'store', 'destroy']);
 	});
-	Route::get('/users', function () {return User::limit(10)->get();});
+	Route::get('/users', function () {return UserResource::collection(User::all());});
 	Route::post('/logout', [ApiAuthController::class, 'logout']);	
 Route::post('/ping', [ApiAuthController::class, 'ping']);
-});
+});	
