@@ -15,12 +15,14 @@
 
         @include('components.menu.card_menu', ['url' => route('area.index'), 'bg_color' => '#E94560', 'class_icon' => 'bi bi-building', 'title' =>'Areas'])
         
-        @include('components.menu.card_menu', ['url' => route('config.index'), 'bg_color' => '#816797', 'class_icon' => 'bi bi-gear-fill', 'title' =>'Configuraciones'])
-        
-        
-        @endcan
+        @include('components.menu.card_menu', ['url' => route('config.index'), 'bg_color' => '#816797', 'class_icon' => 'bi bi-gear-fill', 'title' =>'Configuraciones'])  
+
         
         @endcan
+        
+        @endcan
+
+        @include('components.menu.card_menu', ['url' => route('tareas.index'), 'bg_color' => '#748F92', 'class_icon' => 'bi bi-list-check', 'title' =>'Tareas'])
         
         @include('components.menu.card_menu', ['url' => route('export.index'), 'bg_color' => '#4C3A51', 'class_icon' => 'bi bi-clipboard2-data', 'title' =>'Exportable'])
 

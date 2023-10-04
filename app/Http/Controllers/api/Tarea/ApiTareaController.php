@@ -28,13 +28,13 @@ class ApiTareaController extends Controller
         //         ->get()
         //     );
         // }else{
-            $tareas = TareaResource::collection(
-                Auth::user()
-                ->tareas()
-                ->where('finalizada', false)
-                ->orderBy('updated_at', 'DESC')
-                ->get()
-            );
+        $tareas = TareaResource::collection(
+            Auth::user()
+            ->tareas()
+            ->where('finalizada', false)
+            ->orderBy('id', 'DESC')
+            ->get()
+        );
         // }
         return response($tareas, 200);
     }
@@ -54,15 +54,25 @@ class ApiTareaController extends Controller
     
     public function store(TareaRequest $request){
         $creador = Auth::user();
+
         $tarea = Tarea::create([
             'titulo' => $request['titulo'],
             'creador_id' => $creador->id,
         ]);
         
-        $tarea_participante = TareaParticipante::create([
-            'user_id' => Auth::id(),
-            'tarea_id' => $tarea->id,
-        ]);
+        $areas = $creador->areas;
+        
+        foreach($areas as $area){
+            foreach($area->usuarios as $usuario){
+                $tarea_participante = TareaParticipante::firstOrCreate([
+                    'user_id' => $usuario->id,
+                    'tarea_id' => $tarea->id,
+                ]);
+            }
+        }
+
+        
+        
 
         return response($tarea, 201);
     }

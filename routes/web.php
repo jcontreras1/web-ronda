@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () { return view('welcome'); });
 
 
-Route::get('/tareas', [testcontroller::class, 'test']);
+// Route::get('/tareas', [testcontroller::class, 'test']);
 
 Route::get('clave/definir/{token}', [ResetPasswordController::class, 'showDefineForm'])->name('password.define');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -48,6 +48,6 @@ Route::middleware(['auth'])->group(function () {
     /*Export*/
     Route::get('/export', [ExportController::class, 'index'])->name('export.index');    
     Route::get('/export/{ronda}', [ExportController::class, 'show'])->name('export.show');
-    // Route::view('/tareas', 'tareas.index');
+    Route::view('/tareas', 'tareas.index')->name('tareas.index');
   
 });
