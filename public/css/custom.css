@@ -21,3 +21,10 @@
 .card.indigo{
 	border-left: 4px solid #9561e2;
 }
+
+.list-group-item.indigo{
+	border-left: 4px solid #9561e2;
+}
+.list-group-item.danger{
+	border-left: 4px solid #BA403E;
+}

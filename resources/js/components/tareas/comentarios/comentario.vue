@@ -2,10 +2,16 @@
     <div class="list-group mb-1">
         <div class="list-group-item" :class="comentario.fijado ? 'danger' : 'indigo'">
             <div class="text-muted">
-                <i class="far fa-comment-alt mr-2" style="cursor: pointer;" @click="fijarComentario"></i>
+                <i class="bi bi-chat-left mr-2" role="button" @click="fijarComentario"></i>
                 {{comentario.user.name}}&nbsp;
-                <span v-if="comentario.fijado"><i class="fas fa-thumbtack fa-sm text-danger"></i></span>
-                <span v-else-if="comentario.user_id == this.user" style="cursor: pointer;" @click="eliminarComentario"><i class="fas fa-trash text-danger"></i></span>
+                <span class="float-end">
+                <span v-if="comentario.fijado">
+                    <i title="fijado" class="bi bi-pin-angle text-danger"></i>
+                </span>
+                <span v-else-if="comentario.user_id == this.user" role="button" @click="eliminarComentario">
+                    <i class="bi bi-trash text-danger"></i>
+                </span>
+            </span>
             </div>
             <span v-if="comentario.user_id == this.user" contenteditable="true" @keydown.prevent.enter="setComentario($event)" @blur="setComentario($event)">
                 {{comentario.comentario}}

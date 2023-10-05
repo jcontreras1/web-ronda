@@ -1,5 +1,5 @@
 <template>
-    <div v-for="(subtarea, index) in subtareas" :key="index" class="row">
+    <div v-for="(subtarea, index) in subtareas" :key="index" class="row mb-1">
         <div class="col-12">
             <div class="list-group">
                 <div class="list-group-item">
@@ -9,7 +9,7 @@
                     <span v-if="subtarea.finalizada" style="text-decoration: line-through;">{{subtarea.titulo}}</span>
                     <span v-else contenteditable="true" @keydown.prevent.enter="setTitulo($event, subtarea.id)" @blur="setTitulo($event, subtarea.id)">{{subtarea.titulo}}</span>
                     &nbsp;
-                    <button class="btn btn-sm btn-outline-danger float-right" @click="eliminarTarea(subtarea.id)"><i class="bi bi-x"></i></button>
+                    <button class="btn btn-sm btn-outline-danger float-end" @click="eliminarTarea(subtarea.id)"><i class="bi bi-x"></i></button>
                 </div>
             </div>
         </div>

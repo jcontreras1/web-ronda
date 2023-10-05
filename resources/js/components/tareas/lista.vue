@@ -1,6 +1,5 @@
 <template>
-    <div class="row">
-
+    <div class="row" data-masonry='{"percentPosition": true }'>
         <div v-for="(tarea) in tareas" :key="tarea.id" class="col-12 col-sm-6 col-md-4 mb-2">
             <tarea 
             :tarea="tarea"

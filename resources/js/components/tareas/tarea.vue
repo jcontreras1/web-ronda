@@ -1,52 +1,47 @@
 <template>
-	<div class="card shadow h-100">
-		<a  data-bs-toggle="offcanvas" :data-bs-target="'#offcanvasWithBothOptions'+tarea.id" :aria-controls="'offcanvasWithBothOptions' + tarea.id" style="text-decoration: none;" class="text-dark">
+	<div class="card shadow p-3">
+		<div class="row d-flex align-items-center">
+			<div class="col-2">
+				<button class="btn btn-success btn-sm" @click.stop.prevent="completarTarea($event)"> <i class="bi bi-check"></i></button>
+			</div>
+			<div class="col-10">
+				<div data-bs-toggle="offcanvas" :data-bs-target="'#offCanvasTarea'+tarea.id">						
+					<span>{{ tarea.titulo }}</span>
+					<div>
+						<!-- Responsable -->
+						<span v-if="tarea.responsable_id" class="mr-1 badge bg-primary" data-bs-toggle="tooltip" title="Responsable">
 
-			<div class="card-body">
-				<span >{{ tarea.titulo }}</span>
-				<span class="float-end">
-					<button 
-					class="btn btn-success btn-sm"
-					@click.prevent.stop="completarTarea()"
-					>
-					<i class="bi bi-check"></i>
-				</button>
-			</span>
-			<div>
-				<!-- Responsable -->
-				<span v-if="tarea.responsable_id" class="mr-1 badge bg-primary" data-bs-toggle="tooltip" title="Responsable">
-
-					<i class="bi bi-person"></i> {{user_selected.name}}
-				</span>
-				<!-- Subtareas - Progress -->
-				<span v-if="totales" class="mr-1 badge bg-success" data-bs-toggle="tooltip" title="Tareas">
-					Tareas {{realizadas}}/{{totales}}
-				</span>
-				<!-- Comentarios -->
-				<span v-if="comentarios.length" class="mr-1 badge bg-secondary" data-bs-toggle="tooltip" title="Tiene comentarios">
-					<i class="bi bi-chat mr-1"></i>&nbsp;{{comentarios.length}}
-				</span>
-				<!-- Renovable -->
-				<span v-if="tarea.renovable" class="mr-1 badge bg-primary" data-bs-toggle="tooltip" title="Renovable">
-					<i class="bi bi-arrow-repeat"></i>
-				</span>
-				<!-- Archivos -->
-				<span v-if="documentos.length" class="mr-1 badge bg-secondary" data-bs-toggle="tooltip" title="Documentos">
-					{{this.documentos.length}} <i class="bi bi-file-earmark-text"></i>
-				</span>
+							<i class="bi bi-person"></i> {{user_selected.name}}
+						</span>
+						<!-- Subtareas - Progress -->
+						<span v-if="totales" class="mr-1 badge bg-success" data-bs-toggle="tooltip" title="Tareas">
+							Tareas {{realizadas}}/{{totales}}
+						</span>
+						<!-- Comentarios -->
+						<span v-if="comentarios.length" class="mr-1 badge bg-secondary" data-bs-toggle="tooltip" title="Tiene comentarios">
+							<i class="bi bi-chat mr-1"></i>&nbsp;{{comentarios.length}}
+						</span>
+						<!-- Renovable -->
+						<span v-if="tarea.renovable" class="mr-1 badge bg-primary" data-bs-toggle="tooltip" title="Renovable">
+							<i class="bi bi-arrow-repeat"></i>
+						</span>
+						<!-- Archivos -->
+						<span v-if="documentos.length" class="mr-1 badge bg-secondary" data-bs-toggle="tooltip" title="Documentos">
+							{{this.documentos.length}} <i class="bi bi-file-earmark-text"></i>
+						</span>
+					</div>
+				</div>
 			</div>
 		</div>
-	</a>
 
-	<div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" :id="'offcanvasWithBothOptions' + tarea.id" aria-labelledby="offcanvasWithBothOptionsLabel">
-		<div class="offcanvas-header">
-			<h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">{{tarea.titulo}}</h5>
-			<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-		</div>
-		<div class="offcanvas-body">
-			<div class="card-footer bg-white">
+		<div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" :id="'offCanvasTarea' + tarea.id" aria-labelledby="offcanvasWithBothOptionsLabel">
+			<div class="offcanvas-header">
+				<h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">{{tarea.titulo}}</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+			</div>
+			<div class="offcanvas-body">
 				<div class="row">
-					<div class="col-12">
+					<div class="col-12 mb-3">
 						<!-- Responsable -->
 						<div class="mb-3">
 							<label>Responsable</label>
@@ -59,27 +54,29 @@
 						</div>
 						<!-- Tarea Periódica -->
 						<div>
-							<div class="custom-control custom-switch">
+							<div class="form-check form-switch">
 								<input 
 								:checked="tarea.renovable" 
 								type="checkbox" 
 								@change="setPeriodica($event)" 
-								class="custom-control-input" 
+								class="form-check-input" 
+								role="switch"
 								:id="'customSwitch' + tarea.id"
 								/>
-								<label class="custom-control-label" :for="'customSwitch' + tarea.id">Tarea periódica</label>
+								<label class="form-check-label" :for="'customSwitch' + tarea.id">Tarea periódica</label>
 							</div>
 						</div>                    
 					</div>
 
+					<hr>
+
 					<!-- Subtareas -->
-					<div class="col-12">
+					<div class="col-12 mb-3">
 						<label>Subtareas</label>
 						<subtarea-create
 						:tarea="tarea"
 						v-on:subtareaCreada="recargarSubtareas"
 						/>
-						<hr>
 						<subtarea-list 
 						:subtareas="subtareas"
 						:tarea="tarea"
@@ -87,23 +84,25 @@
 						/>
 					</div>
 
+					<hr>
+
 					<!-- Comentarios -->
-					<div class="col-12">
+
+					<div class="col-12 mb-3">
 						<label>Comentarios</label>
 						<comentario-create
 						:tarea="tarea"
 						v-on:comentarioCreado="recargarComentarios"
 						/>
-						<hr>
 						<comentario-list 
 						:comentarios="comentarios"
 						:tarea="tarea"
 						v-on:recargarComentarios="recargarComentarios"
 						/>
 					</div>                
-				</div>
-				<!-- <hr> -->
-				<div class="row">
+
+					<hr>
+
 					<!-- Documentos -->
 					<div class="col-12">
 						<documento-create 
@@ -119,6 +118,7 @@
 						v-on:recargarDocumentos="recargarDocumentos"
 						/>
 					</div>
+
 				</div>
 				<div class="row">
 					<div class="col-12">
@@ -130,13 +130,15 @@
 						</div>
 					</div>
 				</div>
-			</div>			
+			</div>
 		</div>
 	</div>
-</div>
 </template>
 
 <script>
+	document.body.addEventListener('click', function(e){
+		e.stopPropagation()
+	});
 	import subtareaCreate from './subtareas/subtareaCreate.vue';
 	import subtareaList from './subtareas/subtareaList.vue';
 	import comentarioCreate from './comentarios/comentarioCreate.vue';
@@ -169,8 +171,11 @@
 			documentoList,
 		},
 		props: ['tarea', 'administrar'],
+		emits: ['tareaCumplid'],
 		methods : {
-			completarTarea(){
+			completarTarea(e){
+				e.preventDefault();
+				e.stopPropagation();
 				this.tarea.finalizada = true;
 				axios.put('api/tarea/' + this.tarea.id, this.tarea)
 				.then( response => {
@@ -242,9 +247,6 @@
 				axios.get('api/tarea/' + this.tarea.id + '/comentario')
 				.then( response => {
 					if(response.status == 200){
-						if(response.data.length){
-							console.log(this.tarea.id + ' - ' + response.data.length);
-						}
 						this.comentarios = response.data;
 					}
 				})

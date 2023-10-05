@@ -1,6 +1,6 @@
 <template>
     <div class="row">
-        <div class="col-12 m-2" v-if="documentos.length">Documentos</div>
+        <div class="col-12" v-if="documentos.length">Documentos</div>
         <documento v-for="documento in documentos" :key="documento.id" 
         :documento="documento"
         :tarea="tarea"

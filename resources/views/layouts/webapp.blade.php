@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-{{-- <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-bs-theme="dark"> --}}
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-bs-theme="light">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-bs-theme="dark">
+{{-- <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-bs-theme="light"> --}}
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,8 +13,10 @@
 	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 	<link rel="manifest" href="/site.webmanifest">
+	<link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 	<!-- Styles -->
 	<link href="{{ mix('css/app.css') }}" rel="stylesheet">
+	<link href="{{ asset('css/custom.css') }}" rel="stylesheet">
 </head>
 <body class="h-100">
 	@include('sweetalert::alert')
@@ -25,10 +27,11 @@
 		@include('components.menu.navbar')
 		@endguest
 		<main>
-		@yield('content')
+			@yield('content')
 		</main>
 		@stack('scripts')
 		<script src="{{ mix('js/app.js') }}"></script>
+		<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
 		@include('components.misc.footer')
 	</div>
 </body>

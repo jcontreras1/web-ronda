@@ -1,6 +1,6 @@
 <template>
     <div class="col-12 col-sm-6">
-        <div class="media mb-2 bg-light h-100"
+        <div class="media mb-2 h-100"
         >
             <div class="row">
             <div class="col-12 mb-2 text-center">
@@ -17,9 +17,15 @@
             <div class="text-center col-12">
                 <p v-if="documento.formato !== 'img'" class="text-break">{{documento.nombre_real_archivo}}</p>
                 <p class="">
-                    <i class="fas fa-trash fa-lg fa-fw text-danger p-2" @click="eliminarDocumento" style="cursor: pointer;" title="Eliminar"></i>
-                    <a :href="'/storage/tareas/' + tarea.id + '/' + documento.nombre_archivo" :download="documento.nombre_real_archivo">
-                        <i class="fas fa-download fa-lg fa-fw text-primary p-2"></i>
+                    <button class="btn btn-danger m-1" @click="eliminarDocumento" style="cursor: pointer;" title="Eliminar">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                    <a 
+                    :href="'/storage/tareas/' + tarea.id + '/' + documento.nombre_archivo"
+                    :download="documento.nombre_real_archivo"
+                    class="btn btn-primary"
+                    >
+                        <i class="bi bi-download"></i>
                     </a>
                 </p>
             </div>
