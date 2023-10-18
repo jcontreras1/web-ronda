@@ -1,7 +1,7 @@
 <div class="col-12 col-md-4">
 	<div class="card">
 		<div class="card-body">
-			<a class="text-dark" href="{{route('ronda.show', $ronda)}}" style="text-decoration: none;">
+			<a class="link-body-emphasis" href="{{route('ronda.show', $ronda)}}" style="text-decoration: none;">
 				<div class="card-title">
 					<h5>Ronda #{{$ronda->id}} @if($ronda->circuito)- <small class="text-muted"> {{ $ronda->circuito->titulo }}</small> @endif </h5>
 					<hr>

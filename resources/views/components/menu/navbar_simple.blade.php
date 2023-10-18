@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark me-2 h5">
+<nav class="navbar navbar-expand-lg bg-dark border-bottom border-body mb-2" data-bs-theme="dark">
   <div class="container">
         <a class="navbar-brand" href="{{ url('/') }}">
       {{-- <img src="{{asset('/img/logo-big.png')}}" alt="" height="50" width="auto"> --}}

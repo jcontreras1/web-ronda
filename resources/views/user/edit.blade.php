@@ -59,7 +59,7 @@
             @if(count($user->tipos_usuario) == 0)
             <small>Sin cargos</small>
             @else
-            <table class="table table-striped table-sm">
+            <table class="table table-hover table-sm">
                 <tbody>
                     @foreach($user->tipos_usuario as $tipo_usuario)
                     <tr>
@@ -89,7 +89,7 @@
             @if(count($user->areas) == 0)
             <small>Sin Áreas</small>
             @else
-            <table class="table table-striped table-sm">
+            <table class="table table-hover table-sm">
                 <tbody>
                     @foreach($user->areas as $area)
                     <tr>

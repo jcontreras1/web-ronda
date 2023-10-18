@@ -92,17 +92,19 @@
 		
 		let activeImage, originalWidthToHeightRatio;
 		
-		btn_obtener_ubicacion.addEventListener('click', function(){
+		if(btn_obtener_ubicacion){
+			btn_obtener_ubicacion.addEventListener('click', function(){
 			/*Si el marker ya estaba definido, lo borro y lo creo de vuelta*/
-			if(marker){
-				myMap.removeLayer(marker);
-			}
-			document.getElementById('btn_obtener_ubicacion').innerHTML = `
-			<div class="spinner-border" role="status">
-			<span class="visually-hidden">Loading...</span>
-			</div>`;
-			getLocation();
-		});
+				if(marker){
+					myMap.removeLayer(marker);
+				}
+				document.getElementById('btn_obtener_ubicacion').innerHTML = `
+				<div class="spinner-border" role="status">
+				<span class="visually-hidden">Loading...</span>
+				</div>`;
+				getLocation();
+			});
+		}
 
 
 

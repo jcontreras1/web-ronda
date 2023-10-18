@@ -18,7 +18,7 @@
 	{{-- Rondas históricas --}}
 	<h4 class="mb-3">Histórico</h4>
 	<div class="table-responsive">
-		<table class="table table-striped" id="tabla">
+		<table class="table table-hover" id="tabla">
 			<thead>
 				<tr>
 					<th>Recorre</th>
@@ -30,7 +30,7 @@
 				@foreach($cerradas as $ronda)
 				<tr onclick="ver_circuito('{{ route('ronda.show', $ronda) }}')" style="cursor: pointer;">
 					<td data-order="{{ $ronda->id }}">{{ucwords($ronda->creador->nombre)}}
-						<span class="lead text-primary d-block d-md-inline float-md-end ">
+						<span class="lead text-primary-emphasis d-block d-md-inline float-md-end ">
 							@if(count($ronda->novedades) > 0)
 							<i data-toggle="tooltip" title="Tiene novedades" class="bi bi-card-text"></i>
 							@endif

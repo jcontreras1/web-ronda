@@ -14,6 +14,7 @@
 	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 	<link rel="manifest" href="/site.webmanifest">
 	<link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+	<script type="text/javascript" src="{{asset('/js/theme-switcher.js')}}"></script>
 	<!-- Styles -->
 	<link href="{{ mix('css/app.css') }}" rel="stylesheet">
 	<link href="{{ asset('css/custom.css') }}" rel="stylesheet">
@@ -31,7 +32,6 @@
 		</main>
 		@stack('scripts')
 		<script src="{{ mix('js/app.js') }}"></script>
-		<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
 		@include('components.misc.footer')
 	</div>
 </body>

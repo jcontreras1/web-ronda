@@ -8,7 +8,7 @@
 		<button data-toggle="model" onclick="modal_create()" class="btn btn-success"><i class="bi bi-plus"></i></button>
 	</x-misc-title>
 	<div class="table-responsive">
-		<table class="table table-striped">
+		<table class="table table-hover">
 			<thead>
 				<tr>
 					<th>Area</th>

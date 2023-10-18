@@ -4,7 +4,7 @@
 			<div class="col-2">
 				<button class="btn btn-success btn-sm" @click.stop.prevent="completarTarea($event)"> <i class="bi bi-check"></i></button>
 			</div>
-			<div class="col-10">
+			<div class="col-10" role="button">
 				<div data-bs-toggle="offcanvas" :data-bs-target="'#offCanvasTarea'+tarea.id">						
 					<span>{{ tarea.titulo }}</span>
 					<div>

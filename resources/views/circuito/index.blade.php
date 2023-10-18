@@ -10,7 +10,7 @@
 	</x-misc-title>
 
 	<div class="table-responsive">		
-		<table class="table table-striped" id="tabla">
+		<table class="table table-hover" id="tabla">
 			<thead>
 				<tr>
 					<th>Nombre</th>

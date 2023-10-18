@@ -7,7 +7,7 @@
 	</x-misc-title>
 	{{-- Rondas históricas --}}
 	<div class="table-responsive">
-		<table class="table table-striped" id="tabla">
+		<table class="table table-hover" id="tabla">
 			<thead>
 				<tr>
 					<th>Recorre</th>
