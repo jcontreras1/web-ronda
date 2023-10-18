@@ -30,7 +30,7 @@ class RondaController extends Controller
 
         /*Si puede administrar el sistema, verá esto. Caso contrario, se ve solo lo del área*/
         $abiertas = Ronda::where('abierta', true)->get();
-        $cerradas = Ronda::where('abierta', false)->get();
+        $cerradas = Ronda::where('abierta', false)->orderBy('id', 'desc')->get();
 
         if(!evaluar_permisos(['ADM_SIS'], Auth::user()->tipos_usuario)){
             /*Rondas cerradas cuyo circuito, pertenece a algún área a la que pertenezco*/

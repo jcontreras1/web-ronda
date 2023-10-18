@@ -29,20 +29,30 @@
 			<tbody>
 				@foreach($cerradas as $ronda)
 				<tr onclick="ver_circuito('{{ route('ronda.show', $ronda) }}')" style="cursor: pointer;">
-					<td data-order="{{ $ronda->id }}">{{ucwords($ronda->creador->nombre)}}
-						<span class="lead text-primary-emphasis d-block d-md-inline float-md-end ">
+					<td>{{ucwords($ronda->creador->nombre)}}
+						<span class="lead text-primary-emphasis d-block d-md-inline float-md-end">
 							@if(count($ronda->novedades) > 0)
-							<i data-toggle="tooltip" title="Tiene novedades" class="bi bi-card-text"></i>
+							{{-- <i data-toggle="tooltip" title="Tiene novedades" class="bi bi-card-text"></i> --}}
+							<i class="bi bi-list border px-1 rounded" data-toggle="tooltip" title="Tiene novedades"></i>
 							@endif
 							@if(count($ronda->images) > 0)
-							<i data-toggle="tooltip" title="Hay imágenes" class="bi bi-card-image"></i>
+							{{-- <i  class="bi bi-card-image"></i> --}}
+							<i class="bi bi-image-alt border px-1 rounded" data-toggle="tooltip" title="Hay imágenes"></i>
 							@endif
-							@if(count($ronda->checkpoints) < 10 && count($ronda->checkpoints) > 0)
-							<i data-toggle="tooltip" title="Puntos visitados" class="bi bi-{{ count($ronda->checkpoints) }}-circle"></i>
+							@if(count($ronda->checkpoints) > 0)
+							@if(count($ronda->checkpoints) >= 10 )
+							<span class="text-primary-emphasis border px-1 rounded" data-toggle="tooltip" title="Puntos visitados">
+								<small>9+</small>
+							</span>
+							@else
+							<span class="text-primary-emphasis border px-2 rounded" data-toggle="tooltip" title="Puntos visitados">
+								{{ count($ronda->checkpoints) }}
+							</span>
+							@endif
 							@endif
 						</span>
 					</td>
-					<td data-order="{{ $ronda->id }}">{{date('d/m/Y H:i', strtotime($ronda->created_at))}}</td>
+					<td data-order="{{ $ronda->created_at }}">{{date('d/m/Y H:i', strtotime($ronda->created_at))}}</td>
 					<td>
 						<a href="{{route('ronda.show', $ronda)}}" data-toggle="tooltip" title="Ver" class="btn btn-primary mb-1"><i class="bi bi-list-task"></i></a>
 					</td>

@@ -22,7 +22,7 @@
         
         @endcan
 
-        @include('components.menu.card_menu', ['url' => route('tareas.index'), 'bg_color' => '#748F92', 'class_icon' => 'bi bi-list-check', 'title' =>'Tareas'])
+        {{-- @include('components.menu.card_menu', ['url' => route('tareas.index'), 'bg_color' => '#748F92', 'class_icon' => 'bi bi-list-check', 'title' =>'Tareas']) --}}
         
         @include('components.menu.card_menu', ['url' => route('export.index'), 'bg_color' => '#4C3A51', 'class_icon' => 'bi bi-clipboard2-data', 'title' =>'Exportable'])
 
