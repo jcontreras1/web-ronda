@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Ronda;
 
 use App\Http\Controllers\Controller;
+use App\Models\Ronda\Checkpoint;
 use App\Models\Ronda\Circuito;
 use App\Models\Ronda\Ronda;
 use Illuminate\Http\Request;
@@ -13,6 +14,14 @@ use Illuminate\Support\Facades\Storage;
 
 class RondaController extends Controller
 {
+
+    public function heatmap(){
+        $checkpoints = Checkpoint::all();
+        $circuitos = Circuito::all();
+        return view('rondas.heatmap')->with(compact(['checkpoints', 'circuitos']));
+    }
+
+
     public function index(){
 
         /*Áreas a las que pertenezco*/

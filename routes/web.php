@@ -38,6 +38,7 @@ Route::middleware(['auth'])->group(function () {
         Route::patch('/profile/update', [UserController::class, 'profile_update'])->name('profile.update');
         Route::patch('/profile/password/', [UserController::class, 'password_update'])->name('profile.password.update');
     });
+    Route::get('/heatmap', [RondaController::class, 'heatmap']);
     Route::resource('area', AreaController::class);
     Route::resource('/user/{user}/area_usuario', AreaUsuarioController::class);
     Route::resource('ronda', RondaController::class)->only(['index', 'show', 'store', 'destroy']);

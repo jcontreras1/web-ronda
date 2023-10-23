@@ -89,6 +89,24 @@
 		const btn_obtener_ubicacion = document.getElementById('btn_obtener_ubicacion');
 		const latitud = document.querySelector('#latitud');
 		const longitud = document.querySelector('#longitud');
+
+		//Active seek Navigator
+		// options = {
+		// 	enableHighAccuracy: true,
+		// 	timeout: 5000,
+		// 	maximumAge: 0,
+		// };
+
+		// const success = (pos) => {
+		// 	 const crd = pos.coords;
+		// 	 console.log(crd);
+		// }		
+
+		// const error = (err) => {
+		// 	 console.log(err);
+		// }
+		// navigator.geolocation.watchPosition(success, error, options);
+
 		
 		let activeImage, originalWidthToHeightRatio;
 		
