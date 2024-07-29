@@ -79,6 +79,9 @@
 			var modal = new bootstrap.Modal(document.getElementById('mdl_ronda_create'));
 			modal.show();
 		}else{
+			//Bloquear el boton de crear ronda
+			btn_ronda_create.disabled = true;
+			btn_ronda_create.innerHTML = '<i class="bi bi-spinner fa-spin"></i> Creando ronda...';
 			var form = document.getElementById('form_ronda_create');
 			form.submit();
 		}

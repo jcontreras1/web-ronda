@@ -96,7 +96,7 @@ class RondaController extends Controller
             $checkpoint->delete();
         }
         $ronda->delete();
-        toast('Ronda eliminada', 'success')->autoClose('1500');
+        //toast('Ronda eliminada', 'success')->autoClose('1500');
         return back();
     }
 
