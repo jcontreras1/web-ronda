@@ -1,5 +1,5 @@
-<div class="col-12 col-md-4">
-	<div class="card">
+<div class="col-12 col-sm-6 col-md-4 col-lg-3">
+	<div class="card mb-3 shadow">
 		<div class="card-body">
 			<a class="link-body-emphasis" href="{{route('ronda.show', $ronda)}}" style="text-decoration: none;">
 				<div class="card-title">

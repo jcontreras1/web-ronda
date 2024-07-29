@@ -49,7 +49,7 @@ class RondaController extends Controller
         ->orderBy('id', 'desc')->get();
 
         if(!evaluar_permisos(['ADM_SIS'], Auth::user()->tipos_usuario)){
-            return "hola";
+            //return "hola";
             /*Rondas cerradas cuyo circuito, pertenece a algún área a la que pertenezco*/
             $cerradas = Ronda::where('abierta', false)->whereIn('circuito_id', array_map(function($elem){return $elem['id'];}, $circuitos_posibles))->get();
             /*Rondas abiertas cuyo circuito, pertenece a algín área a la que pertenezco*/
