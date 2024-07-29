@@ -39,9 +39,17 @@ class RondaController extends Controller
 
         /*Si puede administrar el sistema, verá esto. Caso contrario, se ve solo lo del área*/
         $abiertas = Ronda::where('abierta', true)->get();
-        $cerradas = Ronda::where('abierta', false)->orderBy('id', 'desc')->get();
+        $cerradas = Ronda::where('abierta', false)
+        ->with('creador')
+        ->with('circuito')
+        ->with('checkpoints')
+        ->with('novedades')
+        ->with('images')
+        ->take(1000)
+        ->orderBy('id', 'desc')->get();
 
         if(!evaluar_permisos(['ADM_SIS'], Auth::user()->tipos_usuario)){
+            return "hola";
             /*Rondas cerradas cuyo circuito, pertenece a algún área a la que pertenezco*/
             $cerradas = Ronda::where('abierta', false)->whereIn('circuito_id', array_map(function($elem){return $elem['id'];}, $circuitos_posibles))->get();
             /*Rondas abiertas cuyo circuito, pertenece a algín área a la que pertenezco*/
