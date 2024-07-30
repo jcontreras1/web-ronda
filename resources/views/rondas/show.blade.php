@@ -230,7 +230,22 @@
 		let punto_visitado = null;
 		@foreach($ronda->checkpoints as $geo)
 		punto_visitado = L.marker([{{$geo->latitud}}, {{$geo->longitud}}], {icon: @if(count($geo->images) > 0) icono_imagenes @elseif($geo->novedad) icono_novedades @else icono_sin_novedades @endif}).addTo(myMap);
-		punto_visitado.bindPopup(`<strong>{!!nl2br($geo->novedad)!!}</strong><br>Visitado a las {{ date('d/m/Y H:i', strtotime($geo->created_at)) }}`);
+		@if($geo->images->count() > 0)
+		//mostrar imagen
+		punto_visitado.bindPopup(`
+		<img src="{{ asset('storage/ronda/' . $geo->id . '/' . $geo->images->first()->filename) }}" class="img-fluid" onClick="launch_modal('{{ asset('storage/ronda/' . $geo->id . '/' . $geo->images->first()->filename) }}')">
+		<hr>
+		@if($geo->novedad)
+		<strong>{!!nl2br($geo->novedad)!!}</strong><br>
+		@endif
+		<small>Visitado a las {{ date('d/m/y H:i', strtotime($geo->created_at)) }}</small>`);	
+		@else
+		punto_visitado.bindPopup(`
+		@if($geo->novedad)
+		<strong>{!!nl2br($geo->novedad)!!}</strong><br>
+		@endif
+		<small>Visitado a las {{ date('d/m/y H:i', strtotime($geo->created_at)) }}</small>`);	
+		@endif
 		@endforeach
 		
 		//Si hay geofences

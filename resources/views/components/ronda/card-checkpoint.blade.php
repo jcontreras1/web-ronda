@@ -6,9 +6,20 @@
 }
 </style>
 <div class="col-12">
-	<div class="card card-primary">
-		<div class="card-header @if($checkpoint->novedad || count($checkpoint->images) > 0) bg-dark @else bg-success @endif text-white">
-			{{$checkpoint->user->nombre}} {{$checkpoint->user->apellido}} [{{ date('d/m/Y H:i', strtotime($checkpoint->created_at))}}]
+	<div class="card shadow-sm">
+		<div class="card-header">
+			@if(!$checkpoint->novedad && count($checkpoint->images) == 0)
+			<i class="bi bi-check-circle-fill text-success pr-2"></i>
+			<span class="mx-2">
+			{{$checkpoint->user->nombre}} {{$checkpoint->user->apellido}} [{{ date('d/m/y H:i', strtotime($checkpoint->created_at))}}]
+			</span>
+			<strong><em>(Sin novedades)</em></strong>
+			@else
+			<i class="bi bi-chat-square-dots-fill text-primary"></i>
+			<span class="mx-2">
+			{{$checkpoint->user->nombre}} {{$checkpoint->user->apellido}} [{{ date('d/m/y H:i', strtotime($checkpoint->created_at))}}]
+			</span>
+			@endif
 			<span class="float-end">#{{$checkpoint->id}}</span>
 			{{-- <span class="float-end">
 				<form method="POST" action="{{route('checkpoint.destroy', ['ronda' => $ronda, 'checkpoint' => $checkpoint])}}">
@@ -17,16 +28,16 @@
 				</form>
 			</span> --}}
 		</div>
+		@if($checkpoint->novedad || count($checkpoint->images) > 0)
 		<div class="card-body">		
 
 			@if($checkpoint->novedad)
 				<strong>{!!nl2br($checkpoint->novedad)!!}</strong>
-			@else
-				<span class="text-muted">Sin novedades</span>
 			@endif
-
-			@if(count($checkpoint->images))
+			@if($checkpoint->novedad && count($checkpoint->images) > 0)
 			<hr>
+			@endif
+			@if(count($checkpoint->images))
 			<div class="row">
 				@foreach($checkpoint->images as $img)
 				@include('components.ronda.novedad-image', ['img' => asset('storage/ronda/' . $checkpoint->id . '/' . $img->filename)])
@@ -34,5 +45,6 @@
 			</div>
 			@endif
 		</div>
+		@endif
 	</div>
 </div>
