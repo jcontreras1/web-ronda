@@ -48,18 +48,19 @@
 
 	@section('scripts')
 	<script type="text/javascript">
+		document.addEventListener('DOMContentLoaded', function() {
+			function ver_circuito(url){
+				location.href = url;
+			}
 
-		function ver_circuito(url){
-			location.href = url;
-		}
-
-		$(document).ready(function(){
-			$('#tabla').DataTable({
-				language : {
-					url : '{{asset('assets/dt.spanish.json')}}'
-				},
-				order: [[1, 'desc']],
-			});			
+			$(document).ready(function(){
+				$('#tabla').DataTable({
+					language : {
+						url : '{{asset('assets/dt.spanish.json')}}'
+					},
+					order: [[1, 'desc']],
+				});			
+			});
 		});
 	</script>
 	@endsection

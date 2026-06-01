@@ -44,6 +44,7 @@
 @push('scripts')
 <script type="text/javascript">
 
+document.addEventListener('DOMContentLoaded', function() {
 	var btn_circuito_create = document.getElementById('btn_circuito_create');
 	btn_circuito_create.addEventListener('click', crear_circuito);
 
@@ -80,5 +81,6 @@
 			}
 		});
 	});
+});
 </script>
 @endpush

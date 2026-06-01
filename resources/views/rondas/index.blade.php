@@ -70,6 +70,7 @@
 
 @section('scripts')
 <script type="text/javascript">
+document.addEventListener('DOMContentLoaded', function() {
 	var btn_ronda_create = document.getElementById('btn_ronda_create');
 	btn_ronda_create.addEventListener('click', crear_rondin);
 
@@ -129,5 +130,6 @@
 			})
 		});
 	});
+});
 </script>
 @endsection

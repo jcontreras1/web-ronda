@@ -1,5 +1,4 @@
 <template>
-
     <div class="input-group mb-3">
       <input 
       ref="input_tarea" 
@@ -27,7 +26,6 @@
     :aria-valuenow="progress" 
     aria-valuemin="0" 
     aria-valuemax="100">
-
 </div>
 </div>
 <span v-if="tarea.titulo.length">
@@ -40,48 +38,54 @@
 </span>
 </template>
 
-<script>
-    import axios from 'axios';
+<script setup>
+import { ref } from 'vue';
+import axios from 'axios';
 
-    export default ({
-        data: function(){
-            return {
-                tarea : {
-                    titulo : ""
-                },
-                progress : 0
-            }
-        },
-        emits:[
-            'tareaCreada'
-            ],
-        methods : {
-            agregarTarea(){
-                if( !this.tarea.titulo ){
-                    return;
-                }
-                axios.post('/api/tarea', {
-                    titulo : this.tarea.titulo
-                }).then(response => {
-                    if( response.status == 201 ){
-                        var audio = new Audio('/assets/sounds/create.mp3');
-                        audio.play();
-                        this.tarea.titulo = "";
-                        this.$refs.input_tarea.focus();
-                        this.$emit('tareaCreada');
-                        this.updateProgressBar();
-                    }
-                }).catch( error => {
-                    console.log( error );
-                } )
-            },
-            updateProgressBar(){
-                if (this.tarea.titulo.length > 140) {
-                        this.tarea.titulo = this.tarea.titulo.slice(0, 140); // Limita el texto a 140 caracteres
-                    }
-                    // Calcula el porcentaje de progreso basado en la longitud del texto
-                    this.progress = (this.tarea.titulo.length / 140) * 100;
-                }
-            }
-        })
-    </script>
+// 1. Declaramos los eventos que emite el componente
+const emit = defineEmits(['tareaCreada']);
+
+// 2. Estado reactivo (reemplaza a 'data')
+const tarea = ref({
+    titulo: ""
+});
+const progress = ref(0);
+
+// 3. Referencia al elemento del DOM (reemplaza a this.$refs.input_tarea)
+// El nombre de la variable DEBE coincidir con el ref="..." en el template
+const input_tarea = ref(null);
+
+// 4. Métodos (reemplaza a 'methods')
+const updateProgressBar = () => {
+    if (tarea.value.titulo.length > 140) {
+        tarea.value.titulo = tarea.value.titulo.slice(0, 140); // Limita el texto a 140 caracteres
+    }
+    // Calcula el porcentaje de progreso basado en la longitud del texto
+    progress.value = (tarea.value.titulo.length / 140) * 100;
+};
+
+const agregarTarea = () => {
+    if (!tarea.value.titulo) {
+        return;
+    }
+    
+    axios.post('/api/tarea', {
+        titulo: tarea.value.titulo
+    }).then(response => {
+        if (response.status == 201) {
+            const audio = new Audio('/assets/sounds/create.mp3');
+            audio.play();
+            
+            tarea.value.titulo = "";
+            
+            // Accedemos al input del DOM y le damos focus
+            input_tarea.value.focus();
+            
+            emit('tareaCreada');
+            updateProgressBar();
+        }
+    }).catch(error => {
+        console.log(error);
+    });
+};
+</script>

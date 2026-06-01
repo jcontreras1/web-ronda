@@ -11,12 +11,15 @@
 
 </template>
 
-<script>
+<script setup>
 import tarea from './tarea.vue';
-export default ({
-    props : ['tareas', 'administrar'],
-    components : {
-        tarea
-    }
-})
+//export default ({
+//    props : ['tareas', 'administrar'],
+//    components : {
+//        tarea
+//    }
+//})
+defineProps(['tareas', 'administrar']);
+
+defineEmits(['tareaCumplida']);
 </script>

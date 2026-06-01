@@ -188,6 +188,6 @@ crossorigin=""></script>
 		// 		}
 		// 		).addTo(myMap);
 		
-		
+
 	</script>
 	@endsection

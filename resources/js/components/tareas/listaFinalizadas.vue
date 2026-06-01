@@ -29,37 +29,38 @@
 </div>
 </div>
 </div>
-
 </template>
 
-<script>
-    import tareaFinalizada from './tareaFinalizada.vue';
-    export default ({
-        methods : {
-            renovar_tareas(){            
-                Swal.fire({
-                    title: '¿Renovar todas las tareas periódicas?',
-                    showCancelButton: true,
-                    confirmButtonText: 'Si',
-                    cancelButtonText: `Cancelar`,
-                    icon : `question`
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        axios.post('/api/tareas/reactivar')
-                        .then( response => {
-                            this.$emit('aplicarFiltros', []);
-                        })
-                        .catch(error => {
-                            console.log(error);
-                        });
-                    }
-                })
-            }
-        },
-        props : ['tareas'],
-        emits : ['tareaEliminada', 'tareaReactivada'],
-        components : {
-            tareaFinalizada
+<script setup>
+import tareaFinalizada from './tareaFinalizada.vue';
+import axios from 'axios'; // Asegúrate de tenerlo importado si no es global
+import Swal from 'sweetalert2'; // Asegúrate de tenerlo importado si no es global
+
+// 1. Definimos las props
+defineProps(['tareas']);
+
+// 2. Definimos los eventos y guardamos la función emit para usarla en el script
+const emit = defineEmits(['tareaEliminada', 'tareaReactivada', 'aplicarFiltros']);
+
+// 3. Convertimos el método en una función normal
+const renovar_tareas = () => {            
+    Swal.fire({
+        title: '¿Renovar todas las tareas periódicas?',
+        showCancelButton: true,
+        confirmButtonText: 'Si',
+        cancelButtonText: `Cancelar`,
+        icon : `question`
+    }).then((result) => {
+        if (result.isConfirmed) {
+            axios.post('/api/tareas/reactivar')
+            .then( response => {
+                // Reemplazamos this.$emit por emit()
+                emit('aplicarFiltros', []);
+            })
+            .catch(error => {
+                console.log(error);
+            });
         }
     })
+};
 </script>

@@ -115,7 +115,7 @@
 @endsection
 @section('scripts')
 <script type="text/javascript">
-
+document.addEventListener('DOMContentLoaded', function() {
     var btn_agregar_area = document.getElementById('agregar_area');
     btn_agregar_area.addEventListener('click', agregar_area);
 
@@ -129,6 +129,7 @@
             $('#mdl_cargo_add').modal('show');
         });
     });
+});
 </script>
 @endsection
 

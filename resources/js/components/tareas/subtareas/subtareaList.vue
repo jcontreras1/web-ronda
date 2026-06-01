@@ -14,63 +14,75 @@
             </div>
         </div>
     </div>
-</template>/
-<script>
-export default ({
-    props : ['subtareas', 'tarea'],
-    emits : ['recargarSubtareas'],
-    methods : {
-        eliminarTarea(subtarea){
-            axios.delete('api/tarea/' + this.tarea.id + '/subtarea/' + subtarea)
-            .then( response => {
-                if( response.status == 200 ){
-                    this.$emit('recargarSubtareas');
-                    var audio = new Audio('/assets/sounds/restore.mp3');
-                    audio.play();
-                }
-            })
-        },
-        setTitulo(event, subtarea){
-            event.target.blur();
-            if(event.target.innerText == ""){
-                return;
-            }
-            axios.put('api/tarea/' + this.tarea.id + '/subtarea/' + subtarea, {'titulo' : event.target.innerText})
-            .then( response => {
-                if( response.status == 201 ){
-                    this.$emit('recargarSubtareas');
-                }
-            })
-            .catch( error => {
-                console.log( error );
-            })
-        },
-        finalizarTarea(subtarea){
-            axios.put('api/tarea/' + this.tarea.id + '/subtarea/' + subtarea, {'finalizada' : 1})
-            .then( response => {
-                if( response.status == 201 ){
-                    this.$emit('recargarSubtareas');
-                    var audio = new Audio('/assets/sounds/done.mp3');
-                    audio.play();
-                }
-            })
-            .catch( error => {
-                console.log( error );
-            })
-        },
-        reactivarTarea(subtarea){
-            axios.put('api/tarea/' + this.tarea.id + '/subtarea/' + subtarea, {'finalizada' : 0})
-            .then( response => {
-                if( response.status == 201 ){
-                    this.$emit('recargarSubtareas');
-                    var audio = new Audio('/assets/sounds/done.mp3');
-                    audio.play();
-                }
-            })
-            .catch( error => {
-                console.log( error );
-            })
+</template>
+
+<script setup>
+import axios from 'axios';
+
+// 1. Definimos las Props
+const props = defineProps(['subtareas', 'tarea']);
+
+// 2. Definimos los Eventos
+const emit = defineEmits(['recargarSubtareas']);
+
+// 3. Métodos
+const eliminarTarea = (subtareaId) => {
+    // Usamos props.tarea.id
+    axios.delete('api/tarea/' + props.tarea.id + '/subtarea/' + subttareaId)
+    .then(response => {
+        if (response.status == 200) {
+            // Usamos emit() en lugar de this.$emit
+            emit('recargarSubtareas');
+            const audio = new Audio('/assets/sounds/restore.mp3');
+            audio.play();
         }
+    })
+    .catch(error => {
+        console.log(error);
+    });
+};
+
+const setTitulo = (event, subttareaId) => {
+    event.target.blur();
+    if (event.target.innerText == "") {
+        return;
     }
-})
+    axios.put('api/tarea/' + props.tarea.id + '/subtarea/' + subttareaId, { 'titulo': event.target.innerText })
+    .then(response => {
+        if (response.status == 201) {
+            emit('recargarSubtareas');
+        }
+    })
+    .catch(error => {
+        console.log(error);
+    });
+};
+
+const finalizarTarea = (subtareaId) => {
+    axios.put('api/tarea/' + props.tarea.id + '/subtarea/' + subttareaId, { 'finalizada': 1 })
+    .then(response => {
+        if (response.status == 201) {
+            emit('recargarSubtareas');
+            const audio = new Audio('/assets/sounds/done.mp3');
+            audio.play();
+        }
+    })
+    .catch(error => {
+        console.log(error);
+    });
+};
+
+const reactivarTarea = (subtareaId) => {
+    axios.put('api/tarea/' + props.tarea.id + '/subtarea/' + subttareaId, { 'finalizada': 0 })
+    .then(response => {
+        if (response.status == 201) {
+            emit('recargarSubtareas');
+            const audio = new Audio('/assets/sounds/done.mp3');
+            audio.play();
+        }
+    })
+    .catch(error => {
+        console.log(error);
+    });
+};
 </script>

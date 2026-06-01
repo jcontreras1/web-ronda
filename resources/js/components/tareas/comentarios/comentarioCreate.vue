@@ -13,39 +13,47 @@
       >Agregar</button>
   </div>
 </template>
-<script>
 
-    export default ({
-     props : ['tarea'],
-     emits : ['comentarioCreado'],
-     data: function(){
-         return {
-             comentario : {
-                 comentario : ""
-             }
-         }
-     },
-     methods : {
-         agregarComentario(){
-             if( !this.comentario.comentario ){
-                 return;
-             }
-             axios.post('/api/tarea/'+this.tarea.id+'/comentario', {
-                 comentario : this.comentario.comentario
-             }).then(response => {
-                 if( response.status == 201 ){
-                     var audio = new Audio('/assets/sounds/create.mp3');
-                     audio.play();
-                     this.comentario.comentario = "";
-                     this.$refs.input_comentario.focus();
-                     this.$emit('comentarioCreado');
-                 }
-             }).catch( error => {
-                 console.log( error );
-             })
-         }
-     },
-     created (){
-     }
- })
+<script setup>
+import { ref } from 'vue';
+import axios from 'axios';
+
+// 1. Props y Emits
+const props = defineProps(['tarea']);
+const emit = defineEmits(['comentarioCreado']);
+
+// 2. Estado Reactivo
+const comentario = ref({
+    comentario: ""
+});
+
+// 3. Referencia al elemento del DOM
+const input_comentario = ref(null);
+
+// 4. Métodos
+const agregarComentario = () => {
+    if (!comentario.value.comentario) {
+        return;
+    }
+    
+    // Usamos props.tarea.id
+    axios.post('/api/tarea/' + props.tarea.id + '/comentario', {
+        comentario: comentario.value.comentario
+    }).then(response => {
+        if (response.status == 201) {
+            const audio = new Audio('/assets/sounds/create.mp3');
+            audio.play();
+            
+            comentario.value.comentario = "";
+            
+            // Accedemos al input del DOM y le damos focus
+            input_comentario.value.focus();
+            
+            // Emitimos el evento hacia el padre
+            emit('comentarioCreado');
+        }
+    }).catch(error => {
+        console.log(error);
+    });
+};
 </script>

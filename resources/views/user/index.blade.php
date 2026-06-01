@@ -40,6 +40,7 @@
 
 @section('scripts')
 <script type="text/javascript">
+document.addEventListener('DOMContentLoaded', function() {
  $(document).ready(function(){
   $('#tabla').DataTable({
     language : {
@@ -65,7 +66,7 @@
   });
 });
 
-
+});
 
 </script>
 @endsection

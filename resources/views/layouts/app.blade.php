@@ -21,7 +21,7 @@
 	{{-- <link rel="dns-prefetch" href="//fonts.gstatic.com"> --}}
 	<link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 	<!-- Styles -->
-	<link href="{{ mix('css/app.css') }}" rel="stylesheet">
+	@vite(['resources/sass/app.scss', 'resources/js/app.js'])
 	<style type="text/css">
 		.bg-purple{
 			background-color: #909CAE;
@@ -63,20 +63,6 @@
 		</main>
 		@include('components.misc.footer')
 	</div>
-	<script src="{{ mix('js/app.js') }}"></script>
-	<script type="text/javascript">
-		$(function () {
-			$("[data-toggle=tooltip").tooltip();
-			$('.btn').click(function(){$(this).blur()});
-			$("[data-toggle=popover]").popover({
-				html: true,
-				sanitize: false
-			});
-			$('.modal').on('shown.bs.modal', function() {
-				$('.primerCampo').focus();
-			})
-		});
-	</script>
 	@yield('scripts')
 	@stack('scripts')
 </body>

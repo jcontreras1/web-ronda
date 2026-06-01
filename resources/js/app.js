@@ -1,7 +1,8 @@
 require('./bootstrap');
-import { createApp } from 'vue';
+//import { createApp } from 'vue';
+import { createApp } from 'vue/dist/vue.esm-bundler.js';
 import 'datatables.net-bs5';
-import tareaMain from './components/tareas/tareaMain';
+import tareaMain from './components/tareas/tareaMain.vue';
 
 //require( 'jszip' );
 // require( 'pdfmake' );

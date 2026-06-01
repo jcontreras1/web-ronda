@@ -16,7 +16,7 @@
 	<link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 	<script type="text/javascript" src="{{asset('/js/theme-switcher.js')}}"></script>
 	<!-- Styles -->
-	<link href="{{ mix('css/app.css') }}" rel="stylesheet">
+	@vite(['resources/sass/app.scss', 'resources/js/app.js'])
 	<link href="{{ asset('css/custom.css') }}" rel="stylesheet">
 </head>
 <body class="h-100">
@@ -31,7 +31,6 @@
 			@yield('content')
 		</main>
 		@stack('scripts')
-		<script src="{{ mix('js/app.js') }}"></script>
 		@include('components.misc.footer')
 	</div>
 </body>
