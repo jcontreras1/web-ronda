@@ -88,9 +88,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		}
 	}
 
-	function ver_circuito(url){
-		location.href = url;
-	}
+	
 
 	$(document).ready(function(){
 		$('#tabla').DataTable({
@@ -131,5 +129,9 @@ document.addEventListener('DOMContentLoaded', function() {
 		});
 	});
 });
+
+function ver_circuito(url){
+		location.href = url;
+	}
 </script>
 @endsection

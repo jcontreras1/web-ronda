@@ -84,12 +84,17 @@
 
 @section('scripts')
 <script type="text/javascript">
-document.addEventListener('DOMContentLoaded', function() {
-	$(document).ready(function(){
-		$('#editar_contraseña_usuario').click(function(){
-			$('#EditarPassUsuario').modal('show');
-		});
-	});
+document.addEventListener('DOMContentLoaded', function () {
+
+    $('#editar_contraseña_usuario').click(function () {
+
+        const modal = new bootstrap.Modal(
+            document.getElementById('EditarPassUsuario')
+        );
+
+        modal.show();
+    });
+
 });
 </script>
 @endsection

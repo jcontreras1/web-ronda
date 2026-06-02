@@ -44,43 +44,42 @@
 @push('scripts')
 <script type="text/javascript">
 
-document.addEventListener('DOMContentLoaded', function() {
-	var btn_circuito_create = document.getElementById('btn_circuito_create');
-	btn_circuito_create.addEventListener('click', crear_circuito);
+	document.addEventListener('DOMContentLoaded', function() {
+		var btn_circuito_create = document.getElementById('btn_circuito_create');
+		btn_circuito_create.addEventListener('click', crear_circuito);
 
-	function crear_circuito(){
-		let opciones = document.getElementById('select_area').length;
-		if(opciones == 1){
-			document.getElementById('form_circuito_store').submit();
-		}else{
-			mdl = new bootstrap.Modal(document.getElementById('mdl_circuito_create'));
-			mdl.show();
+		function crear_circuito(){
+			let opciones = document.getElementById('select_area').length;
+			if(opciones == 1){
+				document.getElementById('form_circuito_store').submit();
+			}else{
+				mdl = new bootstrap.Modal(document.getElementById('mdl_circuito_create'));
+				mdl.show();
+			}
 		}
-	}
 
-
-	function delete_circuito(url){
-		Swal.fire({
-			icon: 'question',
-			title: '¿Eliminar Circuito?',
-			showCancelButton: true,
-			confirmButtonText: 'Si',
-			cancelButtonText: 'Cancelar',
-		}).then((result) => {
-			if (result.isConfirmed) {
-				$('#form_delete_circuito').attr('action', url);
-				$('#form_delete_circuito').submit();
-			}
-		})
-
-	}
-	$(document).ready(function(){
-		$('#tabla').DataTable({
-			language : {
-				url : '{{asset('assets/dt.spanish.json')}}'
-			}
+		$(document).ready(function(){
+			$('#tabla').DataTable({
+				language : {
+					url : '{{asset('assets/dt.spanish.json')}}'
+				}
+			});
 		});
 	});
-});
+	
+	function delete_circuito(url){
+			Swal.fire({
+				icon: 'question',
+				title: '¿Eliminar Circuito?',
+				showCancelButton: true,
+				confirmButtonText: 'Si',
+				cancelButtonText: 'Cancelar',
+			}).then((result) => {
+				if (result.isConfirmed) {
+					$('#form_delete_circuito').attr('action', url);
+					$('#form_delete_circuito').submit();
+				}
+			})
+		}
 </script>
 @endpush
