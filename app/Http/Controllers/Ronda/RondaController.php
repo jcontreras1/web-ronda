@@ -56,6 +56,20 @@ class RondaController extends Controller
             $abiertas = Ronda::where('abierta', true)->whereIn('circuito_id', array_map(function($elem){return $elem['id'];}, $circuitos_posibles))->get();
         }
 
+
+        // Áreas donde el usuario ya tiene una ronda abierta
+        $areasConRondaAbierta = Ronda::query()
+            ->join('circuito', 'ronda.circuito_id', '=', 'circuito.id')
+            ->where('ronda.user_id', Auth::id())
+            ->where('ronda.abierta', true)
+            ->distinct()
+            ->pluck('circuito.area_id')
+            ->toArray();
+        
+        $circuitos_posibles = array_filter($circuitos_posibles, function ($circuito) use ($areasConRondaAbierta) {
+            return !in_array($circuito->area_id, $areasConRondaAbierta);});
+
+            
         return view('rondas.index')->with(compact([
             'abiertas',
             'cerradas',
