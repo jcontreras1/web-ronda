@@ -51,7 +51,7 @@ const cmpPersonasOcurrencias = (a, b) => {
     }
 };
 
-const getTareas = (finalizadas = false, responsables = null) => {
+const getTareas = (traerFinalizadas = false, responsables = null) => {
     axios.get('/api/tarea', { params: { responsables: responsables } })
         .then(response => {
             tareas.value = response.data;

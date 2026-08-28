@@ -5,15 +5,20 @@
 <div class="container">
 
 	<x-misc-title title="Rondas Abiertas">
-		<button class="btn btn-success" id="btn_ronda_create" data-toggle="tooltip"  title="Agregar ronda" {{ count($circuitos_posibles) == 0 ? 'disabled' : '' }}
+		<button class="btn btn-success" id="btn_ronda_create" data-toggle="tooltip"  
+		title="Agregar ronda" 
+		
 ><i class="bi bi-plus"></i></button>
 	</x-misc-title>
 
-	@if(count($circuitos_posibles) == 0)
+	<!-- 
+		revisar {{ count($circuitos_posibles) == 0 ? 'disabled' : '' }}
+	-->
+	<!-- @if(count($circuitos_posibles) == 0)
 		<div class="alert alert-warning">
 			Ha alcanzado el límite de rondas activas. Cierre alguna de sus rondas para poder crear una nueva.
 		</div>
-	@endif
+	@endif -->
 
 	{{-- Rondas abiertas --}}
 	<div class="row mb-3">

@@ -28,7 +28,7 @@ const emit = defineEmits(['recargarSubtareas']);
 // 3. Métodos
 const eliminarTarea = (subtareaId) => {
     // Usamos props.tarea.id
-    axios.delete('api/tarea/' + props.tarea.id + '/subtarea/' + subttareaId)
+    axios.delete('api/tarea/' + props.tarea.id + '/subtarea/' + subtareaId)
     .then(response => {
         if (response.status == 200) {
             // Usamos emit() en lugar de this.$emit
@@ -42,12 +42,12 @@ const eliminarTarea = (subtareaId) => {
     });
 };
 
-const setTitulo = (event, subttareaId) => {
+const setTitulo = (event, subtareaId) => {
     event.target.blur();
     if (event.target.innerText == "") {
         return;
     }
-    axios.put('api/tarea/' + props.tarea.id + '/subtarea/' + subttareaId, { 'titulo': event.target.innerText })
+    axios.put('api/tarea/' + props.tarea.id + '/subtarea/' + subtareaId, { 'titulo': event.target.innerText })
     .then(response => {
         if (response.status == 201) {
             emit('recargarSubtareas');
@@ -59,7 +59,7 @@ const setTitulo = (event, subttareaId) => {
 };
 
 const finalizarTarea = (subtareaId) => {
-    axios.put('api/tarea/' + props.tarea.id + '/subtarea/' + subttareaId, { 'finalizada': 1 })
+    axios.put('api/tarea/' + props.tarea.id + '/subtarea/' + subtareaId, { 'finalizada': 1 })
     .then(response => {
         if (response.status == 201) {
             emit('recargarSubtareas');
@@ -73,7 +73,7 @@ const finalizarTarea = (subtareaId) => {
 };
 
 const reactivarTarea = (subtareaId) => {
-    axios.put('api/tarea/' + props.tarea.id + '/subtarea/' + subttareaId, { 'finalizada': 0 })
+    axios.put('api/tarea/' + props.tarea.id + '/subtarea/' + subtareaId, { 'finalizada': 0 })
     .then(response => {
         if (response.status == 201) {
             emit('recargarSubtareas');
