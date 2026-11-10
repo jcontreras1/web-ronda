@@ -69,9 +69,7 @@ class UserController extends Controller
             'area' => 'required',
         ]);
         
-        // $clave = Hash::make(Str::random(15));
-        /*Sistemas Offline*/
-        $clave = Hash::make('123456');
+        $clave = Hash::make(Str::uuid());
         $current_date_time = Carbon::now()->toDateTimeString(); 
         try {
             DB::beginTransaction();
@@ -113,12 +111,6 @@ class UserController extends Controller
         return redirect()->route('user.index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show(User $user)
     {
         $this->authorize('view', $user);
@@ -152,12 +144,6 @@ class UserController extends Controller
         return back();
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(User $user)
     {
         $this->authorize('delete', $user);

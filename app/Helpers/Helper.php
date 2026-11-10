@@ -51,22 +51,6 @@ function mes($mes_n){
 	return $meses[$mes_n];
 }
 
-function fecha_string_completa($fecha){
-	$fecha_unix = strtotime($fecha);
-	$dia_str = dia_de_la_semana(date('N', $fecha_unix));
-	$dia = date('d', $fecha_unix);
-	$mes = mes(date('n', $fecha_unix));
-	return $dia_str . ' ' . $dia . ' de ' . $mes . ' del ' . date('Y', $fecha_unix);
-}
-
-function medio_de_pago($medio){
-	$medios = [
-		'E' => 'EFECTIVO',
-		'T' => 'TARJETA',
-		'D' => 'TRANSFERENCIA/DEPÓSITO',
-	];
-	return $medios[$medio];
-}
 // Tareas
 function formatos_imagen(){
 	$formatos = [
@@ -79,14 +63,3 @@ function formatos_imagen(){
 	];
 	return $formatos;
  }
-
-function tiene_modulo($modulo){
-	//NECESARIOS Y DE USUARIO
-	return true;
-	return evaluar_permisos(['tareas'], Auth::user()->tipos_usuario);
-	$modulo = 'MODULO_' . strtoupper($modulo);
-	if(variable_global($modulo) == '1' || variable_global($modulo) == 'true'){
-		return true;
-	}
-	return false;
-}

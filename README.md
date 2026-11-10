@@ -12,6 +12,39 @@ Web-Ronda es un sistema de gestion de rondas de control. Programado enteramente 
 - Bootstrap 5.1.x (con sus íconos) - Como framework de frontend
 - Sanctum como librería de autentificación API
 
+### Navegacion de Rondas
+
+El listado y el detalle de Rondas usan Inertia + Vue 3. La navegacion entre
+estas pantallas y los formularios de crear, cerrar, eliminar y registrar un
+punto no recargan toda la pagina. Las demas secciones siguen usando Blade;
+entrar o salir de ellas implica una navegacion normal.
+
+El historico se consulta en paginas de 25 rondas y permite buscar por persona
+o circuito y ordenar por persona o fecha en el servidor. El listado recibe contadores de puntos, novedades
+y fotos, no todas sus relaciones. Vue de Tareas y Leaflet se cargan solo
+cuando se necesitan. Las fotos del detalle se cargan de forma diferida y se
+amplian en un lightbox fuera del mapa, con cierre por Escape, boton o fondo,
+sin perder la posicion de scroll. Las fotos nuevas se reducen antes de subir.
+
+En una ronda abierta se solicita ubicacion de alta precision con
+`watchPosition`, sin reutilizar posiciones cacheadas. El marcador pulsante
+y el circulo muestran el seguimiento y su margen de error estimado.
+"Guardar posicion" fija las coordenadas para la novedad y detiene el GPS;
+"Aceptar" envia esa posicion, descripcion y foto. "Actualizar posicion"
+permite volver a seguir la ubicacion. Despues de agregar una novedad se
+inicia el seguimiento para el proximo punto. El seguimiento se cancela al
+salir de la pantalla o cerrar la ronda. Una lectura de mas de 10 segundos
+se renueva antes de fijarla. Requiere HTTPS (o localhost) y permiso del usuario;
+el navegador y el dispositivo deciden la fuente de ubicacion y su precision.
+Los avisos de exito son pequenos, no desplazan el contenido y se ocultan
+automaticamente despues de 3 segundos; "Novedad agregada" se oculta al segundo.
+
+La primera visita descarga los recursos; las siguientes reutilizan el runtime.
+Inertia no elimina la latencia de red, del servidor ni de los mosaicos del mapa.
+Para desplegar esta migracion ejecutar `composer install`, `npm ci` y
+`npm run build`, y actualizar las caches de Laravel segun el despliegue.
+No requiere nuevas migraciones de base de datos ni un servidor SSR.
+
 ### Funcionalidades
 
 - Gestión de usuarios
@@ -58,7 +91,7 @@ php artisan migrate --seed
 Para entornos de producción, hasta migraciones es lo mismo. Luego:
 
 ```sh
-npm run prod
+npm run build
 php artisan optimize
 php artisan config:cache
 php artisan route:cache

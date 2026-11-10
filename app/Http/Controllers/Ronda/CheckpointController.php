@@ -16,8 +16,10 @@ class CheckpointController extends Controller
 {
 	public function store(Request $request, Ronda $ronda){
 		$request->validate([
-			'latitud' => 'required',
-			'longitud' => 'required',
+			'latitud' => 'required|numeric|between:-90,90',
+			'longitud' => 'required|numeric|between:-180,180',
+			'novedad' => 'nullable|string',
+			'image64' => 'nullable|string',
 		]);
 
 		// return $request;
@@ -39,9 +41,9 @@ class CheckpointController extends Controller
 				$resizedImage->orientate();
 				if($resizedImage->height() >= $resizedImage->width()){
 					/*Es mas alta que ancha, redimensiono par que sea de 720 de altura*/
-					$resizedImage->heighten(720)->encode('jpg', 85);
+					$resizedImage->heighten(720, fn ($constraint) => $constraint->upsize())->encode('jpg', 85);
 				}else{
-					$resizedImage->widen(1280)->encode('jpg', 85);
+					$resizedImage->widen(1280, fn ($constraint) => $constraint->upsize())->encode('jpg', 85);
 				}
 
 				Storage::disk('public')->put('ronda/' . $checkpoint->id . '/' . $filename, $resizedImage->__toString(), 'public');
@@ -52,8 +54,7 @@ class CheckpointController extends Controller
 				]);
 			//}
 		}
-		toast('Novedad agregada', 'success')->autoClose(1500);
-		return back();        
+		return back()->with('success', 'Novedad agregada');
 	}
 
 	public function destroy(Request $request, Ronda $ronda, Checkpoint $checkpoint){

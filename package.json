@@ -23,9 +23,11 @@
         "vue-loader": "^17.2.2"
     },
     "dependencies": {
+        "@inertiajs/vue3": "^2.0.0",
         "datatables.net-bs5": "^1.12.1",
         "datatables.net-buttons-bs5": "^2.2.3",
         "jszip": "^3.10.1",
+        "leaflet": "^1.9.4",
         "pdfmake": "^0.2.5",
         "sweetalert2": "^11.4.33",
         "vue": "^3.2.36"
