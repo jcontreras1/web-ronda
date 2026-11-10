@@ -5,11 +5,13 @@
 
 [![Build Status](https://github.com/jcontreras1/web-ronda?branch=master)](https://github.com/jcontreras1/web-ronda)
 
-Web-Ronda es un sistema de gestion de rondas de control. Programado enteramente en PHP con el framework Laravel en su versión 8.x (ultima)
+Web-Ronda es un sistema de gestion de rondas de control desarrollado con Laravel 13 y PHP 8.3 o superior.
 
 - Blade para manejo de templates
-- jQuery para interacción con Navegador
-- Bootstrap 5.1.x (con sus íconos) - Como framework de frontend
+- Inertia + Vue 3 para Rondas y Vue 3 para Tareas
+- jQuery para interacción con las pantallas Blade
+- Bootstrap 5.3.x (con sus íconos) - Como framework de frontend
+- Vite para compilar los recursos del frontend
 - Sanctum como librería de autentificación API
 
 ### Navegacion de Rondas
@@ -60,24 +62,31 @@ No requiere nuevas migraciones de base de datos ni un servidor SSR.
 
 ### Requisitos:
 
-- PHP 7.4.x
-- Apache 2.4
+- PHP 8.3 o superior, tanto en CLI como en el servidor web
+- Apache 2.4 (con mod_rewrite) o Nginx, con la raiz publica apuntando a `public`
 - MySQL
-- Composer
+- Composer 2.2 o superior
+- Node.js 22.12 o superior y npm para compilar el frontend
 
 ### Extensiones de PHP:
 
 - BCMath PHP Extension
 - Ctype PHP Extension
 - Fileinfo PHP extension
+- Filter PHP Extension
+- GD PHP Extension (procesamiento de fotos)
+- Exif PHP Extension (orientacion de fotos)
+- Hash PHP Extension
 - JSON PHP Extension
 - Mbstring PHP Extension
 - OpenSSL PHP Extension
 - PDO PHP Extension
+- Session PHP Extension
 - Tokenizer PHP Extension
 - XML PHP Extension
 - MySQLI PHP Extension
 - PDO_MYSQL PHP Extension
+- DOM, XMLWriter y PDO_SQLite PHP Extensions para las pruebas
 
 _Para entornos de desarrollo:_
 ```sh
@@ -86,26 +95,72 @@ composer install
 cp .env.example .env
 php artisan key:generate
 php artisan migrate --seed
-```
-
-Para entornos de producción, hasta migraciones es lo mismo. Luego:
-
-```sh
+php artisan storage:link
+npm ci
 npm run build
-php artisan optimize
-php artisan config:cache
-php artisan route:cache
 ```
 
-En entornos linux, usualmente el _git clone_ se debería ejecutar en: _/var/www_. Dentro de _/var/www_ hay una carpeta _html_ que es donde debería copiarse el **contenido** de la carpeta _public_ de lo clonado. 
-Por lo que despues de haber ejecutado todos los comandos anteriores, lo siguiente es:
+Configurar la conexion de base de datos y el correo en `.env` antes de migrar.
+El seeder inicial crea un administrador de ejemplo: cambiar su clave antes
+de exponer la aplicacion.
+
+### Actualizar una instalacion existente a Laravel 13
+
+Respaldar la base de datos, `.env` y los archivos de `storage` antes del
+despliegue. Verificar que PHP CLI y PHP de Apache/Nginx cumplan los requisitos.
+Instalar las versiones fijadas en `composer.lock`, sin ejecutar `composer update`
+en produccion:
 
 ```sh
-cp -R /var/www/web-ronda/public/* /var/www/html
-mv /var/www/html/index.php.linuxenv /var/www/html/index.php
+php artisan down
+composer install --no-dev --optimize-autoloader
+php artisan optimize:clear
+php artisan migrate --force
+npm ci
+npm run build
+php artisan storage:link
+php artisan optimize
+php artisan queue:restart
+php artisan up
 ```
 
-Para finalizar, es necesario revisar cuestiones de permisos. Si todo esto se ejecuta como root, hay que colocar los permisos adecuados en la carpeta _/var/www/html_ 
+Ejecutar `storage:link` solo si el enlace aun no existe. No ejecutar el seeder
+en una actualizacion: esta migracion de framework no agrega tablas ni modifica
+datos; `migrate --force` aplica unicamente las migraciones pendientes de la
+instalacion.
+
+Se conserva la estructura de kernels y providers existente, soportada por
+Laravel 13, junto con las rutas web/API, Sanctum, Blade, Inertia y Vue.
+La proteccion web y la API stateful de Sanctum usan `PreventRequestForgery`:
+acepta el origen `same-origin` y mantiene los tokens CSRF de formularios y Axios
+para navegadores sin Fetch Metadata.
+
+Para no invalidar sesiones activas, se mantiene `session.serialization=php`,
+el nombre de la cookie y los prefijos de cache/Redis existentes. Conservar
+`APP_KEY` y las variables de entorno actuales; no ejecutar `key:generate`
+durante una actualizacion. La cache limita la deserializacion a datos sin
+objetos (`serializable_classes=false`). Tinker usa la version 3 y las
+herramientas de desarrollo usan Debugbar 4, Pest 4 y PHPUnit 12; Pest ya no
+se instala en produccion.
+
+En produccion, configurar `APP_ENV=production` y `APP_DEBUG=false`, y dar
+permiso de escritura al usuario del servidor sobre `storage` y `bootstrap/cache`.
+El DocumentRoot debe ser el directorio `public` del proyecto; no copiar sus
+archivos a otra carpeta ni exponer la raiz del repositorio.
+
+### Pruebas
+
+```sh
+composer install
+php artisan test
+node --test tests/frontend/*.test.mjs
+npm run build
+```
+
+PHPUnit usa SQLite en memoria, sin modificar la base de datos de `.env`.
+La cobertura incluye rondas y fotos, autenticacion web y Sanctum, recuperacion
+de clave, usuarios, areas, circuitos, geofences, pantallas Blade, API de tareas
+y proteccion CSRF/origen de Laravel 13.
 
 ## License
 
